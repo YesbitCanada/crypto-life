@@ -1,4 +1,4 @@
-name: Deploy to Tencent CloudBase
+name: Deploy to Tencent
 
 on:
   push:
@@ -11,11 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install CloudBase CLI
-        run: npm install -g @cloudbase/cli
+      - name: Install coscmd
+        run: pip install coscmd
 
-      - name: Deploy to CloudBase
+      - name: Deploy to COS
         run: |
-          tcb login -k --apiKeyId ${{ secrets.TCB_SECRET_ID }} --apiKey ${{ secrets.TCB_SECRET_KEY }}
-          tcb hosting deploy index.html /Degen/index.html -e ${{ secrets.TCB_ENV_ID }}
-          tcb hosting deploy help.html /Degen/help.html -e ${{ secrets.TCB_ENV_ID }}
+          coscmd config -a ${{ secrets.TCB_SECRET_ID }} -s ${{ secrets.TCB_SECRET_KEY }} -b degen-1256918364 -r ap-hongkong
+          coscmd upload -H '{"Content-Type":"text/html; charset=utf-8"}' index.html /index.html
+          coscmd upload -H '{"Content-Type":"text/html; charset=utf-8"}' help.html /help.html
