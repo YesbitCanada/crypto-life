@@ -16,6 +16,6 @@ jobs:
 
       - name: Deploy to CloudBase
         run: |
-          tcb login --secret-id ${{ secrets.TCB_SECRET_ID }} --secret-key ${{ secrets.TCB_SECRET_KEY }}
+          tcb login -k --apiKeyId ${{ secrets.TCB_SECRET_ID }} --apiKey ${{ secrets.TCB_SECRET_KEY }}
           tcb hosting deploy index.html /Degen/index.html -e ${{ secrets.TCB_ENV_ID }}
           tcb hosting deploy help.html /Degen/help.html -e ${{ secrets.TCB_ENV_ID }}
