@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>币圈浮生记 — 玩家帮助手册</title>
+<style>
+:root{
+  --bg:#1b1a17;--panel:#e7d8b1;--line:#2b241d;--text:#1f1a14;
+  --muted:#5e5343;--green:#4ab83a;--red:#e35b4f;--blue:#3a6db5;
+  --yellow:#f0c64b;--screen:#0a0f14;--screenText:#6cff3d;--shadow:#120f0c;--px:4px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:linear-gradient(180deg,#2f2a24,#211d19);
+  font-family:"Courier New","Microsoft YaHei",monospace;color:var(--text);min-height:100%;}
+body{padding:16px;}
+
+.frame{
+  max-width:820px;margin:0 auto;
+  border:var(--px) solid var(--line);background:var(--panel);
+  box-shadow:0 0 0 4px #6d5c45,0 0 0 8px var(--line),12px 12px 0 0 var(--shadow);
+  overflow:hidden;
+}
+
+/* HEADER */
+.site-header{
+  background:linear-gradient(180deg,#254b7c,#1c3555);color:#fff4d2;
+  padding:18px 24px 14px;border-bottom:var(--px) solid var(--line);
+  display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+.site-header h1{margin:0;font-size:24px;letter-spacing:2px;line-height:1;}
+.site-header .ver{font-size:11px;color:#8dc1ff;margin-top:5px;letter-spacing:1px;}
+.back-btn{
+  border:3px solid var(--line);padding:6px 14px;
+  background:#d9c69c;color:var(--text);font-family:inherit;font-size:13px;cursor:pointer;
+  box-shadow:inset -3px -3px 0 0 #b79c70,inset 3px 3px 0 0 #f6e8c4;
+  text-decoration:none;display:inline-block;
+}
+.back-btn:active{box-shadow:inset 3px 3px 0 0 #b79c70,inset -3px -3px 0 0 #f6e8c4;}
+
+/* TOC */
+.toc{
+  background:#d9c69c;border-bottom:var(--px) solid var(--line);
+  padding:9px 16px;display:flex;flex-wrap:wrap;gap:6px;
+}
+.toc a{
+  font-size:12px;color:var(--blue);text-decoration:none;
+  border:2px solid var(--line);padding:3px 8px;background:#e7d8b1;
+  box-shadow:inset -2px -2px 0 0 #c9b68d,inset 2px 2px 0 0 #fff2cb;
+}
+.toc a:hover{background:#2b5fa3;color:#fff4d2;}
+
+/* CONTENT */
+.content{padding:20px 24px;}
+
+/* SECTION */
+.section{margin-bottom:28px;}
+.section-head{
+  display:flex;align-items:center;gap:10px;
+  border-bottom:var(--px) solid var(--line);padding-bottom:7px;margin-bottom:12px;
+}
+.section-head h2{margin:0;font-size:17px;letter-spacing:1px;}
+.section-tag{
+  font-size:11px;padding:2px 7px;letter-spacing:1px;
+  border:3px solid var(--line);background:#254b7c;color:#fff4d2;
+  box-shadow:inset -3px -3px 0 0 #132842,inset 3px 3px 0 0 #40679b;
+}
+
+p{line-height:1.8;font-size:14px;margin:0 0 8px;}
+ul{padding-left:20px;margin:0 0 8px;}
+li{line-height:1.8;font-size:14px;margin-bottom:3px;}
+
+/* STORY BOX */
+.story-box{
+  border:var(--px) solid var(--line);background:#ede0bc;padding:12px 16px;margin-bottom:10px;
+  box-shadow:inset -4px -4px 0 0 #c3ab7d,inset 4px 4px 0 0 #fff1cd;
+  font-size:14px;line-height:1.9;
+}
+.quote{color:var(--muted);font-style:italic;}
+
+/* TABLE */
+.px-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px;}
+.px-table th{background:#3b3127;color:#fff4d2;padding:7px 10px;text-align:left;border:2px solid var(--line);font-size:12px;letter-spacing:1px;}
+.px-table td{padding:7px 10px;border:2px solid var(--line);background:#ede0bc;vertical-align:top;}
+.px-table tr:nth-child(even) td{background:#e3d4a8;}
+.win{color:var(--green);font-weight:700;}
+.lose{color:var(--red);font-weight:700;}
+.hl-red{color:var(--red);font-weight:700;}
+.hl-green{color:var(--green);font-weight:700;}
+.hl-blue{color:var(--blue);font-weight:700;}
+
+/* TIP CARDS */
+.tip-list{display:grid;gap:7px;margin-bottom:10px;}
+.tip-card{
+  display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;
+  border:var(--px) solid var(--line);padding:9px 10px;background:#ede0bc;
+  box-shadow:inset -4px -4px 0 0 #c3ab7d,inset 4px 4px 0 0 #fff1cd;
+}
+.tip-num{
+  width:30px;height:30px;background:#254b7c;color:#fff4d2;
+  display:grid;place-items:center;font-size:14px;font-weight:700;
+  border:3px solid var(--line);
+  box-shadow:inset -3px -3px 0 0 #132842,inset 3px 3px 0 0 #40679b;
+}
+.tip-card p{margin:0;font-size:13px;line-height:1.7;}
+
+/* SCREEN BOX */
+.screen-box{
+  border:var(--px) solid var(--line);
+  background:linear-gradient(180deg,#131c24,var(--screen));
+  color:var(--screenText);padding:11px 14px;margin-bottom:10px;
+  box-shadow:inset -4px -4px 0 0 #05080c,inset 4px 4px 0 0 #1d2c38;
+  font-size:13px;line-height:1.8;
+}
+.screen-box .stitle{color:#8dc1ff;font-size:11px;letter-spacing:1px;margin-bottom:5px;}
+
+/* MOOD */
+.mood-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px;}
+.mood-badge{padding:4px 11px;border:3px solid var(--line);font-size:13px;font-weight:700;
+  box-shadow:inset -3px -3px 0 0 rgba(0,0,0,.2),inset 3px 3px 0 0 rgba(255,255,255,.12);}
+.mood-hold{background:#3a3530;color:#6cff3d;}
+.mood-fomo{background:#7a5c10;color:#f0c64b;}
+.mood-panic{background:#8b2010;color:#ff8888;}
+.mood-rekt{background:#5a1808;color:#ff8888;}
+.mood-moon{background:#1a5c28;color:#6cff3d;}
+
+/* LEV TABLE */
+.lev-table{display:grid;grid-template-columns:80px 1fr 1fr;margin-bottom:10px;}
+.lev-cell{border:2px solid var(--line);padding:6px 10px;font-size:13px;background:#ede0bc;}
+.lev-cell.head{background:#3b3127;color:#fff4d2;font-size:12px;letter-spacing:1px;}
+.lev-cell.danger{color:var(--red);font-weight:700;}
+
+/* ASSET ICONS */
+.asset-icon{
+  display:inline-block;width:20px;height:20px;border:2px solid var(--line);
+  font-size:10px;font-weight:700;color:#fff;text-align:center;line-height:20px;
+  vertical-align:middle;margin-right:4px;
+}
+
+/* SAVE */
+.save-box{
+  border:var(--px) solid var(--line);background:#1a4a1a;color:#6cff3d;
+  padding:11px 14px;font-size:13px;line-height:1.8;
+  box-shadow:inset -4px -4px 0 0 #0a1e0a,inset 4px 4px 0 0 #2d7a2d;
+}
+
+/* FOOTER */
+.site-footer{
+  background:#3b3127;color:#8c7757;padding:9px 24px;font-size:11px;letter-spacing:1px;
+  border-top:var(--px) solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;
+}
+
+@media(max-width:600px){
+  body{padding:8px;}
+  .content{padding:14px 14px;}
+  .site-header{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <div class="site-header">
+    <div>
+      <h1>₿ 币圈浮生记</h1>
+      <div class="ver">玩家帮助手册 · v1.3 · 单文件 HTML5 · 无需注册，无需网络</div>
+    </div>
+    <a class="back-btn" href="index.html">← 返回游戏</a>
+  </div>
+
+  <div class="toc">
+    <a href="#story">故事背景</a>
+    <a href="#winlose">胜负条件</a>
+    <a href="#tips">新手策略</a>
+    <a href="#ui">界面说明</a>
+    <a href="#trade">交易机制</a>
+    <a href="#funcs">功能说明</a>
+    <a href="#events">随机事件</a>
+    <a href="#assets">资产列表</a>
+    <a href="#save">本地存档</a>
+  </div>
+
+  <div class="content">
+
+    <!-- 故事背景 -->
+    <div class="section" id="story">
+      <div class="section-head"><h2>故事背景</h2><span class="section-tag">STORY</span></div>
+      <div class="story-box">
+        2023年，老同学小王说缅北有个"互联网客服"岗位，月入三万，包吃包住。<br>
+        <span class="quote">"这是机会！"</span><br><br>
+        你把房子抵了贷款凑路费，跟着去了。下飞机才发现不对劲——<br>
+        手机没收，护照扣押，签的是电诈合同。<br><br>
+        三个月后，你和小王密谋出逃。翻墙、躲追捕、差点被噶腰子……<br>
+        好不容易跑回国内。回来一查：<b>房子已经在走拍卖程序了。</b><br><br>
+        小王说"帮你东山再起"，借给你 <span class="hl-red">$3,000</span>：<br>
+        <span class="quote">"$2,000 帮你配了专业炒币电脑和硬件钱包，<br>剩下 $1,000 就是你的启动资金。"</span><br><br>
+        <span style="color:var(--muted);font-size:12px;">（那台电脑，你至今没见到）</span><br><br>
+        现在你欠他 <span class="hl-red">$3,000</span>，日息 <b>10%</b>。<br>
+        <span class="quote">"20天还清，不然去堵你。"</span>
+      </div>
+      <table class="px-table">
+        <tr><th>初始参数</th><th>值</th></tr>
+        <tr><td>现金</td><td><span class="hl-green">$1,000</span></td></tr>
+        <tr><td>负债</td><td><span class="hl-red">$3,000</span>（日息 10% 复利）</td></tr>
+        <tr><td>心态值</td><td>100</td></tr>
+        <tr><td>仓位上限</td><td>100 手</td></tr>
+        <tr><td>游戏天数</td><td>20 天</td></tr>
+      </table>
+    </div>
+
+    <!-- 胜负条件 -->
+    <div class="section" id="winlose">
+      <div class="section-head"><h2>胜负条件</h2><span class="section-tag">WIN / LOSE</span></div>
+      <table class="px-table">
+        <tr><th>结果</th><th>触发条件</th></tr>
+        <tr><td><span class="win">✅ 胜利</span></td><td>第20天结束，心态值 &gt; 0 且 现金 + 存款 − 负债 ≥ 0</td></tr>
+        <tr><td><span class="lose">❌ 心态崩溃</span></td><td>心态值归零（随时触发）</td></tr>
+        <tr><td><span class="lose">❌ 债主上门</span></td><td>第20天结束净资产为负</td></tr>
+      </table>
+    </div>
+
+    <!-- 新手策略（移至胜负条件之后） -->
+    <div class="section" id="tips">
+      <div class="section-head"><h2>新手策略建议</h2><span class="section-tag">TIPS</span></div>
+      <div class="tip-list">
+        <div class="tip-card">
+          <div class="tip-num">1</div>
+          <p><b>先还一部分债</b>：10% 日利息复利增长很恐怖，5天内最好能还清，可大幅减少总利息。</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">2</div>
+          <p><b>初期炒小币种</b>：启动资金有限，优先买单价低的币（SHIB/DOGE）多手建仓；后期资金多了，仓位上限100手，转向贵的币（BTC）单价高收益大。</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">3</div>
+          <p><b>用 AAVE 保住本金</b>：把部分现金存入 AAVE，免受钓鱼攻击，还能获得每天 1% 利息。</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">4</div>
+          <p><b>关注新闻热点</b>：每天的事件弹窗和左栏情报是重要信号，币圈一天，人间一年。</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">5</div>
+          <p><b>操作完后点击"下一天"</b>：当天买卖完成后记得推进，共 20 天，第20天自动结算。</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">6</div>
+          <p><b>杠杆谨慎使用</b>：2x 杠杆可能翻倍收益，但价格跌 50% 直接爆仓。LP 遇黑客攻击必爆，慎用。</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">7</div>
+          <p><b>心态值低于 30 立刻去心理援助</b>：$5,000 换一条命，比归零代价小得多。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 界面说明（精简版） -->
+    <div class="section" id="ui">
+      <div class="section-head"><h2>界面说明</h2><span class="section-tag">UI</span></div>
+
+      <p><b>顶栏</b>：现金 · 负债/日息 · 心态值 · 天数。右侧警报框显示爆仓风险或最新事件摘要。</p>
+
+      <p><b>左栏</b>：切换信息源刷新内幕情报（纯氛围）；今日情绪屏显示当天市场状态；底部功能按钮进入 AAVE/还款/心理援助/Etherscan。</p>
+
+      <div class="mood-row">
+        <div class="mood-badge mood-hold">HOLD 无事</div>
+        <div class="mood-badge mood-fomo">FOMO 暴涨</div>
+        <div class="mood-badge mood-panic">PANIC 暴跌/追债</div>
+        <div class="mood-badge mood-rekt">REKT 钱包受损</div>
+        <div class="mood-badge mood-moon">MOON 空投</div>
+      </div>
+
+      <p><b>中栏</b>：市场行情列表（含 sparkline 走势图）。点击资产选中后，左卡显示持仓详情和爆仓风险，右卡用滑条选择数量、选杠杆、点买入/卖出。现金不足时买入置灰，无持仓时卖出置灰。</p>
+      <p><b>底部操作</b>：当天买卖完成后，点击下方按钮推进游戏：</p>
+      <div style="margin-bottom:10px;">
+        <button style="border:4px solid var(--line);padding:12px 24px;font-size:20px;font-weight:700;color:#fff7df;font-family:inherit;background:#bc8b23;box-shadow:inset -4px -4px 0 0 #7d5c18,inset 4px 4px 0 0 #e1b44e;cursor:default;">⏩ 下一天</button>
+      </div>
+
+      <p><b>右栏</b>：持仓市值 / 持仓数量 / 总持仓进度（如 35/100）；下方为最近3条事件卡片和选中资产走势大图（2x 杠杆时红色虚线标注爆仓价）。</p>
+
+      <p style="font-size:13px;color:var(--muted);">有持仓的币种图标左上角显示绿色 <b style="color:var(--green);">●</b> 徽标。已持仓的币种杠杆自动锁定，卖清后可重选。</p>
+    </div>
+
+    <!-- 交易机制 -->
+    <div class="section" id="trade">
+      <div class="section-head"><h2>交易机制</h2><span class="section-tag">TRADING</span></div>
+      <div class="screen-box">
+        <div class="stitle">BUY / SELL</div>
+        每手花费 = 当前价格 ÷ 杠杆<br>
+        每手收益 = (当前价 − 入场价 × (1 − 1/杠杆)) × 手数<br>
+        仓位上限 100 手，超出无法继续买入
+      </div>
+      <div class="lev-table">
+        <div class="lev-cell head">杠杆</div><div class="lev-cell head">爆仓条件</div><div class="lev-cell head">爆仓后果</div>
+        <div class="lev-cell">1x 现货</div><div class="lev-cell">不爆仓</div><div class="lev-cell">—</div>
+        <div class="lev-cell">2x 杠杆</div><div class="lev-cell danger">价格跌 ≥ 50%</div><div class="lev-cell danger">持仓清零，心态 −15</div>
+      </div>
+    </div>
+
+    <!-- 功能说明 -->
+    <div class="section" id="funcs">
+      <div class="section-head"><h2>功能说明</h2><span class="section-tag">FEATURES</span></div>
+      <table class="px-table">
+        <tr><th>功能</th><th>说明</th></tr>
+        <tr>
+          <td><b>🏦 AAVE 存款</b></td>
+          <td>存入现金，<span class="hl-green">每天获得 1% 利息（复利）</span>，不受钓鱼攻击等事件影响。存入/取出各自独立滑条，"全部"快捷按钮填满至最大值。</td>
+        </tr>
+        <tr>
+          <td><b>💸 还款小王</b></td>
+          <td>减少负债。负债每天 ×1.1 增长，<span class="hl-red">越早还越划算</span>。"全部还"按钮一键最大还款。</td>
+        </tr>
+        <tr>
+          <td><b>🧠 心理援助</b></td>
+          <td>花费 <span class="hl-red">$5,000</span> 将心态值恢复至 100。心态归零即失败。</td>
+        </tr>
+        <tr>
+          <td><b>🔍 Etherscan</b></td>
+          <td>查看本局完整历史事件日志。</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 随机事件 -->
+    <div class="section" id="events">
+      <div class="section-head"><h2>随机事件系统</h2><span class="section-tag">EVENTS</span></div>
+      <p>每天推进时，有 <b>65% 概率</b>触发一条随机事件，弹窗提示并写入右栏事件流。</p>
+      <table class="px-table">
+        <tr><th>类型</th><th>效果</th><th>典型案例</th></tr>
+        <tr><td><b>价格暴涨</b></td><td>某资产价格暴涨很多倍</td><td>马斯克发推，DOGE ×7</td></tr>
+        <tr><td><b>价格暴跌</b></td><td>某资产价格暴跌很多倍</td><td>项目跑路，PLUS ×0.02</td></tr>
+        <tr><td><b>免费空投</b></td><td>获赠若干手，无需花钱</td><td>协议快照，获赠 5 手 SHIB</td></tr>
+        <tr><td><b>钱包攻击</b></td><td>现金损失比例，心态下降</td><td>钓鱼攻击，损失 40% USDT</td></tr>
+        <tr><td><b>债务追加</b></td><td>小王追加债务</td><td>催债，追加 $500</td></tr>
+      </table>
+    </div>
+
+    <!-- 资产列表 -->
+    <div class="section" id="assets">
+      <div class="section-head"><h2>资产列表</h2><span class="section-tag">ASSETS</span></div>
+      <table class="px-table">
+        <tr><th>代码</th><th>名称</th><th>价格区间</th><th>特点</th></tr>
+        <tr><td><span class="asset-icon" style="background:#f7931a;">B</span>BTC</td><td>比特币</td><td>$18,000–$126,000</td><td>受监管/ETF事件影响</td></tr>
+        <tr><td><span class="asset-icon" style="background:#627eea;">E</span>ETH</td><td>以太坊</td><td>$500–$5,000</td><td>受技术升级/监管影响</td></tr>
+        <tr><td><span class="asset-icon" style="background:#c2a633;">D</span>DOGE</td><td>狗狗币</td><td>$2–$50</td><td>马斯克一推就飞</td></tr>
+        <tr><td><span class="asset-icon" style="background:#ff4500;">G</span>GPU</td><td>ETH矿机显卡</td><td>$200–$6,000</td><td>AI爆发暴涨，POS升级崩盘</td></tr>
+        <tr><td><span class="asset-icon" style="background:#0052ff;">M</span>MINER</td><td>BTC矿机</td><td>$200–$2,000</td><td>受算力/减半/分叉影响</td></tr>
+        <tr><td><span class="asset-icon" style="background:#9b59b6;">N</span>NFT</td><td>总统代言</td><td>$3,000–$18,000</td><td>情绪驱动，波动极大</td></tr>
+        <tr><td><span class="asset-icon" style="background:#00c896;">L</span>LP</td><td>DeFi矿池</td><td>$80–$2,000</td><td>最怕黑客攻击，可跌破底价</td></tr>
+        <tr><td><span class="asset-icon" style="background:#666666;">P</span>PLUS</td><td>PLUS传销币</td><td>$30–$1,000</td><td>可能 ×4 拉盘，跑路后永久归零</td></tr>
+      </table>
+    </div>
+
+    <!-- 本地存档 -->
+    <div class="section" id="save">
+      <div class="section-head"><h2>本地存档</h2><span class="section-tag">SAVE</span></div>
+      <div class="save-box">
+        💾 游戏自动保存进度（浏览器 localStorage）<br>
+        关闭浏览器后重新打开，可选择"继续上局"恢复进度<br>
+        点击"入场！"开始新游戏将覆盖存档
+      </div>
+    </div>
+
+  </div>
+
+  <div class="site-footer">
+    <span>币圈浮生记 · Pixel Edition · v1.3</span>
+    <span>单文件部署 · crypto.html</span>
+  </div>
+
+</div>
+</body>
+</html>

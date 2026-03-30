@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>币圈浮生记</title>
+<style>
+/* ═══════════════════════════════════════
+   PIXEL THEME — 币圈浮生记
+   ═══════════════════════════════════════ */
+:root{
+  --bg:#1b1a17;
+  --panel:#e7d8b1;
+  --panel-dark:#3b3127;
+  --panel-mid:#8c7757;
+  --line:#2b241d;
+  --text:#1f1a14;
+  --muted:#5e5343;
+  --green:#4ab83a;
+  --red:#e35b4f;
+  --blue:#3a6db5;
+  --yellow:#f0c64b;
+  --screen:#0a0f14;
+  --screen2:#131c24;
+  --screenText:#6cff3d;
+  --shadow:#120f0c;
+  --px:4px;
+}
+*{box-sizing:border-box;image-rendering:pixelated;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;height:100%;background:linear-gradient(180deg,#2f2a24,#211d19);color:var(--text);font-family:"Courier New","Microsoft YaHei",monospace;}
+body{padding:12px;}
+
+/* ── FRAME ── */
+.frame{
+  max-width:1440px;margin:0 auto;
+  border:var(--px) solid var(--line);
+  background:var(--panel);
+  box-shadow:0 0 0 4px #6d5c45,0 0 0 8px var(--line),12px 12px 0 0 var(--shadow);
+  padding:12px;
+}
+
+/* ── PIXEL PANEL BASE ── */
+.px-panel{
+  border:var(--px) solid var(--line);
+  box-shadow:inset -4px -4px 0 0 #c9b68d,inset 4px 4px 0 0 #fff2cb;
+  background:var(--panel);
+}
+.px-screen{
+  border:var(--px) solid var(--line);
+  background:linear-gradient(180deg,var(--screen2),var(--screen));
+  color:var(--screenText);
+  box-shadow:inset -4px -4px 0 0 #05080c,inset 4px 4px 0 0 #1d2c38;
+  padding:10px;
+}
+.screen-title{color:#8dc1ff;font-size:12px;margin-bottom:6px;letter-spacing:1px;}
+.screen-big{font-size:28px;font-weight:700;line-height:1.1;}
+.screen-sm{font-size:18px;font-weight:700;line-height:1.1;}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:grid;
+  grid-template-columns:280px 1fr 280px;
+  gap:10px;margin-bottom:10px;
+}
+.titlebox{
+  padding:12px 16px;
+  background:linear-gradient(180deg,#254b7c,#1c3555);
+  color:#fff4d2;
+  border:var(--px) solid var(--line);
+  box-shadow:inset -4px -4px 0 0 #132842,inset 4px 4px 0 0 #40679b;
+}
+.titlebox h1{margin:0;font-size:30px;letter-spacing:2px;line-height:1;}
+.titlebox small{display:block;margin-top:6px;color:#cbd8e9;font-size:11px;}
+.statusbar{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:var(--px) solid var(--line);
+  box-shadow:inset -4px -4px 0 0 #c9b68d,inset 4px 4px 0 0 #fff2cb;
+  overflow:hidden;
+}
+.stat{padding:10px 12px;border-right:var(--px) solid var(--line);}
+.stat:last-child{border-right:none;}
+.stat-lbl{font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;}
+.stat-val{font-size:22px;font-weight:700;line-height:1.1;}
+.green{color:var(--green);}
+.red{color:var(--red);}
+.yellow{color:#d88e16;}
+.alertbox{
+  padding:12px 14px;
+  background:linear-gradient(180deg,#b94634,#913227);
+  color:#fff4d2;
+  border:var(--px) solid var(--line);
+  box-shadow:inset -4px -4px 0 0 #6d241d,inset 4px 4px 0 0 #d96658;
+}
+.alertbox .stat-lbl{color:#ffd3bf;margin-bottom:4px;}
+.alertbox .alert-val{font-size:15px;font-weight:700;line-height:1.4;}
+
+/* ── MAIN GRID ── */
+.main{display:grid;grid-template-columns:250px 1fr 310px;gap:10px;}
+
+/* ── PANEL HEAD ── */
+.panelhead{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:10px;padding-bottom:8px;
+  border-bottom:var(--px) solid var(--line);
+}
+.panelhead h2{margin:0;font-size:17px;letter-spacing:1px;}
+.badge{
+  padding:3px 8px;font-size:11px;
+  border:3px solid var(--line);background:#d7c396;
+  box-shadow:inset -3px -3px 0 0 #bda173,inset 3px 3px 0 0 #f9ebc8;
+}
+
+/* ── PIXEL BUTTON ── */
+.px-btn{
+  width:100%;text-align:left;
+  border:var(--px) solid var(--line);
+  background:#d9c69c;padding:10px 12px;
+  font-size:15px;font-family:inherit;cursor:pointer;
+  box-shadow:inset -4px -4px 0 0 #b79c70,inset 4px 4px 0 0 #f6e8c4;
+  color:var(--text);
+}
+.px-btn:hover{filter:brightness(1.04);}
+.px-btn:active{box-shadow:inset 4px 4px 0 0 #b79c70,inset -4px -4px 0 0 #f6e8c4;}
+.px-btn.active{
+  background:#2b5fa3;color:#fff4d2;
+  box-shadow:inset -4px -4px 0 0 #193c6c,inset 4px 4px 0 0 #5484c4;
+}
+
+/* ── INFO CARD ── */
+.info-card{
+  border:var(--px) solid var(--line);background:#ede0bc;
+  padding:10px;margin-bottom:8px;
+  box-shadow:inset -4px -4px 0 0 #c3ab7d,inset 4px 4px 0 0 #fff1cd;
+}
+.info-card .stat-lbl{margin-bottom:5px;}
+
+/* ── MOOD SCREEN ── */
+.mood-screen{
+  border:var(--px) solid var(--line);
+  padding:10px;margin-bottom:8px;
+  box-shadow:inset -4px -4px 0 0 #05080c,inset 4px 4px 0 0 #1d2c38;
+  transition:background .4s;
+}
+.mood-hold{background:linear-gradient(180deg,#3a3530,#252220);}
+.mood-fomo{background:linear-gradient(180deg,#7a5c10,#5a4008);}
+.mood-panic{background:linear-gradient(180deg,#8b2010,#5a1008);}
+.mood-rekt{background:linear-gradient(180deg,#5a1808,#380e04);}
+.mood-moon{background:linear-gradient(180deg,#1a5c28,#0e3818);}
+
+/* ── LEFT SOURCE LIST ── */
+.source-list{display:grid;gap:8px;margin-bottom:8px;}
+.left-divider{border:none;border-top:var(--px) solid var(--line);margin:8px 0;}
+.func-list{display:grid;gap:6px;}
+.func-btn{
+  width:100%;text-align:left;
+  border:3px solid var(--line);background:#c9b88a;
+  padding:8px 10px;font-size:13px;font-family:inherit;cursor:pointer;
+  box-shadow:inset -3px -3px 0 0 #a89060,inset 3px 3px 0 0 #e8d8b0;color:var(--text);
+}
+.func-btn:active{box-shadow:inset 3px 3px 0 0 #a89060,inset -3px -3px 0 0 #e8d8b0;}
+
+/* ── MARKET LIST ── */
+.market-list{display:grid;gap:8px;margin-bottom:10px;}
+.coin-row{
+  display:grid;grid-template-columns:44px 1fr 90px 80px 80px;
+  gap:8px;align-items:center;padding:9px 10px;
+  border:var(--px) solid var(--line);background:#efe2bf;cursor:pointer;
+  box-shadow:inset -4px -4px 0 0 #c8b083,inset 4px 4px 0 0 #fff1cf;
+}
+.coin-row:hover{filter:brightness(1.03);}
+.coin-row:active{box-shadow:inset 4px 4px 0 0 #c8b083,inset -4px -4px 0 0 #fff1cf;}
+.coin-row.sel{
+  background:#2b5fa3;color:#fff7df;
+  box-shadow:inset -4px -4px 0 0 #183d69,inset 4px 4px 0 0 #5e8fd0;
+}
+.coin-row.has-pos{border-left:5px solid var(--green);}
+.coin-icon-wrap{position:relative;width:36px;height:36px;flex-shrink:0;}
+.coin-icon{
+  width:36px;height:36px;border:var(--px) solid var(--line);
+  display:grid;place-items:center;font-weight:700;font-size:15px;color:#fff4d2;
+  box-shadow:inset -4px -4px 0 0 rgba(0,0,0,.25),inset 4px 4px 0 0 rgba(255,255,255,.18);
+}
+.coin-pos-badge{
+  position:absolute;top:-6px;left:-6px;
+  width:14px;height:14px;
+  background:var(--green);border:2px solid var(--line);
+  font-size:9px;font-weight:700;color:#fff;
+  display:grid;place-items:center;line-height:1;
+  box-shadow:2px 2px 0 0 var(--shadow);
+}
+.coin-meta b{display:block;font-size:16px;line-height:1;}
+.coin-meta span{display:block;font-size:11px;opacity:.75;margin-top:3px;}
+.coin-price{font-size:16px;text-align:right;font-weight:700;}
+.coin-chg{font-size:15px;text-align:right;font-weight:700;}
+.spark-box{
+  height:36px;border:var(--px) solid var(--line);
+  background:#111820;
+  box-shadow:inset -4px -4px 0 0 #04070b,inset 4px 4px 0 0 #22303c;
+  overflow:hidden;
+}
+
+/* ── TRADE AREA ── */
+.trade-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+.trade-card{
+  border:var(--px) solid var(--line);padding:10px;background:#efe2bf;
+  box-shadow:inset -4px -4px 0 0 #c8b083,inset 4px 4px 0 0 #fff1cf;
+}
+.trade-card h3{margin:0 0 10px;font-size:15px;}
+.kv{display:grid;gap:8px;grid-template-columns:1fr 1fr;margin-bottom:8px;}
+.field{margin-bottom:8px;}
+.field label{display:block;margin-bottom:5px;font-size:12px;color:var(--muted);}
+.px-range{
+  width:100%;cursor:pointer;accent-color:var(--blue);
+  margin:6px 0 2px;height:6px;
+}
+.qty-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;font-size:12px;color:var(--muted);}
+.qty-val{font-size:20px;font-weight:700;color:var(--text);}
+.action.btn-disabled{
+  background:#66605b!important;
+  box-shadow:inset -4px -4px 0 0 #47423e,inset 4px 4px 0 0 #8b857e!important;
+  opacity:.5;cursor:not-allowed;
+}
+.px-input,.px-select{
+  width:100%;border:var(--px) solid var(--line);
+  padding:8px;font-size:16px;font-family:inherit;
+  background:#fff3d2;color:var(--text);
+  box-shadow:inset -4px -4px 0 0 #d4bc8d,inset 4px 4px 0 0 #fff8e5;
+  outline:none;
+}
+.px-select:disabled{background:#d4c9a8;color:var(--muted);cursor:not-allowed;opacity:.85;}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+.action{
+  border:var(--px) solid var(--line);padding:12px 8px;
+  font-size:22px;font-weight:700;cursor:pointer;color:#fff7df;
+  font-family:inherit;
+}
+.action:active{filter:brightness(.85);}
+.buy{background:#2f8c45;box-shadow:inset -4px -4px 0 0 #1f5e2f,inset 4px 4px 0 0 #53b667;}
+.sell{background:#b94634;box-shadow:inset -4px -4px 0 0 #7a291f,inset 4px 4px 0 0 #d96b5c;}
+.next-btn{background:#bc8b23;box-shadow:inset -4px -4px 0 0 #7d5c18,inset 4px 4px 0 0 #e1b44e;transition:transform .08s,box-shadow .08s;}
+.next-btn:active{box-shadow:inset 4px 4px 0 0 #7d5c18,inset -4px -4px 0 0 #e1b44e;transform:scale(.97);filter:none;}
+.flat-btn{background:#66605b;box-shadow:inset -4px -4px 0 0 #47423e,inset 4px 4px 0 0 #8b857e;}
+.footer-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+
+/* ── RIGHT: EVENT FEED ── */
+.event-list{display:grid;gap:8px;margin-bottom:10px;}
+.ev-card{
+  display:grid;grid-template-columns:44px 1fr;gap:8px;
+  border:var(--px) solid var(--line);background:#efe2bf;padding:9px;
+  box-shadow:inset -4px -4px 0 0 #c8b083,inset 4px 4px 0 0 #fff1cf;
+}
+.ev-avatar{
+  width:44px;height:44px;border:var(--px) solid var(--line);
+  display:grid;place-items:center;font-size:20px;background:#d9c69c;
+  box-shadow:inset -4px -4px 0 0 #b79c70,inset 4px 4px 0 0 #f6e8c4;
+}
+.ev-card b{display:block;margin-bottom:3px;font-size:13px;}
+.ev-card p{margin:0;line-height:1.4;font-size:12px;color:var(--muted);}
+.ev-empty{color:var(--muted);font-size:13px;padding:8px;}
+
+/* ── RIGHT: BIG CHART ── */
+.big-chart{
+  width:100%;height:130px;
+  border:var(--px) solid var(--line);background:#10161c;
+  box-shadow:inset -4px -4px 0 0 #05080c,inset 4px 4px 0 0 #22303c;
+}
+
+/* ── MODAL ── */
+.modal-back{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);
+  align-items:center;justify-content:center;z-index:100;padding:16px;}
+.modal-back.open{display:flex;}
+.modal-win{
+  background:var(--panel);width:100%;max-width:400px;
+  border:var(--px) solid var(--line);
+  box-shadow:0 0 0 4px #6d5c45,8px 8px 0 0 var(--shadow);
+}
+.modal-tb{
+  background:linear-gradient(180deg,#254b7c,#1c3555);
+  color:#fff4d2;padding:10px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:var(--px) solid var(--line);
+}
+.modal-tb h3{margin:0;font-size:16px;letter-spacing:1px;}
+.modal-x{
+  width:24px;height:24px;background:#d9c69c;
+  border:3px solid var(--line);font-size:14px;cursor:pointer;
+  display:grid;place-items:center;
+  box-shadow:inset -3px -3px 0 0 #b79c70,inset 3px 3px 0 0 #f6e8c4;
+  font-family:inherit;
+}
+.modal-body{padding:16px;}
+.modal-foot{display:flex;justify-content:center;gap:10px;padding:10px 16px 16px;flex-wrap:wrap;}
+.modal-icon-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
+.modal-big-icon{font-size:34px;line-height:1;}
+.modal-text{font-size:13px;line-height:1.8;flex:1;}
+.m-btn{
+  border:var(--px) solid var(--line);padding:9px 18px;
+  font-size:14px;font-family:inherit;cursor:pointer;
+  background:#d9c69c;color:var(--text);
+  box-shadow:inset -4px -4px 0 0 #b79c70,inset 4px 4px 0 0 #f6e8c4;
+}
+.m-btn:active{box-shadow:inset 4px 4px 0 0 #b79c70,inset -4px -4px 0 0 #f6e8c4;}
+.m-btn.primary{background:#2b5fa3;color:#fff4d2;box-shadow:inset -4px -4px 0 0 #193c6c,inset 4px 4px 0 0 #5484c4;}
+.m-input{
+  width:100%;border:var(--px) solid var(--line);padding:9px;
+  font-size:16px;font-family:inherit;background:#fff3d2;color:var(--text);
+  box-shadow:inset -4px -4px 0 0 #d4bc8d,inset 4px 4px 0 0 #fff8e5;
+  outline:none;margin-top:6px;
+}
+.m-row{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:13px;}
+.m-row input[type=range]{flex:1;height:4px;accent-color:var(--blue);}
+.m-box{
+  border:3px solid var(--line);padding:2px 6px;font-size:13px;
+  background:#fff3d2;min-width:44px;text-align:center;
+}
+
+/* ── INTRO ── */
+#introOverlay{
+  display:flex;position:fixed;inset:0;
+  background:linear-gradient(180deg,#2f2a24,#211d19);
+  align-items:center;justify-content:center;z-index:200;padding:16px;
+}
+
+/* ── TICKER ── */
+.ticker-wrap{
+  margin-top:10px;
+  border:var(--px) solid var(--line);
+  background:#10161c;height:24px;overflow:hidden;
+  display:flex;align-items:center;
+  box-shadow:inset -4px -4px 0 0 #05080c,inset 4px 4px 0 0 #22303c;
+}
+.ticker-icon{padding:0 8px;color:#8dc1ff;font-size:13px;flex-shrink:0;border-right:2px solid #2a3840;}
+.ticker-scroll{flex:1;overflow:hidden;height:100%;display:flex;align-items:center;}
+.ticker-txt{white-space:nowrap;font-size:12px;color:#6cff3d;animation:tick 30s linear infinite;}
+@keyframes tick{0%{transform:translateX(700px);}100%{transform:translateX(-100%);}}
+.ticker-day{padding:0 10px;font-size:12px;color:var(--yellow);border-left:2px solid #2a3840;flex-shrink:0;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .topbar{grid-template-columns:1fr 1fr;}
+  .titlebox{grid-column:1/3;}
+  .main{grid-template-columns:220px 1fr;}
+  .right-col{display:none;}
+}
+@media(max-width:700px){
+  body{padding:6px;}
+  .topbar{grid-template-columns:1fr;}
+  .titlebox{grid-column:auto;}
+  .main{grid-template-columns:1fr;}
+  .left-col{display:block;order:2;}
+  .main > main{order:1;}
+  .right-col{display:none;}
+  .trade-grid{grid-template-columns:1fr;}
+  .footer-actions{grid-template-columns:1fr;}
+  .coin-row{grid-template-columns:36px 1fr 80px 70px;}
+  .spark-box{display:none;}
+  .statusbar{grid-template-columns:repeat(2,1fr);}
+  .topbar{gap:6px;}
+  .trade-card h3{font-size:12px;margin-bottom:5px;}
+  .trade-card .px-screen{padding:5px 7px;}
+  .trade-card .screen-title{font-size:10px;margin-bottom:1px;}
+  .trade-card .screen-sm{font-size:13px;}
+  .source-list{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ INTRO OVERLAY ══ -->
+<div id="introOverlay">
+  <div class="modal-win" style="max-width:440px;">
+    <div class="modal-tb"><h3>₿ 币圈浮生记</h3></div>
+    <div class="modal-body">
+      <div class="modal-icon-row">
+        <span class="modal-big-icon">📱</span>
+        <div class="modal-text">
+          2023年，老同学小王说缅北有个"互联网客服"岗位，月入三万。<br>
+          <span style="color:var(--muted);">"这是机会！"</span><br><br>
+          你把房子抵了贷款凑路费，跟着去了。下飞机才发现——<br>
+          手机没收，护照扣押，签的是电诈合同。<br><br>
+          三个月后你和小王密谋出逃，翻墙、躲追捕、差点被噶腰子……<br>
+          好不容易跑回国内。回来一查：<b>房子已经在走拍卖程序了。</b><br><br>
+          小王说<b>"帮你东山再起"</b>，借给你 <b style="color:var(--red);">$3,000</b>：<br>
+          <span style="color:var(--muted);">"$2,000帮你配了专业炒币电脑和硬件钱包，<br>剩下$1,000就是你的启动资金。"</span><br><br>
+          <span style="font-size:12px;color:var(--muted);">（那台电脑，你至今没见到）</span><br><br>
+          现在你欠他 <b style="color:var(--red);">$3,000</b>，日息 <b>10%</b>。<br>
+          <span style="color:var(--muted);">"20天还清，不然去堵你。"</span>
+        </div>
+      </div>
+      <div id="savedNotice" style="display:none;padding:8px;background:#fff3d2;border:3px solid var(--line);font-size:13px;margin-bottom:8px;">
+        💾 发现存档！
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="m-btn primary" onclick="startGame(false)" style="font-size:16px;padding:10px 24px;">入场！</button>
+      <button class="m-btn" id="continueBtn" style="display:none;" onclick="startGame(true)">继续上局</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP FRAME ══ -->
+<div class="frame">
+
+  <!-- TOPBAR -->
+  <section class="topbar">
+    <div class="titlebox">
+      <h1>币圈浮生记</h1>
+      <small>Pixel Edition · 20天翻盘传说</small>
+      <a href="help.html" style="display:inline-block;margin-top:5px;padding:3px 10px;font-size:11px;font-family:inherit;color:var(--text);background:#d9c69c;border:3px solid var(--line);box-shadow:inset -2px -2px 0 0 #b79c70,inset 2px 2px 0 0 #f6e8c4;text-decoration:none;letter-spacing:1px;">❓ 帮助手册</a>
+    </div>
+
+    <div class="statusbar">
+      <div class="stat">
+        <div class="stat-lbl">现金 USDT</div>
+        <div class="stat-val green" id="tbCash">1000</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">负债 / 日息10%</div>
+        <div class="stat-val red" id="tbDebt">3000</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">心态值</div>
+        <div class="stat-val" id="tbHealth" style="color:#aaddcc;">100</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">天数</div>
+        <div class="stat-val yellow" id="tbDays">0 / 20</div>
+      </div>
+    </div>
+
+    <div class="alertbox">
+      <div class="stat-lbl" id="alertLbl">状态</div>
+      <div class="alert-val" id="alertTxt">等待入场...</div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <section class="main">
+
+    <!-- LEFT: 信息源 -->
+    <aside class="px-panel left-col" style="padding:12px;">
+      <div class="panelhead"><h2>信息源</h2><div class="badge">SOURCE</div></div>
+
+      <div class="source-list" id="sourceList">
+        <button class="px-btn active" onclick="srcClick(this,'twitter')">🐦 Twitter 传闻</button>
+        <button class="px-btn" onclick="srcClick(this,'discord')">💬 Discord 小道</button>
+        <button class="px-btn" onclick="srcClick(this,'market')">📊 交易所公告</button>
+        <button class="px-btn" onclick="srcClick(this,'kol')">👤 KOL 观点</button>
+      </div>
+
+      <div class="info-card">
+        <div class="stat-lbl">内幕情报</div>
+        <div id="intelText" style="font-size:13px;line-height:1.6;">"等待交易信号..."</div>
+      </div>
+
+      <div class="mood-screen mood-hold" id="moodScreen">
+        <div class="screen-title">今日情绪</div>
+        <div class="screen-big" id="moodText" style="color:#6cff3d;">HOLD</div>
+      </div>
+
+      <hr class="left-divider"/>
+      <div class="func-list">
+        <button class="func-btn" onclick="openModal('bank')">🏦 AAVE 存款</button>
+        <button class="func-btn" onclick="openModal('postal')">💸 还款小王</button>
+        <button class="func-btn" onclick="openModal('hospital')">🧠 心理援助</button>
+        <button class="func-btn" onclick="openModal('cafe')">🔍 Etherscan</button>
+      </div>
+    </aside>
+
+    <!-- CENTER: Market + Trade -->
+    <main class="px-panel" style="padding:12px;">
+      <div class="panelhead"><h2>市场行情</h2><div class="badge">MARKET</div></div>
+
+      <div class="market-list" id="marketList"></div>
+
+      <div class="trade-grid">
+        <!-- Left trade card: current selection -->
+        <div class="trade-card">
+          <h3>当前选择</h3>
+          <div class="kv">
+            <div class="px-screen">
+              <div class="screen-title">币种</div>
+              <div class="screen-sm" id="selName">—</div>
+            </div>
+            <div class="px-screen">
+              <div class="screen-title">价格</div>
+              <div class="screen-sm" id="selPrice">—</div>
+            </div>
+          </div>
+          <div class="px-screen">
+            <div class="screen-title">持仓 / 爆仓价</div>
+            <div class="screen-sm" id="selHolding">—</div>
+          </div>
+          <div class="kv" style="margin-top:8px;">
+            <div class="px-screen">
+              <div class="screen-title">杠杆</div>
+              <div class="screen-sm" id="selLev">1x</div>
+            </div>
+            <div class="px-screen">
+              <div class="screen-title">爆仓风险</div>
+              <div class="screen-sm" id="selLiqRisk">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right trade card: controls -->
+        <div class="trade-card">
+          <h3>交易控制</h3>
+          <div class="field">
+            <div class="qty-label"><span>数量（手）</span><span class="qty-val" id="qtyDisplay">0</span></div>
+            <input class="px-range" id="qtyInput" type="range" value="0" min="0" max="100" oninput="onQtySlider(this.value)"/>
+          </div>
+          <div class="field">
+            <label>杠杆</label>
+            <select class="px-select" id="levSelect" onchange="setLev(parseInt(this.value))">
+              <option value="1">1x — 现货</option>
+              <option value="2">2x — 杠杆（50%跌爆仓）</option>
+            </select>
+          </div>
+          <div class="btn-row">
+            <button class="action buy btn-disabled" id="buyBtn" onclick="handleBuy()">买入</button>
+            <button class="action sell btn-disabled" id="sellBtn" onclick="handleSell()">卖出</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-actions">
+        <button class="action next-btn" onclick="handleNextDay()">⏩ 下一天</button>
+        <button class="action flat-btn" onclick="handleCloseAll()">全部平仓</button>
+      </div>
+
+    </main>
+
+    <!-- RIGHT: Account + Events + Chart -->
+    <aside class="px-panel right-col" style="padding:12px;">
+      <div class="panelhead"><h2>账户情况</h2><div class="badge">ACCOUNT</div></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <div class="px-screen">
+          <div class="screen-title">持仓市值</div>
+          <div class="screen-big" id="acctPos">$0</div>
+        </div>
+        <div class="px-screen">
+          <div class="screen-title">持仓数量</div>
+          <div class="screen-big" id="acctQty">0手</div>
+        </div>
+      </div>
+      <div class="px-screen" style="margin-bottom:8px;">
+        <div class="screen-title">总持仓 / 仓位限制</div>
+        <div class="screen-sm" id="acctCap">0 / 100</div>
+      </div>
+
+      <div class="panelhead" style="margin-top:6px;"><h2>事件流</h2><div class="badge">EVENT</div></div>
+      <div class="event-list" id="eventFeed">
+        <div class="ev-empty">暂无事件，点击"下一天"开始</div>
+      </div>
+
+      <svg id="bigChart" class="big-chart" viewBox="0 0 300 130" preserveAspectRatio="none"></svg>
+    </aside>
+
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-icon">📰</div>
+    <div class="ticker-scroll"><span class="ticker-txt" id="tickerTxt">加载中...</span></div>
+    <div class="ticker-day" id="tickerDay">0/20</div>
+  </div>
+
+</div><!-- .frame -->
+
+<!-- ══ MODALS ══ -->
+<div class="modal-back" id="modalBack">
+
+  <!-- Event -->
+  <div class="modal-win" id="modalEvent" style="display:none;">
+    <div class="modal-tb"><h3 id="evTitle">⚡ 链上事件</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="modal-icon-row">
+        <span class="modal-big-icon" id="evIcon">📰</span>
+        <p class="modal-text" id="evText"></p>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="m-btn primary" onclick="closeModal()">知道了（又这样）</button></div>
+  </div>
+
+  <!-- Liquidation -->
+  <div class="modal-win" id="modalLiq" style="display:none;">
+    <div class="modal-tb"><h3>💀 爆仓通知</h3></div>
+    <div class="modal-body">
+      <div class="modal-icon-row">
+        <span class="modal-big-icon">📉</span>
+        <p class="modal-text" id="liqText"></p>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="m-btn primary" onclick="closeModal()">好的（哭）</button></div>
+  </div>
+
+  <!-- Bank -->
+  <div class="modal-win" id="modalBank" style="display:none;">
+    <div class="modal-tb"><h3>🏦 AAVE 借贷协议</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;font-size:13px;">
+        <div>钱包：<b id="bkCash">$0</b></div>
+        <div>已存：<b id="bkSavings">$0</b></div>
+        <div style="grid-column:1/3;color:#4ab83a;font-size:12px;" id="bkInterest">日利率 1% · 今日利息 $0.00</div>
+      </div>
+      <div style="border-top:3px solid var(--line);padding-top:10px;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">存入 &nbsp;<b id="bkDepAmt">$0</b> USDT</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="range" id="bankDepSlider" min="0" max="1000" value="0" oninput="onDepSlider(this.value)" style="flex:1;accent-color:#2b5fa3;"/>
+          <button class="m-btn" onclick="setDepMax()" style="white-space:nowrap;padding:6px 10px;font-size:12px;">全部</button>
+        </div>
+        <div style="margin-top:8px;">
+          <button class="m-btn primary" onclick="handleDeposit()" style="width:100%;">存入</button>
+        </div>
+      </div>
+      <div style="border-top:3px solid var(--line);padding-top:10px;">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">取出 &nbsp;<b id="bkWitAmt">$0</b> USDT</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="range" id="bankWitSlider" min="0" max="1000" value="0" oninput="onWitSlider(this.value)" style="flex:1;accent-color:#b94634;"/>
+          <button class="m-btn" onclick="setWitMax()" style="white-space:nowrap;padding:6px 10px;font-size:12px;">全部</button>
+        </div>
+        <div style="margin-top:8px;">
+          <button class="m-btn" onclick="handleWithdraw()" style="width:100%;">取出</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="m-btn" onclick="closeModal()">断开连接</button>
+    </div>
+  </div>
+
+  <!-- Hospital -->
+  <div class="modal-win" id="modalHospital" style="display:none;">
+    <div class="modal-tb"><h3>🧠 心理援助热线</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="modal-icon-row">
+        <span class="modal-big-icon">👨‍⚕️</span>
+        <p class="modal-text">心态值：<b id="hospHealth">100</b><br><br>专业疏导费：<b style="color:var(--red);">$5,000</b><br>（恢复至满血100）<br><br><span style="color:var(--muted);font-size:12px;">归零即心态崩溃，游戏结束。</span></p>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="m-btn primary" onclick="handleHeal()">接受疏导</button>
+      <button class="m-btn" onclick="closeModal()">我没事（嘴硬）</button>
+    </div>
+  </div>
+
+  <!-- Postal -->
+  <div class="modal-win" id="modalPostal" style="display:none;">
+    <div class="modal-tb"><h3>💸 微信转账 — 还给小王</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <p style="font-size:13px;margin-bottom:8px;">欠款：<b id="postDebt" style="color:var(--red);">$3,000</b> &nbsp;|&nbsp; 钱包：<b id="postCash">$1,000</b></p>
+      <input class="m-input" type="number" id="repayAmt" placeholder="还款金额" min="1"/>
+    </div>
+    <div class="modal-foot">
+      <button class="m-btn primary" onclick="handleRepay()">转账</button>
+      <button class="m-btn" onclick="setRepayMax()">全部还</button>
+      <button class="m-btn" onclick="closeModal()">再等等</button>
+    </div>
+  </div>
+
+  <!-- Cafe/Log -->
+  <div class="modal-win" id="modalCafe" style="display:none;">
+    <div class="modal-tb"><h3>🔍 Etherscan — 链上记录</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-body" style="padding:12px;">
+      <div style="background:#10161c;border:var(--px) solid var(--line);height:200px;overflow-y:auto;padding:6px;" id="cafeLog"></div>
+    </div>
+    <div class="modal-foot"><button class="m-btn primary" onclick="closeModal()">关闭</button></div>
+  </div>
+
+  <!-- Warn -->
+  <div class="modal-win" id="modalWarn" style="display:none;max-width:340px;">
+    <div class="modal-tb"><h3>⚠ 提示</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="modal-icon-row">
+        <span class="modal-big-icon" id="warnIcon">⛔</span>
+        <p class="modal-text" id="warnText"></p>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="m-btn primary" onclick="closeModal()">知道了</button></div>
+  </div>
+
+  <!-- Game Over -->
+  <div class="modal-win" id="modalGameover" style="display:none;">
+    <div class="modal-tb"><h3 id="goTitle">游戏结束</h3></div>
+    <div class="modal-body">
+      <div class="modal-icon-row">
+        <span class="modal-big-icon" id="goIcon">🎉</span>
+        <p class="modal-text" id="goText"></p>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="m-btn primary" onclick="restartGame()">再来一把</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  GAME DATA
+// ═══════════════════════════════════════════
+
+const GOODS = {
+  BTC:   "比特币 BTC",
+  ETH:   "以太坊 ETH",
+  DOGE:  "狗狗币 DOGE",
+  GPU:   "ETH矿机显卡",
+  MINER: "BTC矿机",
+  NFT:   "总统代言",
+  LP:    "DeFi矿池 LP",
+  PLUS:  "PLUS传销币",
+};
+
+const COIN_COLORS = {
+  BTC:"#f7931a", ETH:"#627eea", DOGE:"#c2a633", GPU:"#ff4500",
+  MINER:"#0052ff", NFT:"#9b59b6", LP:"#00c896", PLUS:"#666666",
+};
+
+const PRICE_CFG = {
+  BTC:   { min:8000,   max:126000, dec:0 },
+  ETH:   { min:200,    max:5000,   dec:1 },
+  DOGE:  { min:2,      max:50,     dec:2 },
+  GPU:   { min:200,    max:6000,   dec:0 },
+  MINER: { min:200,    max:2000,   dec:0 },
+  NFT:   { min:3000,   max:18000,  dec:0 },
+  LP:    { min:80,     max:2000,   dec:1 },
+  PLUS:  { min:30,     max:1000,   dec:1 },
+};
+
+const EVENTS = [
+  {desc:"马斯克发推：'Doge to the moon 🚀'，DOGE暴涨！",                     type:"price", goods:"DOGE",  rate:7,    icon:"🐕", title:"KOL喊单"},
+  {desc:"BTC ETF获批！机构买盘涌入，价格飙升！",                              type:"price", goods:"BTC",   rate:3,    icon:"📈", title:"ETF获批"},
+  {desc:"以太坊升级成功！ETH价格爆涨！",                                      type:"price", goods:"ETH",   rate:4,    icon:"🔮", title:"技术升级"},
+  {desc:"孙割参加总统国宴，总统NFT市场FOMO！",                                type:"price", goods:"NFT",   rate:5,    icon:"🦧", title:"NFT炒作"},
+  {desc:"PLUS项目方发推：'我们的算力将部署在火星！'短暂拉盘。",               type:"price", goods:"PLUS",  rate:4,    icon:"🤡", title:"项目方发声"},
+  {desc:"比特币分叉，全网算力争夺，矿机需求暴增！",                            type:"price", goods:"MINER", rate:3.5,  icon:"⛏️", title:"算力争夺"},
+  {desc:"DeFi LP协议TVL突破百亿！矿池LP暴涨！",                              type:"price", goods:"LP",    rate:5,    icon:"💧", title:"DeFi爆发"},
+  {desc:"比特币减半！历史规律来了！BTC价格飙升！",                             type:"price", goods:"BTC",   rate:5,    icon:"⚡", title:"BTC减半"},
+  {desc:"AI算力需求暴增，显卡供不应求！",                                      type:"price", goods:"GPU",   rate:4,    icon:"💻", title:"AI爆发"},
+  {desc:"项目方最后一条推文：'大家保重'。然后失联。",                          type:"price", goods:"PLUS",  rate:0,    icon:"🏃", title:"项目跑路",  bypassFloor:true, rugPull:true},
+  {desc:"SEC起诉最大交易所！市场恐慌踩踏，BTC暴跌！",                         type:"price", goods:"BTC",   rate:0.3,  icon:"⚖️", title:"监管起诉"},
+  {desc:"多个加密货币升级支持POS，不再需要显卡挖矿，崩盘！",                  type:"price", goods:"GPU",   rate:0.25, icon:"💻", title:"庄家暴雷"},
+  {desc:"八部委开会了。你不确定这是第几次。",                                  type:"price", goods:"BTC",   rate:0.8,  icon:"⚖️", title:"监管禁令"},
+  {desc:"DeFi LP协议遭黑客攻击，TVL接近归零！",                               type:"price", goods:"LP",    rate:0.02, icon:"🔓", title:"黑客攻击",  bypassFloor:true},
+  {desc:"矿机价格暴跌，新一代量子工艺上市，旧矿机贱卖！",                      type:"price", goods:"MINER", rate:0.2,  icon:"⛏️", title:"矿机贬值"},
+  {desc:"总统称自己不清楚这个项目，NFT地板价创历史新低。",                     type:"price", goods:"NFT",   rate:0.15, icon:"🖼️", title:"NFT寒冬"},
+  {desc:"基金会说这不影响生态。价格跌了20%。",                                 type:"price", goods:"ETH",   rate:0.7,  icon:"📉", title:"基金会抛售"},
+  {desc:"空投！你参与的协议快照，获赠3手 LP！",                                type:"goods", goods:"LP",    qty:3,     icon:"🎁", title:"免费空投"},
+  {desc:"老乡送了你5手DOGE，说是'未来的黄金'。",                             type:"goods", goods:"DOGE",  qty:5,     icon:"🎁", title:"朋友赠送"},
+  {desc:"你点了'免费空投'链接，USDT钱包被钓鱼！损失20%，心态-30。",          type:"cash",  rate:0.8,  hp:-30,        icon:"🎣", title:"钓鱼攻击"},
+  {desc:"群大佬让你FOMO跟单，亏了10% USDT，心态-10。",                         type:"cash",  rate:0.9,  hp:-10,        icon:"📱", title:"跟单亏损"},
+  {desc:"交易所以'异常交易'冻结部分资产。损失10%持仓，心态-10。",             type:"cash",  rate:0.9,  hp:-10,        icon:"🔒", title:"资产冻结"},
+  {desc:"Gas费暴涨，来回操作损失15% USDT，心态-30。",                         type:"cash",  rate:0.85, hp:-30,        icon:"⛽", title:"Gas爆炸"},
+  {desc:"小王又来催了，还追加了$500债务！",                                    type:"debt",  debt:500,               icon:"😤", title:"追债通知"},
+];
+
+const TICKER_POOL = [
+  "BTC减半倒计时进行中 📅","某交易所宣布暂停提款 😱",
+  "马斯克：'买车支持用DOGE支付' 🐕","SEC：所有币都是证券 ⚖️",
+  "PLUS项目方：'我们的太空算力在建设中' 🤡","NFT地板价创历史新低 🖼️",
+  "BTC ETF日流入创纪录！机构来了 🏦","矿机价格松动，算力过剩 ⛏️",
+  "DeFi协议被盗，团队称'正在调查' 🔓","小王问你还款进度了 😰",
+  "某KOL：'我Allin了' 📊","链上鲸鱼正在悄悄出货 🐳",
+];
+
+const INSIDER_TIPS = [
+  '"孙割阑尾炎复发，可能会爽约总统"',
+  '"DOGE有异常放量，群里已有人埋伏..."',
+  '"机构在悄悄建仓BTC，听说要分叉"',
+  '"某头部交易所提币很慢，小心爆雷"',
+  '"监管部门闭门会议，风声很紧"',
+  '"BTC减半进入倒计时，历史规律来了"',
+  '"PLUS项目方保证不跑路"（他们说的）',
+  '"有大佬在OTC大量收ETH，传说中的底部"',
+  '"矿机价格要崩了，算力过剩严重"',
+];
+
+// ═══════════════════════════════════════════
+//  GAME STATE
+// ═══════════════════════════════════════════
+
+let G = {}, prices = {}, prevPrices = {};
+let selectedGood = null, eventLog = [], currentModal = null, currentLev = 1;
+let priceHistory = {}, recentEvents = [];
+let lastSelectedGood = null; // tracks asset switches to reset slider
+
+function rp(cfg) {
+  const v = cfg.min + Math.random() * (cfg.max - cfg.min);
+  const f = Math.pow(10, cfg.dec || 0);
+  return Math.round(v * f) / f;
+}
+
+function newGame() {
+  G = { cash:1000, savings:0, debt:3000, health:100, capacity:100, goods:{}, totalGoods:0, daysLeft:20, day:0, plusRugged:false };
+  prices = {}; prevPrices = {}; priceHistory = {};
+  for (const k in PRICE_CFG) { prices[k] = rp(PRICE_CFG[k]); priceHistory[k] = [prices[k]]; }
+  selectedGood = null; lastSelectedGood = null; eventLog = []; recentEvents = []; currentLev = 1;
+  document.getElementById('levSelect').value = '1';
+  document.getElementById('qtyInput').value = '0';
+  document.getElementById('qtyDisplay').textContent = '0';
+  setMood(null);
+  updateInsiderTip();
+  updateTicker();
+}
+
+// ═══════════════════════════════════════════
+//  SAVE / LOAD
+// ═══════════════════════════════════════════
+
+function saveGame() {
+  try {
+    localStorage.setItem('cryptoGame_v2', JSON.stringify({
+      G, prices, prevPrices, priceHistory, eventLog, recentEvents,
+      currentLev, selectedGood
+    }));
+  } catch(e) {}
+}
+
+function loadGame() {
+  try {
+    const raw = localStorage.getItem('cryptoGame_v2');
+    if (!raw) return false;
+    const d = JSON.parse(raw);
+    if (!d.G || d.G.daysLeft <= 0) return false;
+    G = d.G; prices = d.prices || {}; prevPrices = d.prevPrices || {};
+    priceHistory = d.priceHistory || {};
+    eventLog = d.eventLog || []; recentEvents = d.recentEvents || [];
+    currentLev = d.currentLev || 1;
+    selectedGood = d.selectedGood || null;
+    document.getElementById('levSelect').value = String(currentLev);
+    return true;
+  } catch(e) { return false; }
+}
+
+function clearSave() { localStorage.removeItem('cryptoGame_v2'); }
+
+// ═══════════════════════════════════════════
+//  GAME LOGIC
+// ═══════════════════════════════════════════
+
+function handleNextDay() { playCoin(); doMove(); }
+
+function doMove() {
+  G.daysLeft--; G.day++;
+  G.debt = parseFloat((G.debt * 1.1).toFixed(2));
+  if (G.savings > 0) G.savings = parseFloat((G.savings * 1.01).toFixed(2));
+  prevPrices = { ...prices };
+  for (const k in PRICE_CFG) {
+    const cfg = (k === 'PLUS' && G.plusRugged) ? { min:0.01, max:0.1, dec:2 } : PRICE_CFG[k];
+    prices[k] = rp(cfg);
+    priceHistory[k].push(prices[k]);
+    if (priceHistory[k].length > 10) priceHistory[k].shift();
+  }
+
+  const liqList = checkLiquidations();
+
+  if (G.daysLeft === 0) {
+    // Force sell all positions
+    for (const k in G.goods) {
+      const v = G.goods[k]; if (!v || v.qty <= 0) continue;
+      const lev = v.lev || 1, entry = v.entry || prices[k];
+      G.cash += Math.max(0, parseFloat(((prices[k] - entry * (1 - 1/lev)) * v.qty).toFixed(2)));
+    }
+    G.goods = {}; G.totalGoods = 0;
+    clearSave();
+    renderAll();
+    if (liqList.length > 0) showLiqModal(liqList, () => showGameOver());
+    else showGameOver();
+    return;
+  }
+
+  let evt = null;
+  if (Math.random() < 0.65) {
+    evt = EVENTS[Math.floor(Math.random() * EVENTS.length)];
+    applyEvent(evt);
+  }
+
+  setMood(evt);
+  updateInsiderTip();
+  saveGame();
+  renderAll();
+  updateTicker();
+
+  if (G.health <= 0) {
+    clearSave();
+    if (liqList.length > 0) showLiqModal(liqList, () => showGameOver());
+    else showGameOver();
+    return;
+  }
+  if (liqList.length > 0) showLiqModal(liqList, () => { if (evt) showEventModal(evt); });
+  else if (evt) showEventModal(evt);
+}
+
+function checkLiquidations() {
+  const out = [];
+  for (const [k, v] of Object.entries(G.goods)) {
+    const lev = v.lev || 1; if (lev <= 1) continue;
+    const liqP = v.entry * (1 - 1/lev);
+    if (prices[k] <= liqP) {
+      out.push({ key:k, qty:v.qty, lev, entry:v.entry, liqPrice:liqP });
+      G.totalGoods -= v.qty;
+      G.health = Math.max(0, G.health - 15);
+      delete G.goods[k];
+    }
+  }
+  return out;
+}
+
+function applyEvent(ev) {
+  if (ev.debt) G.debt += ev.debt;
+  if (ev.type === 'price') {
+    const dec = PRICE_CFG[ev.goods] ? (PRICE_CFG[ev.goods].dec || 0) : 2;
+    if (ev.rugPull) {
+      prices[ev.goods] = 0.01;
+      G.plusRugged = true;
+    } else if (ev.bypassFloor) {
+      const c = PRICE_CFG[ev.goods];
+      prices[ev.goods] = parseFloat((prices[ev.goods] * ev.rate).toFixed(dec));
+      prices[ev.goods] = Math.min(c.max, prices[ev.goods]);
+    } else {
+      const c = PRICE_CFG[ev.goods];
+      prices[ev.goods] = parseFloat((prices[ev.goods] * ev.rate).toFixed(dec));
+      prices[ev.goods] = Math.max(c.min, Math.min(c.max, prices[ev.goods]));
+    }
+    priceHistory[ev.goods].push(prices[ev.goods]);
+    if (priceHistory[ev.goods].length > 10) priceHistory[ev.goods].shift();
+  } else if (ev.type === 'goods' && ev.qty > 0) {
+    if (!G.goods[ev.goods]) G.goods[ev.goods] = { qty:0, totalCost:0, lev:1, entry:prices[ev.goods] };
+    G.goods[ev.goods].qty += ev.qty;
+    G.totalGoods += ev.qty;
+  } else if (ev.type === 'cash') {
+    G.cash = parseFloat((G.cash * ev.rate).toFixed(2));
+    if (ev.hp) G.health = Math.max(0, G.health + ev.hp);
+  }
+  eventLog.unshift(`第${G.day}天 ${ev.desc}`);
+  if (eventLog.length > 30) eventLog.pop();
+  recentEvents.unshift({ icon: ev.icon || '⚡', title: ev.title || '事件', desc: ev.desc });
+  if (recentEvents.length > 3) recentEvents.pop();
+}
+
+function doBuy(key, qty) {
+  const lev = currentLev, p = prices[key];
+  const mPer = Math.max(0.01, p / lev);
+  const n = Math.min(qty, Math.floor(G.cash / mPer), G.capacity - G.totalGoods);
+  if (n <= 0) return 0;
+  G.cash = parseFloat((G.cash - n * mPer).toFixed(2));
+  if (!G.goods[key]) G.goods[key] = { qty:0, totalCost:0, lev, entry:p };
+  else { G.goods[key].entry = (G.goods[key].entry * G.goods[key].qty + p * n) / (G.goods[key].qty + n); G.goods[key].lev = lev; }
+  G.goods[key].qty += n;
+  G.goods[key].totalCost += n * mPer;
+  G.totalGoods += n;
+  return n;
+}
+
+function doSell(key, qty) {
+  if (!G.goods[key] || G.goods[key].qty === 0) return 0;
+  const n = Math.min(qty, G.goods[key].qty);
+  const lev = G.goods[key].lev || 1, entry = G.goods[key].entry || prices[key];
+  const gain = Math.max(0, (prices[key] - entry * (1 - 1/lev)) * n);
+  G.cash = parseFloat((G.cash + gain).toFixed(2));
+  G.goods[key].qty -= n;
+  G.goods[key].totalCost = G.goods[key].qty === 0 ? 0 : G.goods[key].totalCost * (G.goods[key].qty / (G.goods[key].qty + n));
+  if (G.goods[key].qty === 0) delete G.goods[key];
+  G.totalGoods -= n;
+  return n;
+}
+
+function doRepay(amount) {
+  const n = Math.min(amount, G.cash, G.debt);
+  if (n <= 0) return 0;
+  G.cash = parseFloat((G.cash - n).toFixed(2));
+  G.debt = parseFloat((G.debt - n).toFixed(2));
+  if (G.debt < 0) G.debt = 0;
+  return n;
+}
+
+// ═══════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════
+
+function fmtN(n) {
+  if (n >= 10000) return '$' + Math.round(n).toLocaleString('zh-CN');
+  if (n >= 100)   return '$' + n.toFixed(1);
+  if (n >= 1)     return '$' + n.toFixed(2);
+  return '$' + n.toFixed(3);
+}
+function fmtC(n) { return '$' + parseFloat(n).toLocaleString('zh-CN', {minimumFractionDigits:0, maximumFractionDigits:2}); }
+// Compact format for screen-big displays (prevents overflow)
+function fmtK(n) {
+  if (n >= 1000000) return '$' + (n / 1000000).toFixed(2) + 'M';
+  if (n >= 10000)   return '$' + (n / 1000).toFixed(1) + 'K';
+  if (n >= 1000)    return '$' + (n / 1000).toFixed(2) + 'K';
+  if (n >= 100)     return '$' + n.toFixed(1);
+  if (n >= 1)       return '$' + n.toFixed(2);
+  return '$' + n.toFixed(3);
+}
+
+function sparkPath(hist, w, h, pad) {
+  if (!hist || hist.length < 2) return '';
+  const min = Math.min(...hist), max = Math.max(...hist), range = max - min || 1;
+  return hist.map((v, i) => {
+    const x = pad + i * ((w - pad*2) / (hist.length - 1));
+    const y = h - pad - ((v - min) / range) * (h - pad*2);
+    return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
+  }).join(' ');
+}
+
+function renderAll() {
+  // Topbar
+  document.getElementById('tbCash').textContent = fmtC(G.cash);
+  document.getElementById('tbDebt').textContent = fmtC(G.debt);
+  document.getElementById('tbHealth').textContent = G.health;
+  document.getElementById('tbDays').textContent = `${G.day} / 20`;
+  document.getElementById('tickerDay').textContent = `${G.day}/20`;
+
+  // Alert box
+  let minDist = null;
+  for (const [k, v] of Object.entries(G.goods)) {
+    const lev = v.lev || 1; if (lev <= 1) continue;
+    const d = Math.max(0, (prices[k] - v.entry * (1 - 1/lev)) / Math.max(0.001, prices[k]) * 100);
+    if (minDist === null || d < minDist) minDist = d;
+  }
+  const alertLbl = document.getElementById('alertLbl');
+  const alertTxt = document.getElementById('alertTxt');
+  if (minDist !== null && minDist < 30) {
+    alertLbl.textContent = '⚠ 爆仓风险！';
+    alertTxt.textContent = `距爆仓仅剩 ${Math.round(minDist)}% 空间`;
+  } else if (recentEvents.length > 0) {
+    alertLbl.textContent = `第${G.day}天 · ${recentEvents[0].title}`;
+    alertTxt.textContent = recentEvents[0].desc.slice(0, 40) + (recentEvents[0].desc.length > 40 ? '…' : '');
+  } else {
+    alertLbl.textContent = '状态';
+    alertTxt.textContent = `仓位 ${G.totalGoods}/${G.capacity}手 · 存款 ${fmtC(G.savings)}`;
+  }
+
+  // Right account
+  let posVal = 0;
+  for (const [k, v] of Object.entries(G.goods)) if (v.qty > 0) posVal += prices[k] * v.qty;
+  document.getElementById('acctPos').textContent = fmtK(posVal);
+  document.getElementById('acctQty').textContent = G.totalGoods + '手';
+  document.getElementById('acctCap').textContent = G.totalGoods + ' / ' + G.capacity;
+
+  renderMarket();
+  updateTradeInfo();
+  renderEventFeed();
+  renderBigChart();
+}
+
+function renderMarket() {
+  const list = document.getElementById('marketList');
+  list.innerHTML = '';
+  for (const [key, name] of Object.entries(GOODS)) {
+    const p = prices[key], prev = prevPrices[key];
+    let chgStr = '—', chgCls = '';
+    if (prev !== undefined && prev > 0) {
+      const pct = (p - prev) / prev * 100;
+      chgCls = pct >= 0 ? 'green' : 'red';
+      chgStr = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
+    }
+    const hist = priceHistory[key] || [p];
+    const isSel = selectedGood === key;
+    const hasPos = G.goods[key] && G.goods[key].qty > 0;
+    const col = COIN_COLORS[key];
+    const sparkD = sparkPath(hist, 72, 28, 3);
+    const row = document.createElement('div');
+    row.className = 'coin-row' + (isSel ? ' sel' : '') + (hasPos && !isSel ? ' has-pos' : '');
+    row.innerHTML = `
+      <div class="coin-icon-wrap">
+        <div class="coin-icon" style="background:${col}">${key[0]}</div>
+        ${hasPos ? '<div class="coin-pos-badge">●</div>' : ''}
+      </div>
+      <div class="coin-meta"><b>${key}</b><span>${name.replace(key,'').trim()}</span></div>
+      <div class="coin-price">${fmtN(p)}</div>
+      <div class="coin-chg ${isSel ? '' : chgCls}">${chgStr}</div>
+      <div class="spark-box">
+        <svg width="100%" height="100%" viewBox="0 0 72 28" preserveAspectRatio="none">
+          ${sparkD ? `<path d="${sparkD}" fill="none" stroke="${chgCls === 'red' ? '#e35b4f' : '#6cff3d'}" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/>` : ''}
+        </svg>
+      </div>`;
+    row.onclick = () => { selectedGood = key; renderAll(); };
+    list.appendChild(row);
+  }
+}
+
+function updateTradeInfo() {
+  const levSelect = document.getElementById('levSelect');
+  const buyBtn = document.getElementById('buyBtn');
+  const sellBtn = document.getElementById('sellBtn');
+  const qSlider = document.getElementById('qtyInput');
+  const qDisplay = document.getElementById('qtyDisplay');
+
+  if (!selectedGood) {
+    document.getElementById('selName').textContent = '—';
+    document.getElementById('selPrice').textContent = '—';
+    document.getElementById('selHolding').textContent = '—';
+    document.getElementById('selLev').textContent = currentLev + 'x';
+    document.getElementById('selLiqRisk').textContent = '—';
+    document.getElementById('selLiqRisk').className = 'screen-sm';
+    levSelect.disabled = false;
+    buyBtn.classList.add('btn-disabled'); buyBtn.disabled = true;
+    sellBtn.classList.add('btn-disabled'); sellBtn.disabled = true;
+    qSlider.value = 0; qDisplay.textContent = '0';
+    return;
+  }
+
+  const p = prices[selectedGood], v = G.goods[selectedGood];
+  const have = v?.qty || 0;
+  const mPer = Math.max(0.001, p / currentLev);
+  const canBuy = Math.min(G.capacity - G.totalGoods, Math.floor(G.cash / mPer));
+
+  document.getElementById('selName').textContent = selectedGood;
+  document.getElementById('selPrice').textContent = fmtN(p);
+
+  // Lock leverage to existing position
+  if (have > 0) {
+    const lev = v.lev || 1;
+    levSelect.value = String(lev);
+    levSelect.disabled = true;
+    currentLev = lev;
+    const liqP = lev > 1 ? v.entry * (1 - 1/lev) : null;
+    document.getElementById('selHolding').textContent = `${have}手 / 爆:${liqP ? fmtN(liqP) : '—'}`;
+    let liqRisk = '—', riskCls = 'screen-sm';
+    if (liqP !== null) {
+      const dist = Math.max(0, (p - liqP) / Math.max(0.001, p) * 100);
+      liqRisk = Math.round(dist) + '%';
+      if (dist < 30) riskCls = 'screen-sm red';
+    }
+    document.getElementById('selLev').textContent = lev + 'x';
+    document.getElementById('selLiqRisk').textContent = liqRisk;
+    document.getElementById('selLiqRisk').className = riskCls;
+  } else {
+    levSelect.disabled = false;
+    document.getElementById('selHolding').textContent = '空仓';
+    document.getElementById('selLev').textContent = currentLev + 'x';
+    document.getElementById('selLiqRisk').textContent = '—';
+    document.getElementById('selLiqRisk').className = 'screen-sm';
+  }
+
+  // Buy/sell button states
+  const canSell = have > 0;
+  const canBuyAny = canBuy > 0;
+  buyBtn.disabled = !canBuyAny;
+  buyBtn.classList.toggle('btn-disabled', !canBuyAny);
+  sellBtn.disabled = !canSell;
+  sellBtn.classList.toggle('btn-disabled', !canSell);
+
+  // Slider: only reset on asset switch (prevents doubling bug)
+  const sliderMax = Math.max(1, canBuy, have);
+  qSlider.max = sliderMax;
+  if (selectedGood !== lastSelectedGood) {
+    // Switching asset: set sensible default
+    const defaultQty = have > 0 ? have : Math.max(0, canBuy);
+    qSlider.value = defaultQty;
+    qDisplay.textContent = String(defaultQty);
+    lastSelectedGood = selectedGood;
+  } else {
+    // Same asset re-render: only clamp if over new max
+    const cur = parseInt(qSlider.value) || 0;
+    if (cur > sliderMax) { qSlider.value = sliderMax; qDisplay.textContent = String(sliderMax); }
+    // If can't buy and can't sell, zero out
+    if (!canBuyAny && !canSell) { qSlider.value = 0; qDisplay.textContent = '0'; }
+  }
+}
+
+function renderEventFeed() {
+  const feed = document.getElementById('eventFeed');
+  if (recentEvents.length === 0) {
+    feed.innerHTML = '<div class="ev-empty">暂无事件，点击"下一天"开始</div>';
+    return;
+  }
+  feed.innerHTML = recentEvents.map(e => `
+    <div class="ev-card">
+      <div class="ev-avatar">${e.icon}</div>
+      <div><b>${e.title}</b><p>${e.desc.slice(0, 50)}${e.desc.length > 50 ? '…' : ''}</p></div>
+    </div>`).join('');
+}
+
+function renderBigChart() {
+  const svg = document.getElementById('bigChart');
+  const key = selectedGood || 'BTC';
+  const hist = priceHistory[key];
+  svg.innerHTML = '';
+  if (!hist || hist.length < 2) {
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x','150');t.setAttribute('y','70');t.setAttribute('text-anchor','middle');
+    t.setAttribute('fill','#2a3840');t.setAttribute('font-size','14');t.textContent='选择资产';
+    svg.appendChild(t); return;
+  }
+  const W=300,H=130,p=10;
+  const min=Math.min(...hist),max=Math.max(...hist),range=max-min||1;
+  // Grid lines
+  [35,70,105].forEach(y=>{
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1','0');l.setAttribute('y1',y);l.setAttribute('x2',W);l.setAttribute('y2',y);
+    l.setAttribute('stroke','#22303c');l.setAttribute('stroke-width','2');
+    svg.appendChild(l);
+  });
+  // Liq line
+  if (selectedGood && G.goods[selectedGood] && (G.goods[selectedGood].lev||1) > 1) {
+    const liqP = G.goods[selectedGood].entry * (1 - 1/G.goods[selectedGood].lev);
+    const ly = H - p - ((liqP - min) / range) * (H - p*2);
+    const ll=document.createElementNS('http://www.w3.org/2000/svg','line');
+    ll.setAttribute('x1','0');ll.setAttribute('y1',ly.toFixed(1));ll.setAttribute('x2',W);ll.setAttribute('y2',ly.toFixed(1));
+    ll.setAttribute('stroke','#e35b4f');ll.setAttribute('stroke-width','2');ll.setAttribute('stroke-dasharray','6,4');
+    svg.appendChild(ll);
+  }
+  // Pixel line chart
+  const pts = hist.map((v,i)=>{
+    const x = p + i*((W-p*2)/(hist.length-1));
+    const y = H - p - ((v-min)/range)*(H-p*2);
+    return [x.toFixed(1),y.toFixed(1)];
+  });
+  const d = pts.map((pt,i)=>`${i===0?'M':'L'} ${pt[0]} ${pt[1]}`).join(' ');
+  const col = COIN_COLORS[key] || '#6cff3d';
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('d',d);path.setAttribute('fill','none');path.setAttribute('stroke',col);
+  path.setAttribute('stroke-width','4');path.setAttribute('stroke-linecap','square');path.setAttribute('stroke-linejoin','miter');
+  svg.appendChild(path);
+}
+
+function setMood(evt) {
+  const screen = document.getElementById('moodScreen');
+  const text = document.getElementById('moodText');
+  let mood = 'hold', label = 'HOLD';
+  if (evt) {
+    if (evt.type === 'price' && evt.rate > 3)          { mood='fomo';  label='FOMO'; }
+    else if (evt.type === 'price' && evt.rate < 0.5)   { mood='panic'; label='PANIC'; }
+    else if (evt.type === 'cash')                       { mood='rekt';  label='REKT'; }
+    else if (evt.type === 'goods')                      { mood='moon';  label='MOON'; }
+    else if (evt.debt)                                  { mood='panic'; label='PANIC'; }
+  }
+  screen.className = `mood-screen mood-${mood}`;
+  text.textContent = label;
+  text.style.color = mood==='hold'?'#6cff3d': mood==='fomo'?'#f0c64b': mood==='moon'?'#6cff3d':'#ff8888';
+}
+
+function updateInsiderTip() {
+  document.getElementById('intelText').textContent = INSIDER_TIPS[Math.floor(Math.random() * INSIDER_TIPS.length)];
+}
+
+function updateTicker() {
+  const pool = [...TICKER_POOL].sort(() => Math.random() - .5);
+  document.getElementById('tickerTxt').textContent = pool.slice(0,6).join('  ●  ');
+}
+
+// ═══════════════════════════════════════════
+//  HANDLERS
+// ═══════════════════════════════════════════
+
+function handleBuy() {
+  if (!selectedGood) { flash('请先选择一种资产！'); return; }
+  if (G.totalGoods >= G.capacity) { showWarn(`仓位已满（${G.totalGoods}/${G.capacity}手），无法继续买入！`, '📦'); return; }
+  const qty = parseInt(document.getElementById('qtyInput').value) || 1;
+  const n = doBuy(selectedGood, qty);
+  if (n === 0) flash('USDT不足！'); else { playCoin(); saveGame(); }
+  renderAll();
+}
+
+function handleSell() {
+  if (!selectedGood) { flash('请先选择一种资产！'); return; }
+  const qty = parseInt(document.getElementById('qtyInput').value) || 1;
+  const n = doSell(selectedGood, qty);
+  if (n === 0) flash('空仓，无法平仓！'); else { playCoin(); saveGame(); }
+  renderAll();
+}
+
+function handleCloseAll() {
+  const keys = Object.keys(G.goods).filter(k => G.goods[k]?.qty > 0);
+  if (!keys.length) { flash('没有持仓！'); return; }
+  keys.forEach(k => { if (G.goods[k]?.qty > 0) doSell(k, G.goods[k].qty); });
+  playCoin(); saveGame(); renderAll();
+}
+
+function onQtySlider(v) {
+  document.getElementById('qtyDisplay').textContent = v;
+}
+
+function setLev(n) {
+  currentLev = n;
+  document.getElementById('levSelect').value = String(n);
+  // Recalculate slider max after leverage change
+  if (selectedGood) { lastSelectedGood = null; updateTradeInfo(); }
+}
+
+function srcClick(btn, src) {
+  document.querySelectorAll('#sourceList .px-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const tips = {
+    twitter: INSIDER_TIPS[Math.floor(Math.random()*INSIDER_TIPS.length)],
+    discord: '"群里有人说要拉盘，可信度：' + (Math.random()>0.5?'低':'极低') + '"',
+    market: '"交易所公告：系统维护中，请保持理性"',
+    kol: '"KOL：现在是买入的最好时机！"（他每天都这么说）',
+  };
+  document.getElementById('intelText').textContent = tips[src] || '';
+}
+
+function flash(msg) {
+  const el = document.getElementById('alertTxt');
+  const lbl = document.getElementById('alertLbl');
+  const prev = el.textContent, prevL = lbl.textContent;
+  lbl.textContent = '⚠'; el.textContent = msg;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { lbl.textContent = prevL; el.textContent = prev; }, 2000);
+}
+
+// Bank
+function handleDeposit() {
+  const amt = parseInt(document.getElementById('bankDepSlider').value) || 0;
+  if (amt <= 0 || amt > G.cash) { showWarn('存入金额无效或钱包不足！', '💸'); return; }
+  G.cash = parseFloat((G.cash - amt).toFixed(2));
+  G.savings = parseFloat((G.savings + amt).toFixed(2));
+  updateBankModal(); renderAll(); saveGame();
+}
+function handleWithdraw() {
+  const amt = parseInt(document.getElementById('bankWitSlider').value) || 0;
+  if (amt <= 0 || amt > G.savings) { showWarn('取出金额无效或存款不足！', '🏦'); return; }
+  G.savings = parseFloat((G.savings - amt).toFixed(2));
+  G.cash = parseFloat((G.cash + amt).toFixed(2));
+  updateBankModal(); renderAll(); saveGame();
+}
+function updateBankModal() {
+  document.getElementById('bkCash').textContent = fmtC(G.cash);
+  document.getElementById('bkSavings').textContent = fmtC(G.savings);
+  // Daily interest display
+  const interest = parseFloat((G.savings * 0.01).toFixed(2));
+  document.getElementById('bkInterest').textContent =
+    `日利率 1% · 今日利息 ${fmtC(interest)}`;
+  // Deposit slider: max = cash
+  const dsl = document.getElementById('bankDepSlider');
+  const depMax = Math.max(0, Math.floor(G.cash));
+  dsl.max = depMax;
+  if (parseInt(dsl.value) > depMax) dsl.value = depMax;
+  document.getElementById('bkDepAmt').textContent = fmtC(dsl.value);
+  // Withdraw slider: max = savings (independent of deposit)
+  const wsl = document.getElementById('bankWitSlider');
+  const witMax = Math.max(0, Math.floor(G.savings));
+  wsl.max = witMax;
+  if (parseInt(wsl.value) > witMax) wsl.value = witMax;
+  document.getElementById('bkWitAmt').textContent = fmtC(wsl.value);
+}
+function onDepSlider(v) { document.getElementById('bkDepAmt').textContent = fmtC(v); }
+function onWitSlider(v) { document.getElementById('bkWitAmt').textContent = fmtC(v); }
+function setDepMax() {
+  const sl = document.getElementById('bankDepSlider');
+  sl.value = Math.floor(G.cash);
+  document.getElementById('bkDepAmt').textContent = fmtC(sl.value);
+}
+function setWitMax() {
+  const sl = document.getElementById('bankWitSlider');
+  sl.value = Math.floor(G.savings);
+  document.getElementById('bkWitAmt').textContent = fmtC(sl.value);
+}
+
+// Heal
+function handleHeal() {
+  if (G.health >= 100) { alert('心态还行，不用咨询！'); return; }
+  if (G.cash < 5000) { alert('USDT不足！需要$5,000。'); return; }
+  G.cash = parseFloat((G.cash - 5000).toFixed(2));
+  G.health = 100; closeModal(); renderAll(); saveGame();
+}
+
+// Repay
+function handleRepay() {
+  const amt = parseFloat(document.getElementById('repayAmt').value) || 0;
+  const n = doRepay(amt);
+  if (n <= 0) { alert('无法还款！（USDT不足）'); return; }
+  document.getElementById('repayAmt').value = '';
+  closeModal();
+  if (G.debt <= 0) { G.debt = 0; alert('🎉 还清了！终于可以睡个好觉了！'); }
+  renderAll(); saveGame();
+}
+function setRepayMax() {
+  document.getElementById('repayAmt').value = Math.min(G.cash, G.debt).toFixed(2);
+}
+
+// ═══════════════════════════════════════════
+//  MODALS
+// ═══════════════════════════════════════════
+
+const MMAP = {
+  event:'modalEvent', liq:'modalLiq', bank:'modalBank',
+  hospital:'modalHospital', postal:'modalPostal',
+  cafe:'modalCafe', gameover:'modalGameover', warn:'modalWarn'
+};
+
+function openModal(name) {
+  if (name === 'bank') updateBankModal();
+  if (name === 'hospital') document.getElementById('hospHealth').textContent = G.health;
+  if (name === 'postal') {
+    document.getElementById('postDebt').textContent = fmtC(G.debt);
+    document.getElementById('postCash').textContent = fmtC(G.cash);
+  }
+  if (name === 'cafe') {
+    const log = document.getElementById('cafeLog');
+    log.innerHTML = '';
+    if (!eventLog.length) {
+      log.innerHTML = '<div style="color:#6cff3d;padding:6px;font-size:12px;">（暂无记录）</div>';
+    } else {
+      eventLog.forEach(e => {
+        const d = document.createElement('div');
+        d.style.cssText = 'padding:4px 6px;font-size:11px;border-bottom:1px solid #2a3840;color:#6cff3d;';
+        d.textContent = e; log.appendChild(d);
+      });
+    }
+  }
+  currentModal = name;
+  document.getElementById('modalBack').classList.add('open');
+  Object.values(MMAP).forEach(id => document.getElementById(id).style.display = 'none');
+  document.getElementById(MMAP[name]).style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('modalBack').classList.remove('open');
+  const cb = window._liqCb;
+  if (cb && currentModal === 'liq') { window._liqCb = null; setTimeout(cb, 120); }
+  currentModal = null;
+}
+
+function showEventModal(ev) {
+  document.getElementById('evTitle').textContent = (ev.icon || '⚡') + ' ' + (ev.title || '链上事件');
+  document.getElementById('evIcon').textContent = ev.icon || '⚡';
+  document.getElementById('evText').textContent = ev.desc;
+  soundForEvent(ev);
+  openModal('event');
+}
+
+function showWarn(msg, icon) {
+  document.getElementById('warnIcon').textContent = icon || '⛔';
+  document.getElementById('warnText').textContent = msg;
+  openModal('warn');
+}
+
+function showLiqModal(liqList, cb) {
+  const msgs = liqList.map(l =>
+    `💀 ${GOODS[l.key]} ${l.lev}x杠杆 ${l.qty}手爆仓！\n入场$${l.entry.toFixed(2)} → 爆仓$${l.liqPrice.toFixed(2)}\n保证金全部损失，心态-15`
+  ).join('\n\n');
+  document.getElementById('liqText').innerHTML = msgs.replace(/\n/g,'<br>');
+  playOuch(); openModal('liq'); window._liqCb = cb;
+}
+
+function showGameOver() {
+  const net = parseFloat((G.cash + G.savings - G.debt).toFixed(2));
+  const win = G.health > 0 && net >= 0;
+  const reason = G.health <= 0 ? '心态崩了，从此一蹶不振' :
+    net < 0 ? '没能还清小王，他去你单位门口堵着了' : '还清了债，房子的事或许还有转机！';
+  document.getElementById('goTitle').textContent = win ? '🎉 成功脱身！' : '💀 凉凉...';
+  document.getElementById('goIcon').textContent = win ? '🏆' : '😵';
+  document.getElementById('goText').innerHTML =
+    `${reason}<br><br>` +
+    `现金：<b>${fmtC(G.cash)}</b><br>` +
+    `存款：<b>${fmtC(G.savings)}</b><br>` +
+    `欠款：<b style="color:var(--red)">${fmtC(G.debt)}</b><br>` +
+    `净资产：<b style="color:${net>=0?'var(--green)':'var(--red)'}">${fmtC(net)}</b>`;
+  clearSave();
+  openModal('gameover');
+}
+
+// ═══════════════════════════════════════════
+//  AUDIO
+// ═══════════════════════════════════════════
+
+let _ac = null;
+function ac() {
+  if (!_ac) _ac = new (window.AudioContext || window.webkitAudioContext)();
+  if (_ac.state === 'suspended') _ac.resume();
+  return _ac;
+}
+
+function playCoin() {
+  try {
+    const c = ac(), t = c.currentTime;
+    [880,1100,1320].forEach((f,i) => {
+      const o = c.createOscillator(), g = c.createGain();
+      o.connect(g); g.connect(c.destination);
+      o.type = 'sine'; o.frequency.value = f;
+      const s = t + i*.06;
+      g.gain.setValueAtTime(.18,s); g.gain.exponentialRampToValueAtTime(.001,s+.18);
+      o.start(s); o.stop(s+.18);
+    });
+  } catch(e) {}
+}
+
+function playOuch() {
+  try {
+    const c = ac(), t = c.currentTime;
+    [0,.1].forEach((d, i) => {
+      const o = c.createOscillator(), g = c.createGain();
+      o.connect(g); g.connect(c.destination);
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(380-i*80, t+d);
+      o.frequency.exponentialRampToValueAtTime(60-i*20, t+d+.35);
+      g.gain.setValueAtTime(.2, t+d); g.gain.exponentialRampToValueAtTime(.001, t+d+.38);
+      o.start(t+d); o.stop(t+d+.42);
+    });
+  } catch(e) {}
+}
+
+function playCheer() {
+  try {
+    const c = ac(), t = c.currentTime;
+    [523,659,784,988,1047].forEach((f,i) => {
+      const o = c.createOscillator(), g = c.createGain();
+      o.connect(g); g.connect(c.destination);
+      o.type = 'sine'; o.frequency.value = f;
+      const s = t + i*.07;
+      g.gain.setValueAtTime(.14,s); g.gain.exponentialRampToValueAtTime(.001,s+.3);
+      o.start(s); o.stop(s+.3);
+    });
+  } catch(e) {}
+}
+
+function soundForEvent(ev) {
+  if (ev.type === 'cash' || ev.debt) playOuch();
+  else if (ev.type === 'price' && ev.rate > 1) playCheer();
+  else if (ev.type === 'price' && ev.rate < 0.5) playOuch();
+}
+
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
+
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && currentModal && currentModal !== 'gameover') closeModal();
+});
+
+// Unlock AudioContext on first user interaction
+document.addEventListener('click', () => { try { ac(); } catch(e) {} }, { once: true });
+
+// Check for saved game on load
+window.addEventListener('load', () => {
+  const hasSave = !!localStorage.getItem('cryptoGame_v2');
+  if (hasSave) {
+    document.getElementById('savedNotice').style.display = 'block';
+    document.getElementById('continueBtn').style.display = 'inline-block';
+  }
+});
+
+function startGame(useSave) {
+  if (useSave && loadGame()) {
+    // loaded successfully
+  } else {
+    newGame();
+  }
+  document.getElementById('introOverlay').style.display = 'none';
+  renderAll();
+}
+
+function restartGame() {
+  closeModal();
+  clearSave();
+  newGame();
+  renderAll();
+}
+</script>
+</body>
+</html>
