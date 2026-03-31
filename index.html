@@ -72,7 +72,7 @@ body{padding:12px;}
 .titlebox h1{margin:0;font-size:30px;letter-spacing:2px;line-height:1;}
 .titlebox small{display:block;margin-top:6px;color:#cbd8e9;font-size:11px;}
 .statusbar{
-  display:grid;grid-template-columns:repeat(4,1fr);
+  display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;
   border:var(--px) solid var(--line);
   box-shadow:inset -4px -4px 0 0 #c9b68d,inset 4px 4px 0 0 #fff2cb;
   overflow:hidden;
@@ -81,6 +81,7 @@ body{padding:12px;}
 .stat:last-child{border-right:none;}
 .stat-lbl{font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;}
 .stat-val{font-size:22px;font-weight:700;line-height:1.1;}
+.stat-sm .stat-val{font-size:17px;}
 .green{color:var(--green);}
 .red{color:var(--red);}
 .yellow{color:#d88e16;}
@@ -141,6 +142,7 @@ body{padding:12px;}
   box-shadow:inset -4px -4px 0 0 #05080c,inset 4px 4px 0 0 #1d2c38;
   transition:background .4s;
 }
+.mood-screen .screen-big{font-size:22px;}
 .mood-hold{background:linear-gradient(180deg,#3a3530,#252220);}
 .mood-fomo{background:linear-gradient(180deg,#7a5c10,#5a4008);}
 .mood-panic{background:linear-gradient(180deg,#8b2010,#5a1008);}
@@ -341,6 +343,10 @@ body{padding:12px;}
   .titlebox{grid-column:1/3;}
   .main{grid-template-columns:220px 1fr;}
   .right-col{display:none;}
+  .statusbar{grid-template-columns:repeat(5,1fr);}
+  .stat-val{font-size:16px;}
+  .stat-sm .stat-val{font-size:13px;}
+  .stat-lbl{font-size:10px;}
 }
 @media(max-width:700px){
   body{padding:6px;}
@@ -354,7 +360,10 @@ body{padding:12px;}
   .footer-actions{grid-template-columns:1fr;}
   .coin-row{grid-template-columns:36px 1fr 80px 70px;}
   .spark-box{display:none;}
-  .statusbar{grid-template-columns:repeat(2,1fr);}
+  .statusbar{grid-template-columns:1fr 1fr;overflow:visible;}
+  .statusbar .stat:first-child{grid-column:1/-1;border-bottom:var(--px) solid var(--line);}
+  .stat-val{font-size:20px;}
+  .stat-sm .stat-val{font-size:16px;}
   .topbar{gap:6px;}
   .trade-card h3{font-size:12px;margin-bottom:5px;}
   .trade-card .px-screen{padding:5px 7px;}
@@ -373,18 +382,17 @@ body{padding:12px;}
     <div class="modal-body">
       <div class="modal-icon-row">
         <span class="modal-big-icon">📱</span>
-        <div class="modal-text">
-          2023年，老同学小王说缅北有个"互联网客服"岗位，月入三万。<br>
-          <span style="color:var(--muted);">"这是机会！"</span><br><br>
+        <div class="modal-text" style="font-size:15px;">
+          2023年，老同学小王说缅北有个"互联网客服"岗位，月入三万。<b>"这是机会！"</b><br><br>
           你把房子抵了贷款凑路费，跟着去了。下飞机才发现——<br>
           手机没收，护照扣押，签的是电诈合同。<br><br>
           三个月后你和小王密谋出逃，翻墙、躲追捕、差点被噶腰子……<br>
           好不容易跑回国内。回来一查：<b>房子已经在走拍卖程序了。</b><br><br>
           小王说<b>"帮你东山再起"</b>，借给你 <b style="color:var(--red);">$3,000</b>：<br>
-          <span style="color:var(--muted);">"$2,000帮你配了专业炒币电脑和硬件钱包，<br>剩下$1,000就是你的启动资金。"</span><br><br>
-          <span style="font-size:12px;color:var(--muted);">（那台电脑，你至今没见到）</span><br><br>
+          "$2,000帮你配了专业炒币电脑和硬件钱包，剩下$1,000就是你的启动资金。"<br>
+          （那台电脑，你至今没见到）<br><br>
           现在你欠他 <b style="color:var(--red);">$3,000</b>，日息 <b>10%</b>。<br>
-          <span style="color:var(--muted);">"20天还清，不然去堵你。"</span>
+          "20天还清，不然去堵你。"
         </div>
       </div>
       <div id="savedNotice" style="display:none;padding:8px;background:#fff3d2;border:3px solid var(--line);font-size:13px;margin-bottom:8px;">
@@ -411,26 +419,46 @@ body{padding:12px;}
 
     <div class="statusbar">
       <div class="stat">
-        <div class="stat-lbl">现金 USDT</div>
-        <div class="stat-val green" id="tbCash">1000</div>
+        <div class="stat-lbl">总资产 USDT</div>
+        <div class="stat-val" id="tbNetAsset" style="color:var(--text);">$0</div>
       </div>
-      <div class="stat">
-        <div class="stat-lbl">负债 / 日息10%</div>
-        <div class="stat-val red" id="tbDebt">3000</div>
+      <div class="stat stat-sm">
+        <div class="stat-lbl">现金</div>
+        <div class="stat-val green" id="tbCash">$1,000</div>
       </div>
-      <div class="stat">
-        <div class="stat-lbl">心态值</div>
-        <div class="stat-val" id="tbHealth" style="color:#aaddcc;">100</div>
+      <div class="stat stat-sm">
+        <div class="stat-lbl">持仓</div>
+        <div class="stat-val" id="tbPosVal" style="color:var(--text);">$0</div>
       </div>
-      <div class="stat">
-        <div class="stat-lbl">天数</div>
-        <div class="stat-val yellow" id="tbDays">0 / 20</div>
+      <div class="stat stat-sm">
+        <div class="stat-lbl">存款</div>
+        <div class="stat-val" id="tbSavings" style="color:var(--text);">$0</div>
+      </div>
+      <div class="stat stat-sm">
+        <div class="stat-lbl">负债</div>
+        <div class="stat-val red" id="tbDebt">$3,000</div>
       </div>
     </div>
 
     <div class="alertbox">
-      <div class="stat-lbl" id="alertLbl">状态</div>
-      <div class="alert-val" id="alertTxt">等待入场...</div>
+      <div id="alertRisk" style="display:none;">
+        <div class="stat-lbl" style="color:#ffd3bf;">⚠ 爆仓风险！</div>
+        <div class="alert-val" id="alertTxt"></div>
+      </div>
+      <div id="alertStatus" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;">
+        <div>
+          <div class="stat-lbl" style="color:#ffd3bf;">心态</div>
+          <div class="alert-val" id="tbHealth">100</div>
+        </div>
+        <div>
+          <div class="stat-lbl" style="color:#ffd3bf;">仓位</div>
+          <div class="alert-val" id="tbPosCap">0/100</div>
+        </div>
+        <div>
+          <div class="stat-lbl" style="color:#ffd3bf;">天数</div>
+          <div class="alert-val" id="tbDays">0/20</div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -455,12 +483,12 @@ body{padding:12px;}
 
       <div class="mood-screen mood-hold" id="moodScreen">
         <div class="screen-title">今日情绪</div>
-        <div class="screen-big" id="moodText" style="color:#6cff3d;">HOLD</div>
+        <div class="screen-big" id="moodText" style="color:#6cff3d;">按兵不动</div>
       </div>
 
       <hr class="left-divider"/>
       <div class="func-list">
-        <button class="func-btn" onclick="openModal('bank')">🏦 AAVE 存款</button>
+        <button class="func-btn" onclick="openModal('bank')">🏦 DEFI 存款</button>
         <button class="func-btn" onclick="openModal('postal')">💸 还款小王</button>
         <button class="func-btn" onclick="openModal('hospital')">🧠 心理援助</button>
         <button class="func-btn" onclick="openModal('cafe')">🔍 Etherscan</button>
@@ -509,6 +537,16 @@ body{padding:12px;}
           <div class="field">
             <div class="qty-label"><span>数量（手）</span><span class="qty-val" id="qtyDisplay">0</span></div>
             <input class="px-range" id="qtyInput" type="range" value="0" min="0" max="100" oninput="onQtySlider(this.value)"/>
+          </div>
+          <div class="kv" style="margin-bottom:6px;">
+            <div class="px-screen">
+              <div class="screen-title">买后剩余现金</div>
+              <div class="screen-sm" id="tradeCash">—</div>
+            </div>
+            <div class="px-screen">
+              <div class="screen-title">仓位</div>
+              <div class="screen-sm" id="tradePos">—</div>
+            </div>
           </div>
           <div class="field">
             <label>杠杆</label>
@@ -726,7 +764,7 @@ const PRICE_CFG = {
   MINER: { min:200,    max:2000,   dec:0 },
   NFT:   { min:3000,   max:18000,  dec:0 },
   LP:    { min:80,     max:2000,   dec:1 },
-  PLUS:  { min:30,     max:1000,   dec:1 },
+  PLUS:  { min:2,      max:100,    dec:2 },
 };
 
 const EVENTS = [
@@ -739,42 +777,48 @@ const EVENTS = [
   {desc:"DeFi LP协议TVL突破百亿！矿池LP暴涨！",                              type:"price", goods:"LP",    rate:5,    icon:"💧", title:"DeFi爆发"},
   {desc:"比特币减半！历史规律来了！BTC价格飙升！",                             type:"price", goods:"BTC",   rate:5,    icon:"⚡", title:"BTC减半"},
   {desc:"AI算力需求暴增，显卡供不应求！",                                      type:"price", goods:"GPU",   rate:4,    icon:"💻", title:"AI爆发"},
-  {desc:"项目方最后一条推文：'大家保重'。然后失联。",                          type:"price", goods:"PLUS",  rate:0,    icon:"🏃", title:"项目跑路",  bypassFloor:true, rugPull:true},
+  {desc:"项目方最后一条推文：'大家保重'，然后失联，PLUS几乎归零。",                          type:"price", goods:"PLUS",  rate:0,    icon:"🏃", title:"项目跑路",  bypassFloor:true, rugPull:true},
   {desc:"SEC起诉最大交易所！市场恐慌踩踏，BTC暴跌！",                         type:"price", goods:"BTC",   rate:0.3,  icon:"⚖️", title:"监管起诉"},
   {desc:"多个加密货币升级支持POS，不再需要显卡挖矿，崩盘！",                  type:"price", goods:"GPU",   rate:0.25, icon:"💻", title:"庄家暴雷"},
   {desc:"八部委开会了。你不确定这是第几次。",                                  type:"price", goods:"BTC",   rate:0.8,  icon:"⚖️", title:"监管禁令"},
   {desc:"DeFi LP协议遭黑客攻击，TVL接近归零！",                               type:"price", goods:"LP",    rate:0.02, icon:"🔓", title:"黑客攻击",  bypassFloor:true},
-  {desc:"矿机价格暴跌，新一代量子工艺上市，旧矿机贱卖！",                      type:"price", goods:"MINER", rate:0.2,  icon:"⛏️", title:"矿机贬值"},
+  {desc:"BTC矿机价格暴跌，新一代量子工艺上市，旧矿机贱卖！",                      type:"price", goods:"MINER", rate:0.2,  icon:"⛏️", title:"矿机贬值"},
   {desc:"总统称自己不清楚这个项目，NFT地板价创历史新低。",                     type:"price", goods:"NFT",   rate:0.15, icon:"🖼️", title:"NFT寒冬"},
-  {desc:"基金会说这不影响生态。价格跌了20%。",                                 type:"price", goods:"ETH",   rate:0.7,  icon:"📉", title:"基金会抛售"},
+  {desc:"ETH基金会说抛售一部分用于日常运营，价格跌了30%。",                                 type:"price", goods:"ETH",   rate:0.7,  icon:"📉", title:"基金会抛售"},
   {desc:"空投！你参与的协议快照，获赠3手 LP！",                                type:"goods", goods:"LP",    qty:3,     icon:"🎁", title:"免费空投"},
   {desc:"老乡送了你5手DOGE，说是'未来的黄金'。",                             type:"goods", goods:"DOGE",  qty:5,     icon:"🎁", title:"朋友赠送"},
-  {desc:"你点了'免费空投'链接，USDT钱包被钓鱼！损失20%，心态-30。",          type:"cash",  rate:0.8,  hp:-30,        icon:"🎣", title:"钓鱼攻击"},
-  {desc:"群大佬让你FOMO跟单，亏了10% USDT，心态-10。",                         type:"cash",  rate:0.9,  hp:-10,        icon:"📱", title:"跟单亏损"},
+  {desc:"你点了'免费空投'链接，现金USDT钱包被钓鱼！损失20%，心态-30。",          type:"cash",  rate:0.8,  hp:-30,        icon:"🎣", title:"钓鱼攻击"},
+  {desc:"群大佬让你FOMO跟单，亏了10% 现金USDT，心态-10。",                         type:"cash",  rate:0.9,  hp:-10,        icon:"📱", title:"跟单亏损"},
   {desc:"交易所以'异常交易'冻结部分资产。损失10%持仓，心态-10。",             type:"cash",  rate:0.9,  hp:-10,        icon:"🔒", title:"资产冻结"},
-  {desc:"Gas费暴涨，来回操作损失15% USDT，心态-30。",                         type:"cash",  rate:0.85, hp:-30,        icon:"⛽", title:"Gas爆炸"},
+  {desc:"Gas费暴涨，来回操作损失15% 现金USDT，心态-30。",                         type:"cash",  rate:0.85, hp:-30,        icon:"⛽", title:"Gas爆炸"},
   {desc:"小王又来催了，还追加了$500债务！",                                    type:"debt",  debt:500,               icon:"😤", title:"追债通知"},
 ];
 
 const TICKER_POOL = [
-  "BTC减半倒计时进行中 📅","某交易所宣布暂停提款 😱",
-  "马斯克：'买车支持用DOGE支付' 🐕","SEC：所有币都是证券 ⚖️",
-  "PLUS项目方：'我们的太空算力在建设中' 🤡","NFT地板价创历史新低 🖼️",
-  "BTC ETF日流入创纪录！机构来了 🏦","矿机价格松动，算力过剩 ⛏️",
-  "DeFi协议被盗，团队称'正在调查' 🔓","小王问你还款进度了 😰",
-  "某KOL：'我Allin了' 📊","链上鲸鱼正在悄悄出货 🐳",
+  { text:"BTC减半倒计时进行中 📅",                    hint:"BTC减半" },
+  { text:"某交易所宣布暂停提款 😱",                    hint:"项目跑路" },
+  { text:"马斯克：'买车支持用DOGE支付' 🐕",           hint:"KOL喊单" },
+  { text:"SEC：所有币都是证券 ⚖️",                     hint:"监管起诉" },
+  { text:"PLUS项目方：'我们的太空算力在建设中' 🤡",   hint:"项目跑路" },
+  { text:"NFT地板价创历史新低 🖼️",                    hint:"NFT寒冬" },
+  { text:"BTC ETF日流入创纪录！机构来了 🏦",          hint:"ETF获批" },
+  { text:"矿机价格松动，算力过剩 ⛏️",                  hint:"矿机贬值" },
+  { text:"DeFi协议被盗，团队称'正在调查' 🔓",         hint:"黑客攻击" },
+  { text:"小王问你还款进度了 😰",                      hint:"追债通知" },
+  { text:"某KOL：'我Allin了' 📊",                     hint:"KOL喊单" },
+  { text:"链上鲸鱼正在悄悄出货 🐳",                   hint:"庄家暴雷" },
 ];
 
 const INSIDER_TIPS = [
-  '"孙割阑尾炎复发，可能会爽约总统"',
-  '"DOGE有异常放量，群里已有人埋伏..."',
-  '"机构在悄悄建仓BTC，听说要分叉"',
-  '"某头部交易所提币很慢，小心爆雷"',
-  '"监管部门闭门会议，风声很紧"',
-  '"BTC减半进入倒计时，历史规律来了"',
-  '"PLUS项目方保证不跑路"（他们说的）',
-  '"有大佬在OTC大量收ETH，传说中的底部"',
-  '"矿机价格要崩了，算力过剩严重"',
+  { text:'"孙割阑尾炎复发，可能会爽约总统"',           hint:"NFT寒冬" },
+  { text:'"DOGE有异常放量，群里已有人埋伏..."',         hint:"KOL喊单" },
+  { text:'"机构在悄悄建仓BTC，听说要分叉"',            hint:"ETF获批" },
+  { text:'"某头部交易所提币很慢，小心爆雷"',            hint:"项目跑路" },
+  { text:'"监管部门闭门会议，风声很紧"',               hint:"监管起诉" },
+  { text:'"BTC减半进入倒计时，历史规律来了"',          hint:"BTC减半" },
+  { text:'"PLUS项目方保证不跑路"（他们说的）',         hint:"项目跑路" },
+  { text:'"有大佬在OTC大量收ETH，传说中的底部"',       hint:"技术升级" },
+  { text:'"矿机价格要崩了，算力过剩严重"',             hint:"矿机贬值" },
 ];
 
 // ═══════════════════════════════════════════
@@ -792,8 +836,20 @@ function rp(cfg) {
   return Math.round(v * f) / f;
 }
 
+function weightedEventPick() {
+  const boosts = G.eventBoosts || {};
+  const weights = EVENTS.map(e => boosts[e.title] ? 6 : 1);
+  const total = weights.reduce((a, b) => a + b, 0);
+  let r = Math.random() * total;
+  for (let i = 0; i < EVENTS.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return EVENTS[i];
+  }
+  return EVENTS[EVENTS.length - 1];
+}
+
 function newGame() {
-  G = { cash:1000, savings:0, debt:3000, health:100, capacity:100, goods:{}, totalGoods:0, daysLeft:20, day:0, plusRugged:false };
+  G = { cash:1000, savings:0, debt:3000, health:100, capacity:100, goods:{}, totalGoods:0, daysLeft:20, day:0, plusRugged:false, eventBoosts:{} };
   prices = {}; prevPrices = {}; priceHistory = {};
   for (const k in PRICE_CFG) { prices[k] = rp(PRICE_CFG[k]); priceHistory[k] = [prices[k]]; }
   selectedGood = null; lastSelectedGood = null; eventLog = []; recentEvents = []; currentLev = 1;
@@ -873,8 +929,15 @@ function doMove() {
 
   let evt = null;
   if (Math.random() < 0.65) {
-    evt = EVENTS[Math.floor(Math.random() * EVENTS.length)];
+    evt = weightedEventPick();
     applyEvent(evt);
+  }
+  // Decay boosts after using them for today's pick
+  if (G.eventBoosts) {
+    for (const k in G.eventBoosts) {
+      G.eventBoosts[k]--;
+      if (G.eventBoosts[k] <= 0) delete G.eventBoosts[k];
+    }
   }
 
   setMood(evt);
@@ -989,6 +1052,7 @@ function fmtN(n) {
 function fmtC(n) { return '$' + parseFloat(n).toLocaleString('zh-CN', {minimumFractionDigits:0, maximumFractionDigits:2}); }
 // Compact format for screen-big displays (prevents overflow)
 function fmtK(n) {
+  if (n === 0) return '$0';
   if (n >= 1000000) return '$' + (n / 1000000).toFixed(2) + 'M';
   if (n >= 10000)   return '$' + (n / 1000).toFixed(1) + 'K';
   if (n >= 1000)    return '$' + (n / 1000).toFixed(2) + 'K';
@@ -1008,36 +1072,43 @@ function sparkPath(hist, w, h, pad) {
 }
 
 function renderAll() {
-  // Topbar
+  // Compute position value (needed by both topbar and right panel)
+  let posVal = 0;
+  for (const [k, v] of Object.entries(G.goods)) if (v.qty > 0) posVal += prices[k] * v.qty;
+
+  // Topbar: 总资产 + 5 values
+  const net = parseFloat((G.cash + posVal + G.savings - G.debt).toFixed(2));
+  const netEl = document.getElementById('tbNetAsset');
+  netEl.textContent = fmtC(net);
+  netEl.style.color = net >= 0 ? 'var(--green)' : 'var(--red)';
   document.getElementById('tbCash').textContent = fmtC(G.cash);
+  document.getElementById('tbPosVal').textContent = fmtK(posVal);
+  document.getElementById('tbSavings').textContent = fmtC(G.savings);
   document.getElementById('tbDebt').textContent = fmtC(G.debt);
-  document.getElementById('tbHealth').textContent = G.health;
-  document.getElementById('tbDays').textContent = `${G.day} / 20`;
   document.getElementById('tickerDay').textContent = `${G.day}/20`;
 
-  // Alert box
+  // Alertbox: show risk warning or status (心态/仓位/天数)
   let minDist = null;
   for (const [k, v] of Object.entries(G.goods)) {
     const lev = v.lev || 1; if (lev <= 1) continue;
     const d = Math.max(0, (prices[k] - v.entry * (1 - 1/lev)) / Math.max(0.001, prices[k]) * 100);
     if (minDist === null || d < minDist) minDist = d;
   }
-  const alertLbl = document.getElementById('alertLbl');
-  const alertTxt = document.getElementById('alertTxt');
+  const alertRisk = document.getElementById('alertRisk');
+  const alertStatus = document.getElementById('alertStatus');
   if (minDist !== null && minDist < 30) {
-    alertLbl.textContent = '⚠ 爆仓风险！';
-    alertTxt.textContent = `距爆仓仅剩 ${Math.round(minDist)}% 空间`;
-  } else if (recentEvents.length > 0) {
-    alertLbl.textContent = `第${G.day}天 · ${recentEvents[0].title}`;
-    alertTxt.textContent = recentEvents[0].desc.slice(0, 40) + (recentEvents[0].desc.length > 40 ? '…' : '');
+    alertRisk.style.display = 'block';
+    alertStatus.style.display = 'none';
+    document.getElementById('alertTxt').textContent = `距爆仓仅剩 ${Math.round(minDist)}% 空间`;
   } else {
-    alertLbl.textContent = '状态';
-    alertTxt.textContent = `仓位 ${G.totalGoods}/${G.capacity}手 · 存款 ${fmtC(G.savings)}`;
+    alertRisk.style.display = 'none';
+    alertStatus.style.display = 'grid';
   }
+  document.getElementById('tbHealth').textContent = G.health;
+  document.getElementById('tbPosCap').textContent = `${G.totalGoods}/${G.capacity}`;
+  document.getElementById('tbDays').textContent = `${G.day}/20`;
 
   // Right account
-  let posVal = 0;
-  for (const [k, v] of Object.entries(G.goods)) if (v.qty > 0) posVal += prices[k] * v.qty;
   document.getElementById('acctPos').textContent = fmtK(posVal);
   document.getElementById('acctQty').textContent = G.totalGoods + '手';
   document.getElementById('acctCap').textContent = G.totalGoods + ' / ' + G.capacity;
@@ -1162,6 +1233,7 @@ function updateTradeInfo() {
     // If can't buy and can't sell, zero out
     if (!canBuyAny && !canSell) { qSlider.value = 0; qDisplay.textContent = '0'; }
   }
+  updateTradeCashPreview(parseInt(qSlider.value) || 0);
 }
 
 function renderEventFeed() {
@@ -1223,13 +1295,13 @@ function renderBigChart() {
 function setMood(evt) {
   const screen = document.getElementById('moodScreen');
   const text = document.getElementById('moodText');
-  let mood = 'hold', label = 'HOLD';
+  let mood = 'hold', label = '按兵不动';
   if (evt) {
-    if (evt.type === 'price' && evt.rate > 3)          { mood='fomo';  label='FOMO'; }
-    else if (evt.type === 'price' && evt.rate < 0.5)   { mood='panic'; label='PANIC'; }
-    else if (evt.type === 'cash')                       { mood='rekt';  label='REKT'; }
-    else if (evt.type === 'goods')                      { mood='moon';  label='MOON'; }
-    else if (evt.debt)                                  { mood='panic'; label='PANIC'; }
+    if (evt.type === 'price' && evt.rate > 3)          { mood='fomo';  label='冲！冲！冲！'; }
+    else if (evt.type === 'price' && evt.rate < 0.5)   { mood='panic'; label='恐慌踩踏'; }
+    else if (evt.type === 'cash')                       { mood='rekt';  label='钱包爆了'; }
+    else if (evt.type === 'goods')                      { mood='moon';  label='天降横财'; }
+    else if (evt.debt)                                  { mood='panic'; label='恐慌踩踏'; }
   }
   screen.className = `mood-screen mood-${mood}`;
   text.textContent = label;
@@ -1237,12 +1309,20 @@ function setMood(evt) {
 }
 
 function updateInsiderTip() {
-  document.getElementById('intelText').textContent = INSIDER_TIPS[Math.floor(Math.random() * INSIDER_TIPS.length)];
+  const tip = INSIDER_TIPS[Math.floor(Math.random() * INSIDER_TIPS.length)];
+  document.getElementById('intelText').textContent = tip.text;
+  if (tip.hint && G.eventBoosts) G.eventBoosts[tip.hint] = 3;
 }
 
 function updateTicker() {
   const pool = [...TICKER_POOL].sort(() => Math.random() - .5);
-  document.getElementById('tickerTxt').textContent = pool.slice(0,6).join('  ●  ');
+  const chosen = pool.slice(0, 6);
+  document.getElementById('tickerTxt').textContent = chosen.map(t => t.text).join('  ●  ');
+  if (G.eventBoosts) {
+    chosen.forEach(t => {
+      if (t.hint) G.eventBoosts[t.hint] = Math.max(G.eventBoosts[t.hint] || 0, 3);
+    });
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -1275,6 +1355,21 @@ function handleCloseAll() {
 
 function onQtySlider(v) {
   document.getElementById('qtyDisplay').textContent = v;
+  updateTradeCashPreview(parseInt(v));
+}
+
+function updateTradeCashPreview(qty) {
+  const cashEl = document.getElementById('tradeCash');
+  const posEl = document.getElementById('tradePos');
+  posEl.textContent = `${G.totalGoods}/${G.capacity}`;
+  if (!selectedGood || !prices[selectedGood]) {
+    cashEl.textContent = fmtC(G.cash);
+    return;
+  }
+  const mPer = Math.max(0.001, prices[selectedGood] / currentLev);
+  const remain = Math.max(0, G.cash - qty * mPer);
+  cashEl.textContent = fmtC(remain);
+  cashEl.style.color = remain < mPer ? 'var(--red)' : 'var(--screenText)';
 }
 
 function setLev(n) {
@@ -1287,22 +1382,37 @@ function setLev(n) {
 function srcClick(btn, src) {
   document.querySelectorAll('#sourceList .px-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const tips = {
-    twitter: INSIDER_TIPS[Math.floor(Math.random()*INSIDER_TIPS.length)],
-    discord: '"群里有人说要拉盘，可信度：' + (Math.random()>0.5?'低':'极低') + '"',
-    market: '"交易所公告：系统维护中，请保持理性"',
-    kol: '"KOL：现在是买入的最好时机！"（他每天都这么说）',
-  };
-  document.getElementById('intelText').textContent = tips[src] || '';
+  let text;
+  if (src === 'twitter') {
+    const tip = INSIDER_TIPS[Math.floor(Math.random()*INSIDER_TIPS.length)];
+    if (tip.hint && G.eventBoosts) G.eventBoosts[tip.hint] = Math.max(G.eventBoosts[tip.hint] || 0, 3);
+    text = tip.text;
+  } else {
+    const texts = {
+      discord: '"群里有人说要拉盘，可信度：' + (Math.random()>0.5?'低':'极低') + '"',
+      market:  '"交易所公告：系统维护中，请保持理性"',
+      kol:     '"KOL：现在是买入的最好时机！"（他每天都这么说）',
+    };
+    text = texts[src] || '';
+  }
+  document.getElementById('intelText').textContent = text;
 }
 
 function flash(msg) {
-  const el = document.getElementById('alertTxt');
-  const lbl = document.getElementById('alertLbl');
-  const prev = el.textContent, prevL = lbl.textContent;
-  lbl.textContent = '⚠'; el.textContent = msg;
-  clearTimeout(el._t);
-  el._t = setTimeout(() => { lbl.textContent = prevL; el.textContent = prev; }, 2000);
+  const alertRisk = document.getElementById('alertRisk');
+  const alertStatus = document.getElementById('alertStatus');
+  const alertTxt = document.getElementById('alertTxt');
+  const wasRisk = alertRisk.style.display !== 'none';
+  const prevTxt = alertTxt.textContent;
+  alertTxt.textContent = msg;
+  alertRisk.style.display = 'block';
+  alertStatus.style.display = 'none';
+  clearTimeout(alertTxt._t);
+  alertTxt._t = setTimeout(() => {
+    if (wasRisk) { alertRisk.style.display = 'block'; alertStatus.style.display = 'none'; }
+    else { alertRisk.style.display = 'none'; alertStatus.style.display = 'grid'; }
+    alertTxt.textContent = prevTxt;
+  }, 2000);
 }
 
 // Bank
@@ -1355,8 +1465,8 @@ function setWitMax() {
 
 // Heal
 function handleHeal() {
-  if (G.health >= 100) { alert('心态还行，不用咨询！'); return; }
-  if (G.cash < 5000) { alert('USDT不足！需要$5,000。'); return; }
+  if (G.health >= 100) { showWarn('心态还行，不用咨询！', '😌'); return; }
+  if (G.cash < 5000) { showWarn('USDT不足！需要$5,000。', '💸'); return; }
   G.cash = parseFloat((G.cash - 5000).toFixed(2));
   G.health = 100; closeModal(); renderAll(); saveGame();
 }
@@ -1365,10 +1475,10 @@ function handleHeal() {
 function handleRepay() {
   const amt = parseFloat(document.getElementById('repayAmt').value) || 0;
   const n = doRepay(amt);
-  if (n <= 0) { alert('无法还款！（USDT不足）'); return; }
+  if (n <= 0) { showWarn('无法还款！（USDT不足）', '💸'); return; }
   document.getElementById('repayAmt').value = '';
   closeModal();
-  if (G.debt <= 0) { G.debt = 0; alert('🎉 还清了！终于可以睡个好觉了！'); }
+  if (G.debt <= 0) { G.debt = 0; showWarn('🎉 还清了！终于可以睡个好觉了！', '🎉'); }
   renderAll(); saveGame();
 }
 function setRepayMax() {
