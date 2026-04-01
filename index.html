@@ -295,6 +295,31 @@ body{padding:12px;}
 .modal-icon-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
 .modal-big-icon{font-size:34px;line-height:1;}
 .modal-text{font-size:13px;line-height:1.8;flex:1;}
+.event-modal{max-width:560px;}
+.event-art-wrap{
+  display:none;
+  margin-bottom:12px;
+  border:var(--px) solid var(--line);
+  background:#10161c;
+  box-shadow:inset -4px -4px 0 0 #05080c,inset 4px 4px 0 0 #1d2c38;
+  overflow:hidden;
+}
+.event-art{
+  display:block;
+  width:100%;
+  aspect-ratio:16 / 9;
+  object-fit:cover;
+  background:#10161c;
+}
+.event-meta{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.event-meta .modal-icon-row{
+  margin-bottom:0;
+  flex:1;
+}
 .m-btn{
   border:var(--px) solid var(--line);padding:9px 18px;
   font-size:14px;font-family:inherit;cursor:pointer;
@@ -320,7 +345,61 @@ body{padding:12px;}
 #introOverlay{
   display:flex;position:fixed;inset:0;
   background:linear-gradient(180deg,#2f2a24,#211d19);
-  align-items:center;justify-content:center;z-index:200;padding:16px;
+  align-items:flex-start;justify-content:center;z-index:200;
+  padding:16px;overflow-y:auto;
+}
+.intro-wrap{
+  width:min(100%,520px);
+  border:var(--px) solid var(--line);
+  background:var(--panel);
+  box-shadow:0 0 0 4px #6d5c45,8px 8px 0 0 var(--shadow);
+}
+.intro-wrap .modal-tb{
+  display:flex;justify-content:center;align-items:center;
+  padding:10px 16px;border-bottom:var(--px) solid var(--line);
+  background:linear-gradient(180deg,#d4bc8a,#c5a970);
+  box-shadow:inset 0 -4px 0 0 #b09460;
+}
+.intro-wrap .modal-tb h3{margin:0;font-size:18px;letter-spacing:2px;}
+.intro-body{padding:14px;display:flex;flex-direction:column;gap:14px;}
+.story-card{
+  border:var(--px) solid var(--line);
+  background:#fff3d2;
+  box-shadow:inset -4px -4px 0 0 #d4bc8d,inset 4px 4px 0 0 #fff8e5;
+  overflow:hidden;
+}
+.story-img{
+  display:block;width:100%;aspect-ratio:3/2;
+  border-bottom:var(--px) solid var(--line);
+  background:url("story_1page.png") no-repeat #10161c;
+  background-size:200% 200%;
+}
+.story-img-1{background-position:0% 0%;}
+.story-img-2{background-position:100% 0%;}
+.story-img-3{background-position:0% 100%;}
+.story-img-4{background-position:100% 100%;}
+.story-text{padding:10px 12px;}
+.story-tag{
+  display:inline-block;
+  padding:2px 8px;margin-bottom:6px;
+  font-size:10px;letter-spacing:1px;
+  border:3px solid var(--line);
+  background:#d7c396;
+  box-shadow:inset -2px -2px 0 0 #bda173,inset 2px 2px 0 0 #f9ebc8;
+}
+.story-text h4{margin:0 0 4px;font-size:15px;line-height:1.3;}
+.story-text p{margin:0 0 4px;font-size:13px;line-height:1.7;}
+.story-text .hint{font-size:11px;color:var(--muted);line-height:1.5;}
+.intro-note{
+  padding:10px 12px;font-size:13px;line-height:1.7;
+  border:var(--px) solid var(--line);
+  background:#fff3d2;
+  box-shadow:inset -4px -4px 0 0 #d4bc8d,inset 4px 4px 0 0 #fff8e5;
+}
+.intro-note b{color:var(--red);}
+.intro-foot{
+  display:flex;justify-content:center;gap:10px;
+  padding:10px 14px 14px;flex-wrap:wrap;
 }
 
 /* ── TICKER ── */
@@ -377,29 +456,59 @@ body{padding:12px;}
 
 <!-- ══ INTRO OVERLAY ══ -->
 <div id="introOverlay">
-  <div class="modal-win" style="max-width:440px;">
+  <div class="intro-wrap">
     <div class="modal-tb"><h3>₿ 币圈浮生记</h3></div>
-    <div class="modal-body">
-      <div class="modal-icon-row">
-        <span class="modal-big-icon">📱</span>
-        <div class="modal-text" style="font-size:15px;">
-          2023年，老同学小王说缅北有个"互联网客服"岗位，月入三万。<b>"这是机会！"</b><br><br>
-          你把房子抵了贷款凑路费，跟着去了。下飞机才发现——<br>
-          手机没收，护照扣押，签的是电诈合同。<br><br>
-          三个月后你和小王密谋出逃，翻墙、躲追捕、差点被噶腰子……<br>
-          好不容易跑回国内。回来一查：<b>房子已经在走拍卖程序了。</b><br><br>
-          小王说<b>"帮你东山再起"</b>，借给你 <b style="color:var(--red);">$3,000</b>：<br>
-          "$2,000帮你配了专业炒币电脑和硬件钱包，剩下$1,000就是你的启动资金。"<br>
-          （那台电脑，你至今没见到）<br><br>
-          现在你欠他 <b style="color:var(--red);">$3,000</b>，日息 <b>10%</b>。<br>
-          "20天还清，不然去堵你。"
+    <div class="intro-body">
+
+      <div class="story-card">
+        <div class="story-img story-img-1" role="img" aria-label="老同学带你去缅北找工作"></div>
+        <div class="story-text">
+          <span class="story-tag">PAGE 01</span>
+          <h4>一张"高薪邀请函"</h4>
+          <p>2023年，老同学小王说缅北有个"互联网客服"岗位，月入三万，包吃包住。</p>
+          <div class="hint">"这是机会！"你信了。第一步不是发财，是上车。</div>
         </div>
       </div>
-      <div id="savedNotice" style="display:none;padding:8px;background:#fff3d2;border:3px solid var(--line);font-size:13px;margin-bottom:8px;">
+
+      <div class="story-card">
+        <div class="story-img story-img-2" role="img" aria-label="落地后发现进入电诈园区"></div>
+        <div class="story-text">
+          <span class="story-tag">PAGE 02</span>
+          <h4>园区不是工位，是牢房</h4>
+          <p>你跟着去了，才发现掉进了电诈园区。手机没收、护照扣押，合同也不是合同。</p>
+          <div class="hint">那一刻你明白了，所谓"客服"只是骗局的包装。</div>
+        </div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-img story-img-3" role="img" aria-label="三个月后逃亡回国"></div>
+        <div class="story-text">
+          <span class="story-tag">PAGE 03</span>
+          <h4>三个月后，死里逃生</h4>
+          <p>翻墙、躲追捕、狼狈逃命。你和小王一起跑回国内，命是捡回来了，胆子也碎了。</p>
+          <div class="hint">这段经历，后来成了你人生最贵的一次"实习"。</div>
+        </div>
+      </div>
+
+      <div class="story-card">
+        <div class="story-img story-img-4" role="img" aria-label="回乡后背上三千美元债务"></div>
+        <div class="story-text">
+          <span class="story-tag">PAGE 04</span>
+          <h4>回乡之后，债务开局</h4>
+          <p>小王假装帮你东山再起，借给你 <b style="color:var(--red);">$3,000</b>。其中 $2,000 是"电脑和硬件钱包"，$1,000 是启动资金。</p>
+          <div class="hint">现在你欠他 <b>$3,000</b>，日息 <b>10%</b>，20天还清，不然去堵你。</div>
+        </div>
+      </div>
+
+      <div class="intro-note">
+        你现在的目标很简单：在 <b>20 天</b>内翻盘，撑住心态，把债还清。
+      </div>
+
+      <div id="savedNotice" style="display:none;padding:8px;background:#fff3d2;border:3px solid var(--line);font-size:13px;">
         💾 发现存档！
       </div>
     </div>
-    <div class="modal-foot">
+    <div class="intro-foot">
       <button class="m-btn primary" onclick="startGame(false)" style="font-size:16px;padding:10px 24px;">入场！</button>
       <button class="m-btn" id="continueBtn" style="display:none;" onclick="startGame(true)">继续上局</button>
     </div>
@@ -611,15 +720,20 @@ body{padding:12px;}
 <div class="modal-back" id="modalBack">
 
   <!-- Event -->
-  <div class="modal-win" id="modalEvent" style="display:none;">
+  <div class="modal-win event-modal" id="modalEvent" style="display:none;">
     <div class="modal-tb"><h3 id="evTitle">⚡ 链上事件</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
-      <div class="modal-icon-row">
-        <span class="modal-big-icon" id="evIcon">📰</span>
-        <p class="modal-text" id="evText"></p>
+      <div class="event-art-wrap" id="evArtWrap">
+        <img class="event-art" id="evArt" alt="事件插图"/>
+      </div>
+      <div class="event-meta">
+        <div class="modal-icon-row">
+          <span class="modal-big-icon" id="evIcon">📰</span>
+          <p class="modal-text" id="evText"></p>
+        </div>
       </div>
     </div>
-    <div class="modal-foot"><button class="m-btn primary" onclick="closeModal()">知道了（又这样）</button></div>
+    <div class="modal-foot"><button class="m-btn primary" onclick="closeModal()">知道了</button></div>
   </div>
 
   <!-- Liquidation -->
@@ -768,23 +882,23 @@ const PRICE_CFG = {
 };
 
 const EVENTS = [
-  {desc:"马斯克发推：'Doge to the moon 🚀'，DOGE暴涨！",                     type:"price", goods:"DOGE",  rate:7,    icon:"🐕", title:"KOL喊单"},
-  {desc:"BTC ETF获批！机构买盘涌入，价格飙升！",                              type:"price", goods:"BTC",   rate:3,    icon:"📈", title:"ETF获批"},
-  {desc:"以太坊升级成功！ETH价格爆涨！",                                      type:"price", goods:"ETH",   rate:4,    icon:"🔮", title:"技术升级"},
-  {desc:"孙割参加总统国宴，总统NFT市场FOMO！",                                type:"price", goods:"NFT",   rate:5,    icon:"🦧", title:"NFT炒作"},
-  {desc:"PLUS项目方发推：'我们的算力将部署在火星！'短暂拉盘。",               type:"price", goods:"PLUS",  rate:4,    icon:"🤡", title:"项目方发声"},
-  {desc:"比特币分叉，全网算力争夺，矿机需求暴增！",                            type:"price", goods:"MINER", rate:3.5,  icon:"⛏️", title:"算力争夺"},
-  {desc:"DeFi LP协议TVL突破百亿！矿池LP暴涨！",                              type:"price", goods:"LP",    rate:5,    icon:"💧", title:"DeFi爆发"},
-  {desc:"比特币减半！历史规律来了！BTC价格飙升！",                             type:"price", goods:"BTC",   rate:5,    icon:"⚡", title:"BTC减半"},
-  {desc:"AI算力需求暴增，显卡供不应求！",                                      type:"price", goods:"GPU",   rate:4,    icon:"💻", title:"AI爆发"},
-  {desc:"项目方最后一条推文：'大家保重'，然后失联，PLUS几乎归零。",                          type:"price", goods:"PLUS",  rate:0,    icon:"🏃", title:"项目跑路",  bypassFloor:true, rugPull:true},
-  {desc:"SEC起诉最大交易所！市场恐慌踩踏，BTC暴跌！",                         type:"price", goods:"BTC",   rate:0.3,  icon:"⚖️", title:"监管起诉"},
-  {desc:"多个加密货币升级支持POS，不再需要显卡挖矿，崩盘！",                  type:"price", goods:"GPU",   rate:0.25, icon:"💻", title:"庄家暴雷"},
-  {desc:"八部委开会了。你不确定这是第几次。",                                  type:"price", goods:"BTC",   rate:0.8,  icon:"⚖️", title:"监管禁令"},
-  {desc:"DeFi LP协议遭黑客攻击，TVL接近归零！",                               type:"price", goods:"LP",    rate:0.02, icon:"🔓", title:"黑客攻击",  bypassFloor:true},
-  {desc:"BTC矿机价格暴跌，新一代量子工艺上市，旧矿机贱卖！",                      type:"price", goods:"MINER", rate:0.2,  icon:"⛏️", title:"矿机贬值"},
-  {desc:"总统称自己不清楚这个项目，NFT地板价创历史新低。",                     type:"price", goods:"NFT",   rate:0.15, icon:"🖼️", title:"NFT寒冬"},
-  {desc:"ETH基金会说抛售一部分用于日常运营，价格跌了30%。",                                 type:"price", goods:"ETH",   rate:0.7,  icon:"📉", title:"基金会抛售"},
+  {desc:"马斯克发推：'Doge to the moon 🚀'，DOGE暴涨！",                     type:"price", goods:"DOGE",  rate:7,    icon:"🐕", title:"KOL喊单", image:"event/kol_hype.jpg"},
+  {desc:"BTC ETF获批！机构买盘涌入，价格飙升！",                              type:"price", goods:"BTC",   rate:3,    icon:"📈", title:"ETF获批", image:"event/marketincrease.jpg"},
+  {desc:"以太坊升级成功！ETH价格爆涨！",                                      type:"price", goods:"ETH",   rate:4,    icon:"🔮", title:"技术升级", image:"event/karaokETH.jpg"},
+  {desc:"孙割参加总统国宴，总统NFT市场FOMO！",                                type:"price", goods:"NFT",   rate:5,    icon:"🦧", title:"NFT炒作", image:"event/NFTFOMO.jpg"},
+  {desc:"PLUS项目方发推：'我们的算力将部署在火星！'短暂拉盘。",               type:"price", goods:"PLUS",  rate:4,    icon:"🤡", title:"项目方发声", image:"event/marketincrease.jpg"},
+  {desc:"比特币分叉，全网算力争夺，矿机需求暴增！",                            type:"price", goods:"MINER", rate:3.5,  icon:"⛏️", title:"算力争夺", image:"event/marketincrease.jpg"},
+  {desc:"DeFi LP协议TVL突破百亿！矿池LP暴涨！",                              type:"price", goods:"LP",    rate:5,    icon:"💧", title:"DeFi爆发", image:"event/marketincrease.jpg"},
+  {desc:"比特币减半！历史规律来了！BTC价格飙升！",                             type:"price", goods:"BTC",   rate:5,    icon:"⚡", title:"BTC减半", image:"event/marketincrease.jpg"},
+  {desc:"AI算力需求暴增，显卡供不应求！",                                      type:"price", goods:"GPU",   rate:4,    icon:"💻", title:"AI爆发", image:"event/aigpu.jpg"},
+  {desc:"项目方最后一条推文：'大家保重'，然后失联，PLUS几乎归零。",                          type:"price", goods:"PLUS",  rate:0,    icon:"🏃", title:"项目跑路",  bypassFloor:true, rugPull:true, image:"event/marketdecrease.jpg"},
+  {desc:"SEC起诉最大交易所！市场恐慌踩踏，BTC暴跌！",                         type:"price", goods:"BTC",   rate:0.3,  icon:"⚖️", title:"监管起诉", image:"event/marketdecrease.jpg"},
+  {desc:"多个加密货币升级支持POS，不再需要显卡挖矿，崩盘！",                  type:"price", goods:"GPU",   rate:0.25, icon:"💻", title:"庄家暴雷", image:"event/marketdecrease.jpg"},
+  {desc:"八部委开会了。你不确定这是第几次。",                                  type:"price", goods:"BTC",   rate:0.8,  icon:"⚖️", title:"监管禁令", image:"event/marketdecrease.jpg"},
+  {desc:"DeFi LP协议遭黑客攻击，TVL接近归零！",                               type:"price", goods:"LP",    rate:0.02, icon:"🔓", title:"黑客攻击",  bypassFloor:true, image:"event/marketdecrease.jpg"},
+  {desc:"BTC矿机价格暴跌，新一代量子工艺上市，旧矿机贱卖！",                      type:"price", goods:"MINER", rate:0.2,  icon:"⛏️", title:"矿机贬值", image:"event/marketdecrease.jpg"},
+  {desc:"总统称自己不清楚这个项目，NFT地板价创历史新低。",                     type:"price", goods:"NFT",   rate:0.15, icon:"🖼️", title:"NFT寒冬", image:"event/marketdecrease.jpg"},
+  {desc:"ETH基金会说抛售一部分用于日常运营，价格跌了30%。",                                 type:"price", goods:"ETH",   rate:0.7,  icon:"📉", title:"基金会抛售", image:"event/marketdecrease.jpg"},
   {desc:"空投！你参与的协议快照，获赠3手 LP！",                                type:"goods", goods:"LP",    qty:3,     icon:"🎁", title:"免费空投"},
   {desc:"老乡送了你5手DOGE，说是'未来的黄金'。",                             type:"goods", goods:"DOGE",  qty:5,     icon:"🎁", title:"朋友赠送"},
   {desc:"你点了'免费空投'链接，现金USDT钱包被钓鱼！损失20%，心态-30。",          type:"cash",  rate:0.8,  hp:-30,        icon:"🎣", title:"钓鱼攻击"},
@@ -1529,12 +1643,57 @@ function closeModal() {
 }
 
 function showEventModal(ev) {
+  const artWrap = document.getElementById('evArtWrap');
+  const art = document.getElementById('evArt');
   document.getElementById('evTitle').textContent = (ev.icon || '⚡') + ' ' + (ev.title || '链上事件');
   document.getElementById('evIcon').textContent = ev.icon || '⚡';
   document.getElementById('evText').textContent = ev.desc;
+  art.onerror = function() {
+    artWrap.style.display = 'none';
+    art.removeAttribute('src');
+  };
+  if (ev.image) {
+    artWrap.style.display = 'block';
+    art.src = ev.image;
+  } else {
+    artWrap.style.display = 'none';
+    art.removeAttribute('src');
+  }
   soundForEvent(ev);
   openModal('event');
 }
+
+// Console helpers for manually previewing a specific event modal.
+window.debugListEvents = function debugListEvents() {
+  return EVENTS.map((ev, idx) => ({
+    index: idx,
+    title: ev.title,
+    type: ev.type,
+    goods: ev.goods || null
+  }));
+};
+
+window.debugEventModal = function debugEventModal(query) {
+  let ev = null;
+
+  if (typeof query === 'number') {
+    ev = EVENTS[query] || null;
+  } else if (typeof query === 'string' && query.trim()) {
+    const key = query.trim().toLowerCase();
+    ev = EVENTS.find(item =>
+      String(item.title || '').toLowerCase() === key ||
+      String(item.goods || '').toLowerCase() === key
+    ) || null;
+  }
+
+  if (!ev) {
+    console.warn('未找到事件。可先运行 debugListEvents() 查看可用事件。');
+    return null;
+  }
+
+  showEventModal(ev);
+  return ev;
+};
 
 function showWarn(msg, icon) {
   document.getElementById('warnIcon').textContent = icon || '⛔';
@@ -1554,8 +1713,8 @@ function showGameOver() {
   const net = parseFloat((G.cash + G.savings - G.debt).toFixed(2));
   const win = G.health > 0 && net >= 0;
   const reason = G.health <= 0 ? '心态崩了，从此一蹶不振' :
-    net < 0 ? '没能还清小王，他去你单位门口堵着了' : '还清了债，房子的事或许还有转机！';
-  document.getElementById('goTitle').textContent = win ? '🎉 成功脱身！' : '💀 凉凉...';
+    net < 0 ? '20天到了，还是没能还清小王。门外的脚步声越来越近。' : '你终于还清了债，暂时从这场噩梦里喘了口气。';
+  document.getElementById('goTitle').textContent = win ? '🎉 还清了' : '💀 小王来了';
   document.getElementById('goIcon').textContent = win ? '🏆' : '😵';
   document.getElementById('goText').innerHTML =
     `${reason}<br><br>` +
@@ -1595,7 +1754,7 @@ function playCoin() {
 function playOuch() {
   try {
     const c = ac(), t = c.currentTime;
-    [0,.1].forEach((d, i) => {
+    [0,.1].forEach((d,i) => {
       const o = c.createOscillator(), g = c.createGain();
       o.connect(g); g.connect(c.destination);
       o.type = 'sawtooth';
