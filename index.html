@@ -944,6 +944,33 @@ let selectedGood = null, eventLog = [], currentModal = null, currentLev = 1;
 let priceHistory = {}, recentEvents = [];
 let lastSelectedGood = null; // tracks asset switches to reset slider
 
+function createOnboardingState() {
+  return { active:true, step:'buy_doge', boostedDay:false, profitHint:0 };
+}
+
+function isOnboardingStep(step) {
+  return !!(G.onboarding && G.onboarding.active && G.onboarding.step === step);
+}
+
+function finishOnboarding() {
+  if (!G.onboarding) return;
+  G.onboarding.active = false;
+  G.onboarding.step = 'done';
+}
+
+function maybeShowOnboardingPrompt() {
+  if (!G.onboarding || !G.onboarding.active || currentModal) return;
+  if (G.onboarding.step === 'buy_doge' && G.day === 0) {
+    showWarn('新手提示：今天 DOGE 正在地板价，先买一点 DOGE 试试手气。', '🐕');
+  } else if (G.onboarding.step === 'advance_day') {
+    showWarn('很好。现在点击“下一天”，看看这笔 DOGE 会发生什么。', '⏩');
+  } else if (G.onboarding.step === 'sell_doge') {
+    showWarn(`第一桶金到手了，按你现在这笔 DOGE 大约已经赚了 ${fmtC(G.onboarding.profitHint || 0)}。先卖出落袋，再去还钱。`, '📈');
+  } else if (G.onboarding.step === 'repay_debt') {
+    showWarn('很好，现在去“还给小王”，先还一部分，压住每天 10% 的利息。', '💸');
+  }
+}
+
 function rp(cfg) {
   const v = cfg.min + Math.random() * (cfg.max - cfg.min);
   const f = Math.pow(10, cfg.dec || 0);
@@ -963,10 +990,12 @@ function weightedEventPick() {
 }
 
 function newGame() {
-  G = { cash:1000, savings:0, debt:3000, health:100, capacity:100, goods:{}, totalGoods:0, daysLeft:20, day:0, plusRugged:false, eventBoosts:{} };
+  G = { cash:1000, savings:0, debt:3000, health:100, capacity:100, goods:{}, totalGoods:0, daysLeft:20, day:0, plusRugged:false, eventBoosts:{}, onboarding:createOnboardingState() };
   prices = {}; prevPrices = {}; priceHistory = {};
   for (const k in PRICE_CFG) { prices[k] = rp(PRICE_CFG[k]); priceHistory[k] = [prices[k]]; }
-  selectedGood = null; lastSelectedGood = null; eventLog = []; recentEvents = []; currentLev = 1;
+  prices.DOGE = PRICE_CFG.DOGE.min;
+  priceHistory.DOGE = [prices.DOGE];
+  selectedGood = 'DOGE'; lastSelectedGood = null; eventLog = []; recentEvents = []; currentLev = 1;
   document.getElementById('levSelect').value = '1';
   document.getElementById('qtyInput').value = '0';
   document.getElementById('qtyDisplay').textContent = '0';
@@ -999,6 +1028,7 @@ function loadGame() {
     eventLog = d.eventLog || []; recentEvents = d.recentEvents || [];
     currentLev = d.currentLev || 1;
     selectedGood = d.selectedGood || null;
+    G.onboarding = d.G.onboarding || null;
     document.getElementById('levSelect').value = String(currentLev);
     return true;
   } catch(e) { return false; }
@@ -1024,6 +1054,14 @@ function doMove() {
     if (priceHistory[k].length > 10) priceHistory[k].shift();
   }
 
+  if (isOnboardingStep('advance_day') && !G.onboarding.boostedDay) {
+    prices.DOGE = 35;
+    if (priceHistory.DOGE && priceHistory.DOGE.length) {
+      priceHistory.DOGE[priceHistory.DOGE.length - 1] = prices.DOGE;
+    }
+    G.onboarding.boostedDay = true;
+  }
+
   const liqList = checkLiquidations();
 
   if (G.daysLeft === 0) {
@@ -1042,7 +1080,7 @@ function doMove() {
   }
 
   let evt = null;
-  if (Math.random() < 0.65) {
+  if (!isOnboardingStep('advance_day') && Math.random() < 0.65) {
     evt = weightedEventPick();
     applyEvent(evt);
   }
@@ -1068,6 +1106,16 @@ function doMove() {
   }
   if (liqList.length > 0) showLiqModal(liqList, () => { if (evt) showEventModal(evt); });
   else if (evt) showEventModal(evt);
+  else if (isOnboardingStep('advance_day')) {
+    const doge = G.goods.DOGE;
+    const qty = doge?.qty || 0;
+    const lev = doge?.lev || 1;
+    const entry = doge?.entry || PRICE_CFG.DOGE.min;
+    G.onboarding.profitHint = qty > 0 ? Math.max(0, parseFloat(((prices.DOGE - entry * (1 - 1 / lev)) * qty).toFixed(2))) : 0;
+    G.onboarding.step = 'sell_doge';
+    saveGame();
+    setTimeout(() => maybeShowOnboardingPrompt(), 120);
+  }
 }
 
 function checkLiquidations() {
@@ -1089,16 +1137,17 @@ function applyEvent(ev) {
   if (ev.debt) G.debt += ev.debt;
   if (ev.type === 'price') {
     const dec = PRICE_CFG[ev.goods] ? (PRICE_CFG[ev.goods].dec || 0) : 2;
+    const basePrice = prevPrices[ev.goods] ?? prices[ev.goods];
     if (ev.rugPull) {
       prices[ev.goods] = 0.01;
       G.plusRugged = true;
     } else if (ev.bypassFloor) {
       const c = PRICE_CFG[ev.goods];
-      prices[ev.goods] = parseFloat((prices[ev.goods] * ev.rate).toFixed(dec));
+      prices[ev.goods] = parseFloat((basePrice * ev.rate).toFixed(dec));
       prices[ev.goods] = Math.min(c.max, prices[ev.goods]);
     } else {
       const c = PRICE_CFG[ev.goods];
-      prices[ev.goods] = parseFloat((prices[ev.goods] * ev.rate).toFixed(dec));
+      prices[ev.goods] = parseFloat((basePrice * ev.rate).toFixed(dec));
       prices[ev.goods] = Math.max(c.min, Math.min(c.max, prices[ev.goods]));
     }
     priceHistory[ev.goods].push(prices[ev.goods]);
@@ -1448,16 +1497,26 @@ function handleBuy() {
   if (G.totalGoods >= G.capacity) { showWarn(`仓位已满（${G.totalGoods}/${G.capacity}手），无法继续买入！`, '📦'); return; }
   const qty = parseInt(document.getElementById('qtyInput').value) || 1;
   const n = doBuy(selectedGood, qty);
-  if (n === 0) flash('USDT不足！'); else { playCoin(); saveGame(); }
+  if (n === 0) flash('USDT不足！'); else {
+    playCoin();
+    if (isOnboardingStep('buy_doge') && selectedGood === 'DOGE') G.onboarding.step = 'advance_day';
+    saveGame();
+  }
   renderAll();
+  if (isOnboardingStep('advance_day')) setTimeout(() => maybeShowOnboardingPrompt(), 120);
 }
 
 function handleSell() {
   if (!selectedGood) { flash('请先选择一种资产！'); return; }
   const qty = parseInt(document.getElementById('qtyInput').value) || 1;
   const n = doSell(selectedGood, qty);
-  if (n === 0) flash('空仓，无法平仓！'); else { playCoin(); saveGame(); }
+  if (n === 0) flash('空仓，无法平仓！'); else {
+    playCoin();
+    if (isOnboardingStep('sell_doge') && selectedGood === 'DOGE') G.onboarding.step = 'repay_debt';
+    saveGame();
+  }
   renderAll();
+  if (isOnboardingStep('repay_debt')) setTimeout(() => maybeShowOnboardingPrompt(), 120);
 }
 
 function handleCloseAll() {
@@ -1591,6 +1650,7 @@ function handleRepay() {
   const n = doRepay(amt);
   if (n <= 0) { showWarn('无法还款！（USDT不足）', '💸'); return; }
   document.getElementById('repayAmt').value = '';
+  if (isOnboardingStep('repay_debt')) finishOnboarding();
   closeModal();
   if (G.debt <= 0) { G.debt = 0; showWarn('🎉 还清了！终于可以睡个好觉了！', '🎉'); }
   renderAll(); saveGame();
@@ -1825,6 +1885,7 @@ function startGame(useSave) {
   document.getElementById('introOverlay').style.display = 'none';
   preloadEventImages();
   renderAll();
+  setTimeout(() => maybeShowOnboardingPrompt(), 120);
 }
 
 function restartGame() {
