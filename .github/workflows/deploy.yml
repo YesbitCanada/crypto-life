@@ -19,3 +19,5 @@ jobs:
           coscmd config -a ${{ secrets.TCB_SECRET_ID }} -s ${{ secrets.TCB_SECRET_KEY }} -b degen-1256918364 -r ap-hongkong
           coscmd upload -H '{"Content-Type":"text/html; charset=utf-8"}' index.html /index.html
           coscmd upload -H '{"Content-Type":"text/html; charset=utf-8"}' help.html /help.html
+          coscmd upload -r story_1page.png /story_1page.png
+          coscmd upload -r event/ /event/
