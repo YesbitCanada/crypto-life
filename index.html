@@ -1795,6 +1795,15 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && currentModal && currentModal !== 'gameover') closeModal();
 });
 
+// Preload event images to eliminate flash when modal opens
+function preloadEventImages() {
+  const images = new Set(EVENTS.map(ev => ev.image).filter(Boolean));
+  images.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+}
+
 // Unlock AudioContext on first user interaction
 document.addEventListener('click', () => { try { ac(); } catch(e) {} }, { once: true });
 
@@ -1814,6 +1823,7 @@ function startGame(useSave) {
     newGame();
   }
   document.getElementById('introOverlay').style.display = 'none';
+  preloadEventImages();
   renderAll();
 }
 
