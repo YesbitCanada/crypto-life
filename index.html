@@ -79,9 +79,9 @@ body{padding:12px;}
 }
 .stat{padding:10px 12px;border-right:var(--px) solid var(--line);}
 .stat:last-child{border-right:none;}
-.stat-lbl{font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;}
-.stat-val{font-size:22px;font-weight:700;line-height:1.1;}
-.stat-sm .stat-val{font-size:17px;}
+.stat-lbl{font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;}
+.stat-val{font-size:25px;font-weight:700;line-height:1.1;}
+.stat-sm .stat-val{font-size:19px;}
 .green{color:var(--green);}
 .red{color:var(--red);}
 .yellow{color:#d88e16;}
@@ -92,8 +92,8 @@ body{padding:12px;}
   border:var(--px) solid var(--line);
   box-shadow:inset -4px -4px 0 0 #6d241d,inset 4px 4px 0 0 #d96658;
 }
-.alertbox .stat-lbl{color:#ffd3bf;margin-bottom:4px;}
-.alertbox .alert-val{font-size:15px;font-weight:700;line-height:1.4;}
+.alertbox .stat-lbl{color:#ffd3bf;margin-bottom:4px;font-size:12px;}
+.alertbox .alert-val{font-size:16px;font-weight:700;line-height:1.4;}
 
 /* ── MAIN GRID ── */
 .main{display:grid;grid-template-columns:250px 1fr 310px;gap:10px;}
@@ -230,6 +230,7 @@ body{padding:12px;}
   outline:none;
 }
 .px-select:disabled{background:#d4c9a8;color:var(--muted);cursor:not-allowed;opacity:.85;}
+.btn-row-wrap{position:relative;}
 .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
 .action{
   border:var(--px) solid var(--line);padding:12px 8px;
@@ -416,6 +417,8 @@ body{padding:12px;}
 @keyframes tick{0%{transform:translateX(700px);}100%{transform:translateX(-100%);}}
 .ticker-day{padding:0 10px;font-size:12px;color:var(--yellow);border-left:2px solid #2a3840;flex-shrink:0;}
 
+/* 存款为0时桌面端隐藏，手机端保留避免孤儿行 */
+.savings-empty{display:none;}
 /* ── RESPONSIVE ── */
 @media(max-width:1100px){
   .topbar{grid-template-columns:1fr 1fr;}
@@ -423,9 +426,9 @@ body{padding:12px;}
   .main{grid-template-columns:220px 1fr;}
   .right-col{display:none;}
   .statusbar{grid-template-columns:repeat(5,1fr);}
-  .stat-val{font-size:16px;}
-  .stat-sm .stat-val{font-size:13px;}
-  .stat-lbl{font-size:10px;}
+  .stat-val{font-size:18px;}
+  .stat-sm .stat-val{font-size:15px;}
+  .stat-lbl{font-size:11px;}
 }
 @media(max-width:700px){
   body{padding:6px;}
@@ -436,19 +439,45 @@ body{padding:12px;}
   .main > main{order:1;}
   .right-col{display:none;}
   .trade-grid{grid-template-columns:1fr;}
-  .footer-actions{grid-template-columns:1fr;}
-  .coin-row{grid-template-columns:36px 1fr 80px 70px;}
-  .spark-box{display:none;}
-  .statusbar{grid-template-columns:1fr 1fr;overflow:visible;}
+  .footer-actions{grid-template-columns:1fr 1fr;}
+  /* Statusbar: 2行布局 */
+  .statusbar{grid-template-columns:1fr 1fr 1fr 1fr;overflow:visible;}
   .statusbar .stat:first-child{grid-column:1/-1;border-bottom:var(--px) solid var(--line);}
-  .stat-val{font-size:20px;}
-  .stat-sm .stat-val{font-size:16px;}
+  .stat{padding:7px 10px;}
+  .stat-lbl{font-size:11px;margin-bottom:2px;}
+  .stat-val{font-size:24px;}
+  .stat-sm .stat-val{font-size:18px;}
+  /* 币种名 + 中文名同行显示，恢复原字号 */
+  .coin-row{grid-template-columns:30px 1fr 80px 70px;padding:6px 8px;gap:4px;}
+  .coin-icon-wrap{width:30px;height:30px;}
+  .coin-icon{width:30px;height:30px;}
+  .coin-meta span{display:inline;margin-top:0;margin-left:3px;}
+  .market-list{gap:4px;}
+  .spark-box{display:none;}
   .topbar{gap:6px;}
-  .trade-card h3{font-size:12px;margin-bottom:5px;}
+  .trade-card h3{margin-bottom:5px;}
   .trade-card .px-screen{padding:5px 7px;}
-  .trade-card .screen-title{font-size:10px;margin-bottom:1px;}
-  .trade-card .screen-sm{font-size:13px;}
-  .source-list{display:none;}
+  /* 信息源按钮改为横向滚动 */
+  .source-list{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:4px;padding-bottom:4px;}
+  .source-list button{flex-shrink:0;}
+  /* 手机端事件流显示 */
+  .mobile-event-feed{display:block !important;}
+  /* 买入/卖出按钮提早悬浮 */
+  .btn-row-wrap.floating{height:68px;}
+  .btn-row-wrap.floating .btn-row{
+    position:fixed;
+    bottom:calc(env(safe-area-inset-bottom, 0px) + 8px);
+    left:6px;
+    right:6px;
+    z-index:18;
+    margin-top:0;
+    padding:6px;
+    background:var(--panel);
+    border:var(--px) solid var(--line);
+    box-shadow:0 0 0 2px #6d5c45,4px 4px 0 0 var(--shadow);
+  }
+  /* 手机端存款格强制显示，避免负债孤行 */
+  .savings-empty{display:block;}
 }
 </style>
 </head>
@@ -524,7 +553,6 @@ body{padding:12px;}
       <h1>币圈浮生记</h1>
       <small>Pixel Edition · 20天翻盘传说</small>
       <a href="help.html" style="display:inline-block;margin-top:5px;padding:3px 10px;font-size:11px;font-family:inherit;color:var(--text);background:#d9c69c;border:3px solid var(--line);box-shadow:inset -2px -2px 0 0 #b79c70,inset 2px 2px 0 0 #f6e8c4;text-decoration:none;letter-spacing:1px;">❓ 帮助手册</a>
-      <a href="kline-runner.html" style="display:inline-block;margin-top:5px;margin-left:6px;padding:3px 10px;font-size:11px;font-family:inherit;color:#fff4d2;background:#2b5fa3;border:3px solid var(--line);box-shadow:inset -2px -2px 0 0 #193c6c,inset 2px 2px 0 0 #5484c4;text-decoration:none;letter-spacing:1px;">📈 K线跑酷原型</a>
     </div>
 
     <div class="statusbar">
@@ -540,7 +568,7 @@ body{padding:12px;}
         <div class="stat-lbl">持仓</div>
         <div class="stat-val" id="tbPosVal" style="color:var(--text);">$0</div>
       </div>
-      <div class="stat stat-sm">
+      <div class="stat stat-sm" id="tbSavingsCell">
         <div class="stat-lbl">存款</div>
         <div class="stat-val" id="tbSavings" style="color:var(--text);">$0</div>
       </div>
@@ -555,7 +583,7 @@ body{padding:12px;}
         <div class="stat-lbl" style="color:#ffd3bf;">⚠ 爆仓风险！</div>
         <div class="alert-val" id="alertTxt"></div>
       </div>
-      <div id="alertStatus" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;">
+      <div id="alertStatus" style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;">
         <div>
           <div class="stat-lbl" style="color:#ffd3bf;">心态</div>
           <div class="alert-val" id="tbHealth">100</div>
@@ -563,6 +591,10 @@ body{padding:12px;}
         <div>
           <div class="stat-lbl" style="color:#ffd3bf;">仓位</div>
           <div class="alert-val" id="tbPosCap">0/100</div>
+        </div>
+        <div>
+          <div class="stat-lbl" style="color:#ffd3bf;">持仓量</div>
+          <div class="alert-val" id="tbQty">0手</div>
         </div>
         <div>
           <div class="stat-lbl" style="color:#ffd3bf;">天数</div>
@@ -625,18 +657,34 @@ body{padding:12px;}
               <div class="screen-sm" id="selPrice">—</div>
             </div>
           </div>
-          <div class="px-screen">
-            <div class="screen-title">持仓 / 爆仓价</div>
-            <div class="screen-sm" id="selHolding">—</div>
-          </div>
-          <div class="kv" style="margin-top:8px;">
+          <!-- 有持仓时显示：爆仓信息 -->
+          <div id="selLiqRow" style="display:none;">
             <div class="px-screen">
-              <div class="screen-title">杠杆</div>
-              <div class="screen-sm" id="selLev">1x</div>
+              <div class="screen-title">持仓 / 爆仓价</div>
+              <div class="screen-sm" id="selHolding">—</div>
             </div>
-            <div class="px-screen">
-              <div class="screen-title">爆仓风险</div>
-              <div class="screen-sm" id="selLiqRisk">—</div>
+            <div class="kv" style="margin-top:8px;">
+              <div class="px-screen">
+                <div class="screen-title">杠杆</div>
+                <div class="screen-sm" id="selLev">1x</div>
+              </div>
+              <div class="px-screen">
+                <div class="screen-title">爆仓风险</div>
+                <div class="screen-sm" id="selLiqRisk">—</div>
+              </div>
+            </div>
+          </div>
+          <!-- 无持仓时显示：买入参考信息 -->
+          <div id="selBuyHint" style="display:none;">
+            <div class="kv" style="margin-top:8px;">
+              <div class="px-screen">
+                <div class="screen-title">最多可买</div>
+                <div class="screen-sm" id="selMaxBuy">—</div>
+              </div>
+              <div class="px-screen">
+                <div class="screen-title">单手成本</div>
+                <div class="screen-sm" id="selCostPer">—</div>
+              </div>
             </div>
           </div>
         </div>
@@ -650,12 +698,12 @@ body{padding:12px;}
           </div>
           <div class="kv" style="margin-bottom:6px;">
             <div class="px-screen">
-              <div class="screen-title">买后剩余现金</div>
-              <div class="screen-sm" id="tradeCash">—</div>
-            </div>
-            <div class="px-screen">
               <div class="screen-title">仓位</div>
               <div class="screen-sm" id="tradePos">—</div>
+            </div>
+            <div class="px-screen">
+              <div class="screen-title">买后剩余</div>
+              <div class="screen-sm" id="tradeCash">—</div>
             </div>
           </div>
           <div class="field">
@@ -665,9 +713,11 @@ body{padding:12px;}
               <option value="2">2x — 杠杆（50%跌爆仓）</option>
             </select>
           </div>
-          <div class="btn-row">
-            <button class="action buy btn-disabled" id="buyBtn" onclick="handleBuy()">买入</button>
-            <button class="action sell btn-disabled" id="sellBtn" onclick="handleSell()">卖出</button>
+          <div class="btn-row-wrap" id="tradeBtnWrap">
+            <div class="btn-row">
+              <button class="action buy btn-disabled" id="buyBtn" onclick="handleBuy()">买入</button>
+              <button class="action sell btn-disabled" id="sellBtn" onclick="handleSell()">卖出</button>
+            </div>
           </div>
         </div>
       </div>
@@ -677,25 +727,23 @@ body{padding:12px;}
         <button class="action flat-btn" onclick="handleCloseAll()">全部平仓</button>
       </div>
 
+      <!-- 手机端事件流（桌面端隐藏，由右栏负责） -->
+      <div class="mobile-event-feed" id="mobileEventFeed" style="display:none;margin-top:8px;">
+        <div class="panelhead"><h2>事件流</h2><div class="badge">EVENT</div></div>
+        <div class="event-list" id="mobileEventList">
+          <div class="ev-empty">暂无事件，点击"下一天"开始</div>
+        </div>
+      </div>
+
     </main>
 
     <!-- RIGHT: Account + Events + Chart -->
     <aside class="px-panel right-col" style="padding:12px;">
       <div class="panelhead"><h2>账户情况</h2><div class="badge">ACCOUNT</div></div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-        <div class="px-screen">
-          <div class="screen-title">持仓市值</div>
-          <div class="screen-big" id="acctPos">$0</div>
-        </div>
-        <div class="px-screen">
-          <div class="screen-title">持仓数量</div>
-          <div class="screen-big" id="acctQty">0手</div>
-        </div>
-      </div>
       <div class="px-screen" style="margin-bottom:8px;">
-        <div class="screen-title">总持仓 / 仓位限制</div>
-        <div class="screen-sm" id="acctCap">0 / 100</div>
+        <div class="screen-title">持仓数量</div>
+        <div class="screen-big" id="acctQty">0手</div>
       </div>
 
       <div class="panelhead" style="margin-top:6px;"><h2>事件流</h2><div class="badge">EVENT</div></div>
@@ -712,7 +760,6 @@ body{padding:12px;}
   <div class="ticker-wrap">
     <div class="ticker-icon">📰</div>
     <div class="ticker-scroll"><span class="ticker-txt" id="tickerTxt">加载中...</span></div>
-    <div class="ticker-day" id="tickerDay">0/20</div>
   </div>
 
 </div><!-- .frame -->
@@ -983,6 +1030,17 @@ function maybeShowOnboardingPrompt() {
   }
 }
 
+function syncTradeButtonsSticky() {
+  const wrap = document.getElementById('tradeBtnWrap');
+  if (!wrap) return;
+  const isMobile = window.matchMedia('(max-width:700px)').matches;
+  if (!isMobile) {
+    wrap.classList.remove('floating');
+    return;
+  }
+  wrap.classList.toggle('floating', window.scrollY > 120);
+}
+
 function rp(cfg) {
   const v = cfg.min + Math.random() * (cfg.max - cfg.min);
   const f = Math.pow(10, cfg.dec || 0);
@@ -1239,8 +1297,9 @@ function fmtN(n) {
   return '$' + n.toFixed(3);
 }
 function fmtC(n) { return '$' + parseFloat(n).toLocaleString('zh-CN', {minimumFractionDigits:0, maximumFractionDigits:2}); }
-// Compact format for screen-big displays (prevents overflow)
+// Compact format for screen-big displays (prevents overflow); handles negatives
 function fmtK(n) {
+  if (n < 0) return '-' + fmtK(-n);
   if (n === 0) return '$0';
   if (n >= 1000000) return '$' + (n / 1000000).toFixed(2) + 'M';
   if (n >= 10000)   return '$' + (n / 1000).toFixed(1) + 'K';
@@ -1268,14 +1327,13 @@ function renderAll() {
   // Topbar: 总资产 + 5 values
   const net = parseFloat((G.cash + posVal + G.savings - G.debt).toFixed(2));
   const netEl = document.getElementById('tbNetAsset');
-  netEl.textContent = fmtC(net);
+  netEl.textContent = fmtK(net);
   netEl.style.color = net >= 0 ? 'var(--green)' : 'var(--red)';
-  document.getElementById('tbCash').textContent = fmtC(G.cash);
+  document.getElementById('tbCash').textContent = fmtK(G.cash);
   document.getElementById('tbPosVal').textContent = fmtK(posVal);
-  document.getElementById('tbSavings').textContent = fmtC(G.savings);
-  document.getElementById('tbDebt').textContent = fmtC(G.debt);
-  document.getElementById('tickerDay').textContent = `${G.day}/20`;
-
+  document.getElementById('tbSavings').textContent = fmtK(G.savings);
+  document.getElementById('tbSavingsCell').classList.toggle('savings-empty', G.savings <= 0);
+  document.getElementById('tbDebt').textContent = fmtK(G.debt);
   // Alertbox: show risk warning or status (心态/仓位/天数)
   let minDist = null;
   for (const [k, v] of Object.entries(G.goods)) {
@@ -1295,17 +1353,17 @@ function renderAll() {
   }
   document.getElementById('tbHealth').textContent = G.health;
   document.getElementById('tbPosCap').textContent = `${G.totalGoods}/${G.capacity}`;
+  document.getElementById('tbQty').textContent = G.totalGoods + '手';
   document.getElementById('tbDays').textContent = `${G.day}/20`;
 
   // Right account
-  document.getElementById('acctPos').textContent = fmtK(posVal);
   document.getElementById('acctQty').textContent = G.totalGoods + '手';
-  document.getElementById('acctCap').textContent = G.totalGoods + ' / ' + G.capacity;
 
   renderMarket();
   updateTradeInfo();
   renderEventFeed();
   renderBigChart();
+  syncTradeButtonsSticky();
 
   // Prompt for psychological help if health < 50
   if (G.health < 50 && G.health > 0 && !currentModal) {
@@ -1361,10 +1419,8 @@ function updateTradeInfo() {
   if (!selectedGood) {
     document.getElementById('selName').textContent = '—';
     document.getElementById('selPrice').textContent = '—';
-    document.getElementById('selHolding').textContent = '—';
-    document.getElementById('selLev').textContent = currentLev + 'x';
-    document.getElementById('selLiqRisk').textContent = '—';
-    document.getElementById('selLiqRisk').className = 'screen-sm';
+    document.getElementById('selLiqRow').style.display = 'none';
+    document.getElementById('selBuyHint').style.display = 'none';
     levSelect.disabled = false;
     buyBtn.classList.add('btn-disabled'); buyBtn.disabled = true;
     sellBtn.classList.add('btn-disabled'); sellBtn.disabled = true;
@@ -1381,7 +1437,11 @@ function updateTradeInfo() {
   document.getElementById('selPrice').textContent = fmtN(p);
 
   // Lock leverage to existing position
+  const liqRow = document.getElementById('selLiqRow');
+  const buyHint = document.getElementById('selBuyHint');
   if (have > 0) {
+    liqRow.style.display = '';
+    buyHint.style.display = 'none';
     const lev = v.lev || 1;
     levSelect.value = String(lev);
     levSelect.disabled = true;
@@ -1398,11 +1458,14 @@ function updateTradeInfo() {
     document.getElementById('selLiqRisk').textContent = liqRisk;
     document.getElementById('selLiqRisk').className = riskCls;
   } else {
+    liqRow.style.display = 'none';
     levSelect.disabled = false;
-    document.getElementById('selHolding').textContent = '空仓';
-    document.getElementById('selLev').textContent = currentLev + 'x';
-    document.getElementById('selLiqRisk').textContent = '—';
-    document.getElementById('selLiqRisk').className = 'screen-sm';
+    // 无持仓：显示买入参考信息
+    const mPer = Math.max(0.001, p / currentLev);
+    const maxBuy = Math.min(G.capacity - G.totalGoods, Math.floor(G.cash / mPer));
+    document.getElementById('selMaxBuy').textContent = maxBuy > 0 ? maxBuy + '手' : '0手';
+    document.getElementById('selCostPer').textContent = fmtN(mPer);
+    document.getElementById('selBuyHint').style.display = '';
   }
 
   // Buy/sell button states
@@ -1433,16 +1496,15 @@ function updateTradeInfo() {
 }
 
 function renderEventFeed() {
-  const feed = document.getElementById('eventFeed');
-  if (recentEvents.length === 0) {
-    feed.innerHTML = '<div class="ev-empty">暂无事件，点击"下一天"开始</div>';
-    return;
-  }
-  feed.innerHTML = recentEvents.map(e => `
+  const html = recentEvents.length === 0
+    ? '<div class="ev-empty">暂无事件，点击"下一天"开始</div>'
+    : recentEvents.map(e => `
     <div class="ev-card">
       <div class="ev-avatar">${e.icon}</div>
       <div><b>${e.title}</b><p>${e.desc.slice(0, 50)}${e.desc.length > 50 ? '…' : ''}</p></div>
     </div>`).join('');
+  document.getElementById('eventFeed').innerHTML = html;
+  document.getElementById('mobileEventList').innerHTML = html;
 }
 
 function renderBigChart() {
@@ -1901,6 +1963,8 @@ function preloadEventImages() {
 
 // Unlock AudioContext on first user interaction
 document.addEventListener('click', () => { try { ac(); } catch(e) {} }, { once: true });
+window.addEventListener('scroll', syncTradeButtonsSticky, { passive:true });
+window.addEventListener('resize', syncTradeButtonsSticky);
 
 // Check for saved game on load
 window.addEventListener('load', () => {
@@ -1909,6 +1973,7 @@ window.addEventListener('load', () => {
     document.getElementById('savedNotice').style.display = 'block';
     document.getElementById('continueBtn').style.display = 'inline-block';
   }
+  syncTradeButtonsSticky();
 });
 
 function startGame(useSave) {
