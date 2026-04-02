@@ -977,16 +977,25 @@ function rp(cfg) {
   return Math.round(v * f) / f;
 }
 
-function weightedEventPick() {
+const STRESS_EVENTS = [18, 19, 20, 21]; // 钓鱼攻击、跟单亏损、资产冻结、Gas爆炸（心态类）
+const PRICE_EVENTS = EVENTS.map((e, i) => e.type === 'price' ? i : -1).filter(i => i >= 0); // 涨跌类事件索引
+
+function weightedEventPick(forceType) {
   const boosts = G.eventBoosts || {};
-  const weights = EVENTS.map(e => boosts[e.title] ? 6 : 1);
+  let pool = EVENTS;
+  if (forceType === 'stress') {
+    pool = STRESS_EVENTS.map(i => EVENTS[i]);
+  } else if (forceType === 'price') {
+    pool = PRICE_EVENTS.map(i => EVENTS[i]);
+  }
+  const weights = pool.map(e => boosts[e.title] ? 6 : 1);
   const total = weights.reduce((a, b) => a + b, 0);
   let r = Math.random() * total;
-  for (let i = 0; i < EVENTS.length; i++) {
+  for (let i = 0; i < pool.length; i++) {
     r -= weights[i];
-    if (r <= 0) return EVENTS[i];
+    if (r <= 0) return pool[i];
   }
-  return EVENTS[EVENTS.length - 1];
+  return pool[pool.length - 1];
 }
 
 function newGame() {
@@ -1080,8 +1089,9 @@ function doMove() {
   }
 
   let evt = null;
-  if (!isOnboardingStep('advance_day') && Math.random() < 0.65) {
-    evt = weightedEventPick();
+  if (!isOnboardingStep('advance_day')) {
+    const eventType = Math.random() < 0.8 ? 'price' : 'stress';
+    evt = weightedEventPick(eventType);
     applyEvent(evt);
   }
   // Decay boosts after using them for today's pick
@@ -1126,7 +1136,7 @@ function checkLiquidations() {
     if (prices[k] <= liqP) {
       out.push({ key:k, qty:v.qty, lev, entry:v.entry, liqPrice:liqP });
       G.totalGoods -= v.qty;
-      G.health = Math.max(0, G.health - 15);
+      G.health = Math.max(0, G.health - 30);
       delete G.goods[k];
     }
   }
