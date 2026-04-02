@@ -1290,6 +1290,13 @@ function renderAll() {
   updateTradeInfo();
   renderEventFeed();
   renderBigChart();
+
+  // Prompt for psychological help if health < 50
+  if (G.health < 50 && G.health > 0 && !currentModal) {
+    setTimeout(() => {
+      if (G.health < 50) showWarn(`心态已跌至 ${G.health}，建议去做心理咨询（🧠）。`, '⚠️');
+    }, 300);
+  }
 }
 
 function renderMarket() {
@@ -1651,7 +1658,7 @@ function handleHeal() {
   if (G.health >= 100) { showWarn('心态还行，不用咨询！', '😌'); return; }
   if (G.cash < 5000) { showWarn('USDT不足！需要$5,000。', '💸'); return; }
   G.cash = parseFloat((G.cash - 5000).toFixed(2));
-  G.health = 100; closeModal(); renderAll(); saveGame();
+  G.health = Math.min(100, G.health + 50); closeModal(); renderAll(); saveGame();
 }
 
 // Repay
