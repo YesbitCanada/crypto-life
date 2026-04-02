@@ -524,6 +524,7 @@ body{padding:12px;}
       <h1>币圈浮生记</h1>
       <small>Pixel Edition · 20天翻盘传说</small>
       <a href="help.html" style="display:inline-block;margin-top:5px;padding:3px 10px;font-size:11px;font-family:inherit;color:var(--text);background:#d9c69c;border:3px solid var(--line);box-shadow:inset -2px -2px 0 0 #b79c70,inset 2px 2px 0 0 #f6e8c4;text-decoration:none;letter-spacing:1px;">❓ 帮助手册</a>
+      <a href="kline-runner.html" style="display:inline-block;margin-top:5px;margin-left:6px;padding:3px 10px;font-size:11px;font-family:inherit;color:#fff4d2;background:#2b5fa3;border:3px solid var(--line);box-shadow:inset -2px -2px 0 0 #193c6c,inset 2px 2px 0 0 #5484c4;text-decoration:none;letter-spacing:1px;">📈 K线跑酷原型</a>
     </div>
 
     <div class="statusbar">
@@ -948,6 +949,16 @@ function createOnboardingState() {
   return { active:true, step:'buy_doge', boostedDay:false, profitHint:0 };
 }
 
+function hasSeenOnboarding() {
+  try { return localStorage.getItem('cryptoGame_onboarding_seen') === '1'; }
+  catch(e) { return false; }
+}
+
+function markOnboardingSeen() {
+  try { localStorage.setItem('cryptoGame_onboarding_seen', '1'); }
+  catch(e) {}
+}
+
 function isOnboardingStep(step) {
   return !!(G.onboarding && G.onboarding.active && G.onboarding.step === step);
 }
@@ -960,12 +971,13 @@ function finishOnboarding() {
 
 function maybeShowOnboardingPrompt() {
   if (!G.onboarding || !G.onboarding.active || currentModal) return;
+  markOnboardingSeen();
   if (G.onboarding.step === 'buy_doge' && G.day === 0) {
     showWarn('新手提示：今天 DOGE 正在地板价，先买一点 DOGE 试试手气。', '🐕');
   } else if (G.onboarding.step === 'advance_day') {
     showWarn('很好。现在点击“下一天”，看看这笔 DOGE 会发生什么。', '⏩');
   } else if (G.onboarding.step === 'sell_doge') {
-    showWarn(`第一桶金到手了，按你现在这笔 DOGE 大约已经赚了 ${fmtC(G.onboarding.profitHint || 0)}。先卖出落袋，再去还钱。`, '📈');
+    showWarn(`DOGE暴涨，第一桶金到手了，按你现在这笔 DOGE 大约已经赚了 ${fmtC(G.onboarding.profitHint || 0)}。先卖出落袋。`, '📈');
   } else if (G.onboarding.step === 'repay_debt') {
     showWarn('很好，现在去“还给小王”，先还一部分，压住每天 10% 的利息。', '💸');
   }
@@ -999,7 +1011,11 @@ function weightedEventPick(forceType) {
 }
 
 function newGame() {
-  G = { cash:1000, savings:0, debt:3000, health:100, capacity:100, goods:{}, totalGoods:0, daysLeft:20, day:0, plusRugged:false, eventBoosts:{}, onboarding:createOnboardingState() };
+  G = {
+    cash:1000, savings:0, debt:3000, health:100, capacity:100, goods:{}, totalGoods:0,
+    daysLeft:20, day:0, plusRugged:false, eventBoosts:{},
+    onboarding: hasSeenOnboarding() ? null : createOnboardingState()
+  };
   prices = {}; prevPrices = {}; priceHistory = {};
   for (const k in PRICE_CFG) { prices[k] = rp(PRICE_CFG[k]); priceHistory[k] = [prices[k]]; }
   prices.DOGE = PRICE_CFG.DOGE.min;
@@ -1667,9 +1683,11 @@ function handleRepay() {
   const n = doRepay(amt);
   if (n <= 0) { showWarn('无法还款！（USDT不足）', '💸'); return; }
   document.getElementById('repayAmt').value = '';
-  if (isOnboardingStep('repay_debt')) finishOnboarding();
+  const onboardingRepay = isOnboardingStep('repay_debt');
+  if (onboardingRepay) finishOnboarding();
   closeModal();
-  if (G.debt <= 0) { G.debt = 0; showWarn('🎉 还清了！终于可以睡个好觉了！', '🎉'); }
+  if (G.debt <= 0) { G.debt = 0; showWarn('🎉 还清了！后面就看你自己的操作了，坚持20天翻盘人生！', '🎉'); }
+  else if (onboardingRepay) { showWarn('做得好，先把利息压住了。后面就看你自己的操作了，坚持20天翻盘人生！', '✅'); }
   renderAll(); saveGame();
 }
 function setRepayMax() {
@@ -1910,6 +1928,7 @@ function restartGame() {
   clearSave();
   newGame();
   renderAll();
+  setTimeout(() => maybeShowOnboardingPrompt(), 120);
 }
 </script>
 </body>
