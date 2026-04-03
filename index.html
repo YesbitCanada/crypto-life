@@ -525,12 +525,12 @@ body{padding:12px;}
           <span class="story-tag">PAGE 04</span>
           <h4>回乡之后，债务开局</h4>
           <p>小王假装帮你东山再起，借给你 <b style="color:var(--red);">$3,000</b>。其中 $2,000 是"电脑和硬件钱包"，$1,000 是启动资金。</p>
-          <div class="hint">现在你欠他 <b>$3,000</b>，日息 <b>10%</b>，20天还清，不然去堵你。</div>
+          <div class="hint">现在你欠他 <b>$3,000</b>，日息 <b>10%</b>，15天还清，不然去堵你。</div>
         </div>
       </div>
 
       <div class="intro-note">
-        你现在的目标很简单：在 <b>20 天</b>内翻盘，撑住心态，把债还清。
+        你现在的目标很简单：在 <b>15 天</b>内翻盘，撑住心态，把债还清。
       </div>
 
       <div id="savedNotice" style="display:none;padding:8px;background:#fff3d2;border:3px solid var(--line);font-size:13px;">
@@ -551,7 +551,7 @@ body{padding:12px;}
   <section class="topbar">
     <div class="titlebox">
       <h1>币圈浮生记</h1>
-      <small>Pixel Edition · 20天翻盘传说</small>
+      <small>Pixel Edition · 15天翻盘传说</small>
       <a href="help.html" style="display:inline-block;margin-top:5px;padding:3px 10px;font-size:11px;font-family:inherit;color:var(--text);background:#d9c69c;border:3px solid var(--line);box-shadow:inset -2px -2px 0 0 #b79c70,inset 2px 2px 0 0 #f6e8c4;text-decoration:none;letter-spacing:1px;">❓ 帮助手册</a>
     </div>
 
@@ -598,7 +598,7 @@ body{padding:12px;}
         </div>
         <div>
           <div class="stat-lbl" style="color:#ffd3bf;">天数</div>
-          <div class="alert-val" id="tbDays">0/20</div>
+          <div class="alert-val" id="tbDays">0/15</div>
         </div>
       </div>
     </div>
@@ -929,6 +929,8 @@ const PRICE_CFG = {
   PLUS:  { min:2,      max:100,    dec:2 },
 };
 
+const TOTAL_DAYS = 15;
+
 const EVENTS = [
   {desc:"马斯克发推：'Doge to the moon 🚀'，DOGE暴涨！",                     type:"price", goods:"DOGE",  rate:7,    icon:"🐕", title:"KOL喊单", image:"event/kol_hype.jpg"},
   {desc:"BTC ETF获批！机构买盘涌入，价格飙升！",                              type:"price", goods:"BTC",   rate:3,    icon:"📈", title:"ETF获批", image:"event/marketincrease.jpg"},
@@ -949,10 +951,10 @@ const EVENTS = [
   {desc:"ETH基金会说抛售一部分用于日常运营，价格跌了30%。",                                 type:"price", goods:"ETH",   rate:0.7,  icon:"📉", title:"基金会抛售", image:"event/marketdecrease.jpg"},
   {desc:"空投！你参与的协议快照，获赠3手 LP！",                                type:"goods", goods:"LP",    qty:3,     icon:"🎁", title:"免费空投"},
   {desc:"老乡送了你5手DOGE，说是'未来的黄金'。",                             type:"goods", goods:"DOGE",  qty:5,     icon:"🎁", title:"朋友赠送"},
-  {desc:"你点了'免费空投'链接，现金USDT钱包被钓鱼！损失20%，心态-30。",          type:"cash",  rate:0.8,  hp:-30,        icon:"🎣", title:"钓鱼攻击"},
-  {desc:"群大佬让你FOMO跟单，亏了10% 现金USDT，心态-10。",                         type:"cash",  rate:0.9,  hp:-10,        icon:"📱", title:"跟单亏损"},
-  {desc:"交易所以'异常交易'冻结部分资产。损失10%持仓，心态-10。",             type:"cash",  rate:0.9,  hp:-10,        icon:"🔒", title:"资产冻结"},
-  {desc:"Gas费暴涨，来回操作损失15% 现金USDT，心态-30。",                         type:"cash",  rate:0.85, hp:-30,        icon:"⛽", title:"Gas爆炸"},
+  {desc:"你点了'免费空投'链接，现金USDT钱包被钓鱼！损失20%，心态-40。",          type:"cash",  rate:0.8,  hp:-40,        icon:"🎣", title:"钓鱼攻击"},
+  {desc:"群大佬让你FOMO跟单，亏了10% 现金USDT，心态-20。",                         type:"cash",  rate:0.9,  hp:-20,        icon:"📱", title:"跟单亏损"},
+  {desc:"交易所以'异常交易'冻结部分资产。损失10%持仓，心态-20。",             type:"cash",  rate:0.9,  hp:-20,        icon:"🔒", title:"资产冻结"},
+  {desc:"Gas费暴涨，来回操作损失15% 现金USDT，心态-40。",                         type:"cash",  rate:0.85, hp:-40,        icon:"⛽", title:"Gas爆炸"},
   {desc:"小王又来催了，还追加了$500债务！",                                    type:"debt",  debt:500,               icon:"😤", title:"追债通知"},
 ];
 
@@ -1047,8 +1049,10 @@ function rp(cfg) {
   return Math.round(v * f) / f;
 }
 
-const STRESS_EVENTS = [18, 19, 20, 21]; // 钓鱼攻击、跟单亏损、资产冻结、Gas爆炸（心态类）
-const PRICE_EVENTS = EVENTS.map((e, i) => e.type === 'price' ? i : -1).filter(i => i >= 0); // 涨跌类事件索引
+const STRESS_EVENTS = EVENTS.map((e, i) => e.type === 'cash' ? i : -1).filter(i => i >= 0);
+const PRICE_EVENTS = EVENTS.map((e, i) => e.type === 'price' ? i : -1).filter(i => i >= 0);
+const GOODS_EVENTS = EVENTS.map((e, i) => e.type === 'goods' ? i : -1).filter(i => i >= 0);
+const DEBT_EVENTS = EVENTS.map((e, i) => e.type === 'debt' ? i : -1).filter(i => i >= 0);
 
 function weightedEventPick(forceType) {
   const boosts = G.eventBoosts || {};
@@ -1057,6 +1061,10 @@ function weightedEventPick(forceType) {
     pool = STRESS_EVENTS.map(i => EVENTS[i]);
   } else if (forceType === 'price') {
     pool = PRICE_EVENTS.map(i => EVENTS[i]);
+  } else if (forceType === 'goods') {
+    pool = GOODS_EVENTS.map(i => EVENTS[i]);
+  } else if (forceType === 'debt') {
+    pool = DEBT_EVENTS.map(i => EVENTS[i]);
   }
   const weights = pool.map(e => boosts[e.title] ? 6 : 1);
   const total = weights.reduce((a, b) => a + b, 0);
@@ -1071,7 +1079,7 @@ function weightedEventPick(forceType) {
 function newGame() {
   G = {
     cash:1000, savings:0, debt:3000, health:100, capacity:100, goods:{}, totalGoods:0,
-    daysLeft:20, day:0, plusRugged:false, eventBoosts:{},
+    daysLeft:TOTAL_DAYS, day:0, plusRugged:false, eventBoosts:{},
     onboarding: hasSeenOnboarding() ? null : createOnboardingState()
   };
   prices = {}; prevPrices = {}; priceHistory = {};
@@ -1106,6 +1114,7 @@ function loadGame() {
     if (!raw) return false;
     const d = JSON.parse(raw);
     if (!d.G || d.G.daysLeft <= 0) return false;
+    if ((d.G.day || 0) + (d.G.daysLeft || 0) !== TOTAL_DAYS) return false;
     G = d.G; prices = d.prices || {}; prevPrices = d.prevPrices || {};
     priceHistory = d.priceHistory || {};
     eventLog = d.eventLog || []; recentEvents = d.recentEvents || [];
@@ -1164,7 +1173,8 @@ function doMove() {
 
   let evt = null;
   if (!isOnboardingStep('advance_day')) {
-    const eventType = Math.random() < 0.8 ? 'price' : 'stress';
+    const roll = Math.random();
+    const eventType = roll < 0.7 ? 'price' : roll < 0.9 ? 'stress' : roll < 0.95 ? 'goods' : 'debt';
     evt = weightedEventPick(eventType);
     applyEvent(evt);
   }
@@ -1354,7 +1364,7 @@ function renderAll() {
   document.getElementById('tbHealth').textContent = G.health;
   document.getElementById('tbPosCap').textContent = `${G.totalGoods}/${G.capacity}`;
   document.getElementById('tbQty').textContent = G.totalGoods + '手';
-  document.getElementById('tbDays').textContent = `${G.day}/20`;
+  document.getElementById('tbDays').textContent = `${G.day}/${TOTAL_DAYS}`;
 
   // Right account
   document.getElementById('acctQty').textContent = G.totalGoods + '手';
@@ -1748,8 +1758,8 @@ function handleRepay() {
   const onboardingRepay = isOnboardingStep('repay_debt');
   if (onboardingRepay) finishOnboarding();
   closeModal();
-  if (G.debt <= 0) { G.debt = 0; showWarn('🎉 还清了！后面就看你自己的操作了，坚持20天翻盘人生！', '🎉'); }
-  else if (onboardingRepay) { showWarn('做得好，先把利息压住了。后面就看你自己的操作了，坚持20天翻盘人生！', '✅'); }
+  if (G.debt <= 0) { G.debt = 0; showWarn('🎉 还清了！后面就看你自己的操作了，坚持15天翻盘人生！', '🎉'); }
+  else if (onboardingRepay) { showWarn('做得好，先把利息压住了。后面就看你自己的操作了，坚持15天翻盘人生！', '✅'); }
   renderAll(); saveGame();
 }
 function setRepayMax() {
@@ -1870,7 +1880,7 @@ function showGameOver() {
   const net = parseFloat((G.cash + G.savings - G.debt).toFixed(2));
   const win = G.health > 0 && net >= 0;
   const reason = G.health <= 0 ? '心态崩了，从此一蹶不振' :
-    net < 0 ? '20天到了，还是没能还清小王。门外的脚步声越来越近。' : '你终于还清了债，暂时从这场噩梦里喘了口气。';
+    net < 0 ? '15天到了，还是没能还清小王。门外的脚步声越来越近。' : '你终于还清了债，暂时从这场噩梦里喘了口气。';
   document.getElementById('goTitle').textContent = win ? '🎉 还清了' : '💀 小王来了';
   document.getElementById('goIcon').textContent = win ? '🏆' : '😵';
   document.getElementById('goText').innerHTML =

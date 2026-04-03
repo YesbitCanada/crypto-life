@@ -194,7 +194,7 @@ li{line-height:1.8;font-size:14px;margin-bottom:3px;}
         <span class="quote">"$2,000 帮你配了专业炒币电脑和硬件钱包，<br>剩下 $1,000 就是你的启动资金。"</span><br><br>
         <span style="color:var(--muted);font-size:12px;">（那台电脑，你至今没见到）</span><br><br>
         现在你欠他 <span class="hl-red">$3,000</span>，日息 <b>10%</b>，<br>
-        <span class="quote">"20天还清，不然去堵你。"</span>
+        <span class="quote">"15天还清，不然去堵你。"</span>
       </div>
       <table class="px-table">
         <tr><th>初始参数</th><th>值</th></tr>
@@ -202,7 +202,7 @@ li{line-height:1.8;font-size:14px;margin-bottom:3px;}
         <tr><td>负债</td><td><span class="hl-red">$3,000</span>（日息 10% 复利）</td></tr>
         <tr><td>心态值</td><td>100</td></tr>
         <tr><td>仓位上限</td><td>100 手</td></tr>
-        <tr><td>游戏天数</td><td>20 天</td></tr>
+        <tr><td>游戏天数</td><td>15 天</td></tr>
       </table>
     </div>
 
@@ -211,9 +211,9 @@ li{line-height:1.8;font-size:14px;margin-bottom:3px;}
       <div class="section-head"><h2>胜负条件</h2><span class="section-tag">WIN / LOSE</span></div>
       <table class="px-table">
         <tr><th>结果</th><th>触发条件</th></tr>
-        <tr><td><span class="win">✅ 胜利</span></td><td>第20天结束，心态值 &gt; 0 且 现金 + 存款 − 负债 ≥ 0</td></tr>
+        <tr><td><span class="win">✅ 胜利</span></td><td>第15天结束，心态值 &gt; 0 且 现金 + 存款 − 负债 ≥ 0</td></tr>
         <tr><td><span class="lose">❌ 心态崩溃</span></td><td>心态值归零（随时触发）</td></tr>
-        <tr><td><span class="lose">❌ 债主上门</span></td><td>第20天结束净资产为负</td></tr>
+        <tr><td><span class="lose">❌ 债主上门</span></td><td>第15天结束净资产为负</td></tr>
       </table>
     </div>
 
@@ -239,7 +239,7 @@ li{line-height:1.8;font-size:14px;margin-bottom:3px;}
         </div>
         <div class="tip-card">
           <div class="tip-num">5</div>
-          <p><b>操作完后点击"下一天"</b>：当天买卖完成后记得推进，共 20 天，第20天自动结算。</p>
+          <p><b>操作完后点击"下一天"</b>：当天买卖完成后记得推进，共 15 天，第15天自动结算。</p>
         </div>
         <div class="tip-card">
           <div class="tip-num">6</div>
@@ -322,13 +322,13 @@ li{line-height:1.8;font-size:14px;margin-bottom:3px;}
     <!-- 随机事件 -->
     <div class="section" id="events">
       <div class="section-head"><h2>随机事件系统</h2><span class="section-tag">EVENTS</span></div>
-      <p>每天推进时，有 <b>65% 概率</b>触发一条随机事件，弹窗提示并写入右栏事件流。</p>
+      <p>每天推进时，<b>必然</b>触发一条随机事件：70% 为价格事件，20% 为心态事件，5% 为空投事件，5% 为追债事件。</p>
       <table class="px-table">
         <tr><th>类型</th><th>效果</th><th>典型案例</th></tr>
         <tr><td><b>价格暴涨</b></td><td>某资产价格暴涨很多倍</td><td>马斯克发推，DOGE ×7</td></tr>
         <tr><td><b>价格暴跌</b></td><td>某资产价格暴跌很多倍</td><td>项目跑路，PLUS ×0.02</td></tr>
-        <tr><td><b>免费空投</b></td><td>获赠若干手，无需花钱</td><td>协议快照，获赠 5 手 SHIB</td></tr>
-        <tr><td><b>钱包攻击</b></td><td>现金损失比例，心态下降</td><td>钓鱼攻击，损失 40% USDT</td></tr>
+        <tr><td><b>免费空投</b></td><td>获赠若干手，无需花钱</td><td>协议快照，获赠 3 手 LP</td></tr>
+        <tr><td><b>钱包攻击</b></td><td>现金损失比例，心态下降</td><td>钓鱼攻击，损失 20% USDT</td></tr>
         <tr><td><b>债务追加</b></td><td>小王追加债务</td><td>催债，追加 $500</td></tr>
       </table>
     </div>
