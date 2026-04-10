@@ -300,6 +300,101 @@ body{padding:12px;}
 .modal-icon-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
 .modal-big-icon{font-size:34px;line-height:1;}
 .modal-text{font-size:13px;line-height:1.8;flex:1;}
+.gameover-modal .modal-body{padding:14px 16px 16px;}
+.gameover-scene{
+  position:relative;
+  min-height:128px;
+  margin-bottom:14px;
+  border:var(--px) solid var(--line);
+  overflow:hidden;
+  box-shadow:inset -4px -4px 0 0 rgba(0,0,0,.18),inset 4px 4px 0 0 rgba(255,255,255,.15);
+}
+.gameover-scene::before,
+.gameover-scene::after{content:"";position:absolute;pointer-events:none;}
+.gameover-scene::before{inset:0;}
+.gameover-scene::after{inset:auto 0 0 0;height:38%;background:linear-gradient(180deg,transparent,rgba(0,0,0,.22));}
+.gameover-scene-inner{
+  position:relative;z-index:1;height:100%;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:12px 14px;
+}
+.go-figure{
+  font-size:46px;line-height:1;
+  filter:drop-shadow(4px 4px 0 rgba(0,0,0,.2));
+}
+.go-figure.shadow{opacity:.76;transform:scale(1.2) translateY(8px);}
+.go-scene-copy{display:grid;gap:8px;justify-items:end;text-align:right;}
+.go-scene-tag{
+  font-size:11px;font-weight:700;letter-spacing:.08em;
+  padding:5px 8px;border:3px solid rgba(0,0,0,.42);
+  background:rgba(255,245,214,.86);
+  box-shadow:3px 3px 0 rgba(0,0,0,.15);
+}
+.go-scene-reason{font-size:16px;font-weight:700;line-height:1.45;color:var(--text);}
+.gameover-meta .modal-icon-row{margin-bottom:10px;}
+.go-rebirth{
+  border:var(--px) solid var(--line);
+  background:#f6ebc8;
+  padding:10px 12px;
+  box-shadow:inset -4px -4px 0 0 #d5bf91,inset 4px 4px 0 0 #fff6df;
+  font-size:13px;line-height:1.7;color:var(--text);
+}
+.go-rebirth b{color:var(--blue);}
+.ending-mental_break{
+  background:
+    repeating-linear-gradient(-45deg,rgba(255,140,120,.14) 0 8px,transparent 8px 16px),
+    linear-gradient(180deg,#4f1816,#241013 62%,#120d10);
+}
+.ending-mental_break::before{
+  background:
+    linear-gradient(135deg,transparent 0 44%,rgba(255,228,205,.22) 44% 45%,transparent 45% 100%),
+    linear-gradient(35deg,transparent 0 56%,rgba(255,228,205,.18) 56% 57%,transparent 57% 100%),
+    linear-gradient(160deg,transparent 0 61%,rgba(255,228,205,.16) 61% 62%,transparent 62% 100%);
+  opacity:.85;
+}
+.ending-mental_break .go-scene-tag{background:#ffd7cc;color:#7d1814;}
+.ending-mental_break .go-scene-copy{
+  background:rgba(18,10,12,.44);
+  padding:8px 10px;
+  border:3px solid rgba(255,219,205,.18);
+  box-shadow:4px 4px 0 rgba(0,0,0,.15);
+}
+.ending-mental_break .go-scene-reason{
+  color:#ffe6dc;
+  text-shadow:2px 2px 0 rgba(55,11,8,.45);
+}
+.ending-debt_fail{
+  background:
+    linear-gradient(180deg,rgba(28,30,40,.08),rgba(0,0,0,.1)),
+    linear-gradient(180deg,#7b6847,#48392d 58%,#201918);
+}
+.ending-debt_fail::before{
+  top:18px;right:18px;bottom:18px;width:92px;
+  background:linear-gradient(180deg,rgba(18,18,20,.05),rgba(18,18,20,.86));
+  border-left:4px solid rgba(255,241,210,.22);
+}
+.ending-debt_fail .go-scene-tag{background:#fff0d0;color:#6f4b18;}
+.ending-debt_fail .go-scene-copy{
+  background:rgba(22,16,14,.28);
+  padding:8px 10px;
+  border:3px solid rgba(255,236,205,.16);
+  box-shadow:4px 4px 0 rgba(0,0,0,.14);
+}
+.ending-debt_fail .go-scene-reason{
+  color:#f8ead0;
+  text-shadow:2px 2px 0 rgba(30,18,10,.4);
+}
+.ending-debt_clear{
+  background:
+    radial-gradient(circle at top left,rgba(255,247,209,.55),transparent 35%),
+    linear-gradient(180deg,#dbc77f,#89a95d 58%,#40563a);
+}
+.ending-debt_clear::before{
+  left:40%;right:-10%;bottom:-24%;height:70%;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,247,216,.75),rgba(255,247,216,0));
+}
+.ending-debt_clear .go-scene-tag{background:#fff7d6;color:#6d5a14;}
 .event-modal{max-width:560px;}
 .event-art-wrap{
   display:none;
@@ -498,7 +593,7 @@ body{padding:12px;}
         <div class="story-text">
           <span class="story-tag">PAGE 01</span>
           <h4>一张"高薪邀请函"</h4>
-          <p>2023年，老同学小王说缅北有个"互联网客服"岗位，月入三万，包吃包住。</p>
+          <p>2023年，老同学小宝说缅北有个"互联网客服"岗位，月入三万，包吃包住。</p>
           <div class="hint">"这是机会！"你信了。第一步不是发财，是上车。</div>
         </div>
       </div>
@@ -518,7 +613,7 @@ body{padding:12px;}
         <div class="story-text">
           <span class="story-tag">PAGE 03</span>
           <h4>三个月后，死里逃生</h4>
-          <p>翻墙、躲追捕、狼狈逃命。你和小王一起跑回国内，命是捡回来了，胆子也碎了。</p>
+          <p>翻墙、躲追捕、狼狈逃命。你和小宝一起跑回国内，命是捡回来了，胆子也碎了。</p>
           <div class="hint">这段经历，后来成了你人生最贵的一次"实习"。</div>
         </div>
       </div>
@@ -528,7 +623,7 @@ body{padding:12px;}
         <div class="story-text">
           <span class="story-tag">PAGE 04</span>
           <h4>回乡之后，债务开局</h4>
-          <p>小王假装帮你东山再起，借给你 <b style="color:var(--red);">$3,000</b>。其中 $2,000 是"电脑和硬件钱包"，$1,000 是启动资金。</p>
+          <p>小宝假装帮你东山再起，借给你 <b style="color:var(--red);">$3,000</b>。其中 $2,000 是"电脑和硬件钱包"，$1,000 是启动资金。</p>
           <div class="hint">现在你欠他 <b>$3,000</b>，日息 <b>10%</b>，15天还清，不然去堵你。</div>
         </div>
       </div>
@@ -628,7 +723,7 @@ body{padding:12px;}
       <hr class="left-divider"/>
       <div class="func-list">
         <button class="func-btn" onclick="openModal('bank')">🏦 DEFI 存款</button>
-        <button class="func-btn" onclick="openModal('postal')">💸 还款小王</button>
+        <button class="func-btn" onclick="openModal('postal')">💸 还款小宝</button>
         <button class="func-btn" onclick="openModal('hospital')">🧠 心理援助</button>
         <button class="func-btn" onclick="openModal('cafe')">🔍 Etherscan</button>
       </div>
@@ -845,7 +940,7 @@ body{padding:12px;}
 
   <!-- Postal -->
   <div class="modal-win" id="modalPostal" style="display:none;">
-    <div class="modal-tb"><h3>💸 微信转账 — 还给小王</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-tb"><h3>💸 微信转账 — 还给小宝</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <p style="font-size:13px;margin-bottom:8px;">欠款：<b id="postDebt" style="color:var(--red);">$3,000</b> &nbsp;|&nbsp; 钱包：<b id="postCash">$1,000</b></p>
       <input class="m-input" type="number" id="repayAmt" placeholder="还款金额" min="1"/>
@@ -879,12 +974,25 @@ body{padding:12px;}
   </div>
 
   <!-- Game Over -->
-  <div class="modal-win" id="modalGameover" style="display:none;">
+  <div class="modal-win gameover-modal" id="modalGameover" style="display:none;">
     <div class="modal-tb"><h3 id="goTitle">游戏结束</h3></div>
     <div class="modal-body">
-      <div class="modal-icon-row">
-        <span class="modal-big-icon" id="goIcon">🎉</span>
-        <p class="modal-text" id="goText"></p>
+      <div class="gameover-scene ending-debt_clear" id="goScene">
+        <div class="gameover-scene-inner">
+          <span class="go-figure" id="goSceneLeft">🏆</span>
+          <div class="go-scene-copy">
+            <span class="go-scene-tag" id="goSceneTag">ESCAPED</span>
+            <div class="go-scene-reason" id="goSceneReason">你终于还清了债，暂时从这场噩梦里喘了口气。</div>
+          </div>
+          <span class="go-figure shadow" id="goSceneRight">🌤️</span>
+        </div>
+      </div>
+      <div class="gameover-meta">
+        <div class="modal-icon-row">
+          <span class="modal-big-icon" id="goIcon">🎉</span>
+          <p class="modal-text" id="goText"></p>
+        </div>
+        <div class="go-rebirth" id="goRebirth"><b>重生下一局：</b>你已经摸到节奏了，试着赚得更稳。</div>
       </div>
     </div>
     <div class="modal-foot">
@@ -939,9 +1047,9 @@ const EVENTS = [
   {desc:"比特币减半！历史规律来了！BTC价格飙升！",                             type:"price", goods:"BTC",   rate:5,    icon:"⚡", title:"BTC减半", image:"event/marketincrease.jpg"},
   {desc:"AI算力需求暴增，显卡供不应求！",                                      type:"price", goods:"GPU",   rate:4,    icon:"💻", title:"AI爆发", image:"event/aigpu.jpg"},
   {desc:"项目方最后一条推文：'大家保重'，然后失联，PLUS几乎归零。",                          type:"price", goods:"PLUS",  rate:0,    icon:"🏃", title:"项目跑路",  bypassFloor:true, rugPull:true, image:"event/marketdecrease.jpg"},
-  {desc:"SEC起诉最大交易所！市场恐慌踩踏，BTC暴跌！",                         type:"price", goods:"BTC",   rate:0.3,  icon:"⚖️", title:"监管起诉", image:"event/marketdecrease.jpg"},
+  {desc:"SEC起诉最大交易所创始人CZ！市场恐慌踩踏，BTC暴跌！",                 type:"price", goods:"BTC",   rate:0.3,  icon:"⚖️", title:"监管起诉", image:"event/marketdecrease.jpg"},
   {desc:"多个加密货币升级支持POS，不再需要显卡挖矿，崩盘！",                  type:"price", goods:"GPU",   rate:0.25, icon:"💻", title:"庄家暴雷", image:"event/marketdecrease.jpg"},
-  {desc:"八部委开会了。你不确定这是第几次。",                                  type:"price", goods:"BTC",   rate:0.8,  icon:"⚖️", title:"监管禁令", image:"event/marketdecrease.jpg"},
+  {desc:"八部委开会了，Star神秘消失，BTC提币暂停，微跌！",                      type:"price", goods:"BTC",   rate:0.8,  icon:"⚖️", title:"监管禁令", image:"event/marketdecrease.jpg"},
   {desc:"DeFi LP协议遭黑客攻击，TVL接近归零！",                               type:"price", goods:"LP",    rate:0.02, icon:"🔓", title:"黑客攻击",  bypassFloor:true, image:"event/marketdecrease.jpg"},
   {desc:"BTC矿机价格暴跌，新一代量子工艺上市，旧矿机贱卖！",                      type:"price", goods:"MINER", rate:0.2,  icon:"⛏️", title:"矿机贬值", image:"event/marketdecrease.jpg"},
   {desc:"总统称自己不清楚这个项目，NFT地板价创历史新低。",                     type:"price", goods:"NFT",   rate:0.15, icon:"🖼️", title:"NFT寒冬", image:"event/marketdecrease.jpg"},
@@ -952,7 +1060,7 @@ const EVENTS = [
   {desc:"群大佬让你FOMO跟单，亏了10% 现金USDT，心态-20。",                         type:"cash",  rate:0.9,  hp:-20,        icon:"📱", title:"跟单亏损"},
   {desc:"交易所以'异常交易'冻结部分资产。损失10%持仓，心态-20。",             type:"cash",  rate:0.9,  hp:-20,        icon:"🔒", title:"资产冻结"},
   {desc:"Gas费暴涨，来回操作损失15% 现金USDT，心态-40。",                         type:"cash",  rate:0.85, hp:-40,        icon:"⛽", title:"Gas爆炸"},
-  {desc:"小王又来催了，还追加了$500债务！",                                    type:"debt",  debt:500,               icon:"😤", title:"追债通知"},
+  {desc:"小宝又来催了，还追加了$500债务！",                                    type:"debt",  debt:500,               icon:"😤", title:"追债通知"},
 ];
 
 const TICKER_POOL = [
@@ -1057,7 +1165,7 @@ function maybeShowOnboardingPrompt() {
   } else if (G.onboarding.step === 'sell_doge') {
     showWarn(`DOGE暴涨，第一桶金到手了，按你现在这笔 DOGE 大约已经赚了 ${fmtC(G.onboarding.profitHint || 0)}。先卖出落袋。`, '📈');
   } else if (G.onboarding.step === 'repay_debt') {
-    showWarn('很好，现在去“还给小王”，先还一部分，压住每天 10% 的利息。', '💸');
+    showWarn('很好，现在去“还给小宝”，先还一部分，压住每天 10% 的利息。', '💸');
   }
 }
 
@@ -1906,20 +2014,63 @@ function showLiqModal(liqList, cb) {
   playOuch(); openModal('liq'); window._liqCb = cb;
 }
 
+const ENDING_META = {
+  mental_break: {
+    title: '💀 心态崩了',
+    icon: '😵',
+    sceneClass: 'ending-mental_break',
+    sceneTag: 'MELTDOWN',
+    sceneReason: '连续下跌、连环踩雷、每一天都像在精神放血。',
+    leftFigure: '🧠',
+    rightFigure: '📉',
+    reason: '心态崩了，从此一蹶不振。',
+    rebirthLine: '这次先保心态，别让自己先爆掉。'
+  },
+  debt_fail: {
+    title: '😰 小宝来了',
+    icon: '😰',
+    sceneClass: 'ending-debt_fail',
+    sceneTag: 'DEBT DUE',
+    sceneReason: '15 天归零，门外脚步声越来越近，小宝像是已经站到了门口。',
+    leftFigure: '💸',
+    rightFigure: '🚪',
+    reason: '15天到了，还是没能还清小宝。门外的脚步声越来越近，他手里还拎着那把卖牛肉用的砍刀。',
+    rebirthLine: '先活过前几天，现金流比信仰更重要。'
+  },
+  debt_clear: {
+    title: '🎉 暂时上岸',
+    icon: '🏆',
+    sceneClass: 'ending-debt_clear',
+    sceneTag: 'ESCAPED',
+    sceneReason: '债务清零的那一刻，终于能从这场噩梦里喘一口气。',
+    leftFigure: '🏆',
+    rightFigure: '🌤️',
+    reason: '你终于还清了债，暂时从这场噩梦里喘了口气。',
+    rebirthLine: '你已经摸到节奏了，试着赚得更稳。'
+  }
+};
+
 function showGameOver() {
   pendingWarn = null;
   const net = parseFloat((G.cash + G.savings - G.debt).toFixed(2));
-  const win = G.health > 0 && net >= 0;
-  const reason = G.health <= 0 ? '心态崩了，从此一蹶不振' :
-    net < 0 ? '15天到了，还是没能还清小王。门外的脚步声越来越近。' : '你终于还清了债，暂时从这场噩梦里喘了口气。';
-  document.getElementById('goTitle').textContent = win ? '🎉 还清了' : '💀 小王来了';
-  document.getElementById('goIcon').textContent = win ? '🏆' : '😵';
+  const endingKey = G.health <= 0 ? 'mental_break' : (net < 0 ? 'debt_fail' : 'debt_clear');
+  const ending = ENDING_META[endingKey];
+  const netColor = net >= 0 ? 'var(--green)' : 'var(--red)';
+  const goScene = document.getElementById('goScene');
+  goScene.className = `gameover-scene ${ending.sceneClass}`;
+  document.getElementById('goTitle').textContent = ending.title;
+  document.getElementById('goIcon').textContent = ending.icon;
+  document.getElementById('goSceneTag').textContent = ending.sceneTag;
+  document.getElementById('goSceneReason').textContent = ending.sceneReason;
+  document.getElementById('goSceneLeft').textContent = ending.leftFigure;
+  document.getElementById('goSceneRight').textContent = ending.rightFigure;
   document.getElementById('goText').innerHTML =
-    `${reason}<br><br>` +
+    `${ending.reason}<br><br>` +
     `现金：<b>${fmtC(G.cash)}</b><br>` +
     `存款：<b>${fmtC(G.savings)}</b><br>` +
     `欠款：<b style="color:var(--red)">${fmtC(G.debt)}</b><br>` +
-    `净资产：<b style="color:${net>=0?'var(--green)':'var(--red)'}">${fmtC(net)}</b>`;
+    `净资产：<b style="color:${netColor}">${fmtC(net)}</b>`;
+  document.getElementById('goRebirth').innerHTML = `<b>重生下一局：</b>${ending.rebirthLine}`;
   clearSave();
   openModal('gameover');
 }
