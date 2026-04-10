@@ -203,6 +203,10 @@ body{padding:12px;}
 
 /* ── TRADE AREA ── */
 .trade-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+/* PC: don't stretch both cards to equal height; avoid large blank space in 当前选择 */
+.trade-grid{align-items:start;}
+.trade-grid > .trade-card{height:auto;}
+.trade-grid > .trade-card:first-child{align-self:start;}
 .trade-card{
   border:var(--px) solid var(--line);padding:10px;background:#efe2bf;
   box-shadow:inset -4px -4px 0 0 #c8b083,inset 4px 4px 0 0 #fff1cf;
@@ -993,6 +997,7 @@ let G = {}, prices = {}, prevPrices = {};
 let selectedGood = null, eventLog = [], currentModal = null, currentLev = 1;
 let priceHistory = {}, recentEvents = [];
 let lastSelectedGood = null; // tracks asset switches to reset slider
+let pendingWarn = null;
 
 function createOnboardingState() {
   return { active:true, step:'buy_doge', boostedDay:false, profitHint:0 };
@@ -1018,6 +1023,35 @@ function finishOnboarding() {
   G.onboarding.step = 'done';
 }
 
+function healthWarningBucket(health) {
+  if (health <= 0 || health >= 50) return null;
+  return Math.floor(health / 10) * 10;
+}
+
+function showHealthWarn(bucket) {
+  if (bucket === null || G.health <= 0) return;
+  if (!G.warnedHealthBuckets) G.warnedHealthBuckets = {};
+  if (G.warnedHealthBuckets[bucket]) return;
+  G.warnedHealthBuckets[bucket] = true;
+  saveGame();
+  showWarn(`心态已跌至 ${bucket}，建议去做心理咨询（🧠）。`, '⚠️');
+}
+
+function queueHealthWarn(bucket) {
+  if (bucket === null || G.health <= 0) return;
+  if (!G.warnedHealthBuckets) G.warnedHealthBuckets = {};
+  if (G.warnedHealthBuckets[bucket]) return;
+  if (pendingWarn && pendingWarn.bucket === bucket) return;
+  pendingWarn = { bucket, icon: '⚠️' };
+}
+
+function flushPendingWarn() {
+  if (!pendingWarn || currentModal || G.health <= 0) return;
+  const bucket = pendingWarn.bucket;
+  pendingWarn = null;
+  showHealthWarn(bucket);
+}
+
 function maybeShowOnboardingPrompt() {
   if (!G.onboarding || !G.onboarding.active || currentModal) return;
   markOnboardingSeen();
@@ -1040,7 +1074,11 @@ function syncTradeButtonsSticky() {
     wrap.classList.remove('floating');
     return;
   }
-  wrap.classList.toggle('floating', window.scrollY > 120);
+  const rect = wrap.getBoundingClientRect();
+  const viewportH = window.innerHeight || document.documentElement.clientHeight || 0;
+  const triggerOffset = 120;
+  const originalRowVisible = rect.top <= viewportH - 96;
+  wrap.classList.toggle('floating', window.scrollY > triggerOffset && !originalRowVisible);
 }
 
 function rp(cfg) {
@@ -1082,6 +1120,7 @@ function newGame() {
     daysLeft:TOTAL_DAYS, day:0, plusRugged:false, eventBoosts:{},
     onboarding: hasSeenOnboarding() ? null : createOnboardingState()
   };
+  G.warnedHealthBuckets = {};
   prices = {}; prevPrices = {}; priceHistory = {};
   for (const k in PRICE_CFG) { prices[k] = rp(PRICE_CFG[k]); priceHistory[k] = [prices[k]]; }
   prices.DOGE = PRICE_CFG.DOGE.min;
@@ -1121,6 +1160,7 @@ function loadGame() {
     currentLev = d.currentLev || 1;
     selectedGood = d.selectedGood || null;
     G.onboarding = d.G.onboarding || null;
+    G.warnedHealthBuckets = d.G.warnedHealthBuckets || {};
     document.getElementById('levSelect').value = String(currentLev);
     return true;
   } catch(e) { return false; }
@@ -1375,11 +1415,16 @@ function renderAll() {
   renderBigChart();
   syncTradeButtonsSticky();
 
-  // Prompt for psychological help if health < 50
-  if (G.health < 50 && G.health > 0 && !currentModal) {
-    setTimeout(() => {
-      if (G.health < 50) showWarn(`心态已跌至 ${G.health}，建议去做心理咨询（🧠）。`, '⚠️');
-    }, 300);
+  // Prompt for psychological help once per 10-point health bucket (40s, 30s, etc.)
+  const healthBucket = healthWarningBucket(G.health);
+  if (healthBucket !== null && !G.warnedHealthBuckets?.[healthBucket]) {
+    if (currentModal) {
+      queueHealthWarn(healthBucket);
+    } else {
+      setTimeout(() => {
+        if (!currentModal && healthWarningBucket(G.health) !== null) showHealthWarn(healthBucket);
+      }, 300);
+    }
   }
 }
 
@@ -1429,7 +1474,11 @@ function updateTradeInfo() {
   if (!selectedGood) {
     document.getElementById('selName').textContent = '—';
     document.getElementById('selPrice').textContent = '—';
-    document.getElementById('selLiqRow').style.display = 'none';
+    document.getElementById('selLiqRow').style.display = '';
+    document.getElementById('selHolding').textContent = '空仓 / 爆:—';
+    document.getElementById('selLev').textContent = currentLev + 'x';
+    document.getElementById('selLiqRisk').textContent = '—';
+    document.getElementById('selLiqRisk').className = 'screen-sm';
     document.getElementById('selBuyHint').style.display = 'none';
     levSelect.disabled = false;
     buyBtn.classList.add('btn-disabled'); buyBtn.disabled = true;
@@ -1468,14 +1517,13 @@ function updateTradeInfo() {
     document.getElementById('selLiqRisk').textContent = liqRisk;
     document.getElementById('selLiqRisk').className = riskCls;
   } else {
-    liqRow.style.display = 'none';
+    liqRow.style.display = '';
+    buyHint.style.display = 'none';
     levSelect.disabled = false;
-    // 无持仓：显示买入参考信息
-    const mPer = Math.max(0.001, p / currentLev);
-    const maxBuy = Math.min(G.capacity - G.totalGoods, Math.floor(G.cash / mPer));
-    document.getElementById('selMaxBuy').textContent = maxBuy > 0 ? maxBuy + '手' : '0手';
-    document.getElementById('selCostPer').textContent = fmtN(mPer);
-    document.getElementById('selBuyHint').style.display = '';
+    document.getElementById('selHolding').textContent = '空仓 / 爆:—';
+    document.getElementById('selLev').textContent = currentLev + 'x';
+    document.getElementById('selLiqRisk').textContent = '—';
+    document.getElementById('selLiqRisk').className = 'screen-sm';
   }
 
   // Buy/sell button states
@@ -1804,9 +1852,15 @@ function openModal(name) {
 
 function closeModal() {
   document.getElementById('modalBack').classList.remove('open');
+  const closingModal = currentModal;
   const cb = window._liqCb;
-  if (cb && currentModal === 'liq') { window._liqCb = null; setTimeout(cb, 120); }
+  if (cb && closingModal === 'liq') { window._liqCb = null; setTimeout(cb, 120); }
   currentModal = null;
+  if (closingModal === 'event') {
+    flushPendingWarn();
+    return;
+  }
+  setTimeout(() => flushPendingWarn(), 0);
 }
 
 function showEventModal(ev) {
@@ -1877,6 +1931,7 @@ function showLiqModal(liqList, cb) {
 }
 
 function showGameOver() {
+  pendingWarn = null;
   const net = parseFloat((G.cash + G.savings - G.debt).toFixed(2));
   const win = G.health > 0 && net >= 0;
   const reason = G.health <= 0 ? '心态崩了，从此一蹶不振' :
