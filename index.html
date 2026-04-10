@@ -611,19 +611,12 @@ body{padding:12px;}
   <!-- MAIN -->
   <section class="main">
 
-    <!-- LEFT: 信息源 -->
+    <!-- LEFT: 内幕情报 -->
     <aside class="px-panel left-col" style="padding:12px;">
-      <div class="panelhead"><h2>信息源</h2><div class="badge">SOURCE</div></div>
-
-      <div class="source-list" id="sourceList">
-        <button class="px-btn active" onclick="srcClick(this,'twitter')">🐦 Twitter 传闻</button>
-        <button class="px-btn" onclick="srcClick(this,'discord')">💬 Discord 小道</button>
-        <button class="px-btn" onclick="srcClick(this,'market')">📊 交易所公告</button>
-        <button class="px-btn" onclick="srcClick(this,'kol')">👤 KOL 观点</button>
-      </div>
+      <div class="panelhead"><h2>内幕情报</h2><div class="badge">INTEL</div></div>
 
       <div class="info-card">
-        <div class="stat-lbl">内幕情报</div>
+        <div class="stat-lbl">每日情报</div>
         <div id="intelText" style="font-size:13px;line-height:1.6;">"等待交易信号..."</div>
       </div>
 
@@ -967,13 +960,14 @@ const TICKER_POOL = [
   { text:"某交易所宣布暂停提款 😱",                    hint:"项目跑路" },
   { text:"马斯克：'买车支持用DOGE支付' 🐕",           hint:"KOL喊单" },
   { text:"SEC：所有币都是证券 ⚖️",                     hint:"监管起诉" },
-  { text:"PLUS项目方：'我们的太空算力在建设中' 🤡",   hint:"项目跑路" },
+  { text:"PLUS项目方直播回应：一切正常，火星算力计划继续 🤡", hint:"项目方发声" },
   { text:"NFT地板价创历史新低 🖼️",                    hint:"NFT寒冬" },
+  { text:"孙割现身总统国宴，NFT圈彻夜不眠 🦧",          hint:"NFT炒作" },
   { text:"BTC ETF日流入创纪录！机构来了 🏦",          hint:"ETF获批" },
-  { text:"矿机价格松动，算力过剩 ⛏️",                  hint:"矿机贬值" },
+  { text:"矿场主连夜扫货，分叉大战一触即发 ⛏️",          hint:"算力争夺" },
+  { text:"新LP协议TVL疯涨，矿池年化高得离谱 💧",         hint:"DeFi爆发" },
   { text:"DeFi协议被盗，团队称'正在调查' 🔓",         hint:"黑客攻击" },
-  { text:"小王问你还款进度了 😰",                      hint:"追债通知" },
-  { text:"某KOL：'我Allin了' 📊",                     hint:"KOL喊单" },
+  { text:"AI服务器厂商抢购显卡，现货渠道告急 💻",         hint:"AI爆发" },
   { text:"链上鲸鱼正在悄悄出货 🐳",                   hint:"庄家暴雷" },
 ];
 
@@ -982,9 +976,9 @@ const INSIDER_TIPS = [
   { text:'"DOGE有异常放量，群里已有人埋伏..."',         hint:"KOL喊单" },
   { text:'"机构在悄悄建仓BTC，听说要分叉"',            hint:"ETF获批" },
   { text:'"某头部交易所提币很慢，小心爆雷"',            hint:"项目跑路" },
-  { text:'"监管部门闭门会议，风声很紧"',               hint:"监管起诉" },
+  { text:'"听说又要开会了，这次措辞可能更狠"',          hint:"监管禁令" },
   { text:'"BTC减半进入倒计时，历史规律来了"',          hint:"BTC减半" },
-  { text:'"PLUS项目方保证不跑路"（他们说的）',         hint:"项目跑路" },
+  { text:'"有人说基金会钱包最近在往交易所转ETH"',       hint:"基金会抛售" },
   { text:'"有大佬在OTC大量收ETH，传说中的底部"',       hint:"技术升级" },
   { text:'"矿机价格要崩了，算力过剩严重"',             hint:"矿机贬值" },
 ];
@@ -998,6 +992,7 @@ let selectedGood = null, eventLog = [], currentModal = null, currentLev = 1;
 let priceHistory = {}, recentEvents = [];
 let lastSelectedGood = null; // tracks asset switches to reset slider
 let pendingWarn = null;
+let modalChainPending = false;
 
 function createOnboardingState() {
   return { active:true, step:'buy_doge', boostedDay:false, profitHint:0 };
@@ -1229,7 +1224,9 @@ function doMove() {
   setMood(evt);
   updateInsiderTip();
   saveGame();
+  modalChainPending = !!evt || liqList.length > 0;
   renderAll();
+  modalChainPending = false;
   updateTicker();
 
   if (G.health <= 0) {
@@ -1418,12 +1415,10 @@ function renderAll() {
   // Prompt for psychological help once per 10-point health bucket (40s, 30s, etc.)
   const healthBucket = healthWarningBucket(G.health);
   if (healthBucket !== null && !G.warnedHealthBuckets?.[healthBucket]) {
-    if (currentModal) {
+    if (currentModal || modalChainPending) {
       queueHealthWarn(healthBucket);
     } else {
-      setTimeout(() => {
-        if (!currentModal && healthWarningBucket(G.health) !== null) showHealthWarn(healthBucket);
-      }, 300);
+      showHealthWarn(healthBucket);
     }
   }
 }
@@ -1632,7 +1627,7 @@ function updateInsiderTip() {
 
 function updateTicker() {
   const pool = [...TICKER_POOL].sort(() => Math.random() - .5);
-  const chosen = pool.slice(0, 6);
+  const chosen = pool.slice(0, 2);
   document.getElementById('tickerTxt').textContent = chosen.map(t => t.text).join('  ●  ');
   if (G.eventBoosts) {
     chosen.forEach(t => {
@@ -1703,25 +1698,6 @@ function setLev(n) {
   document.getElementById('levSelect').value = String(n);
   // Recalculate slider max after leverage change
   if (selectedGood) { lastSelectedGood = null; updateTradeInfo(); }
-}
-
-function srcClick(btn, src) {
-  document.querySelectorAll('#sourceList .px-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  let text;
-  if (src === 'twitter') {
-    const tip = INSIDER_TIPS[Math.floor(Math.random()*INSIDER_TIPS.length)];
-    if (tip.hint && G.eventBoosts) G.eventBoosts[tip.hint] = Math.max(G.eventBoosts[tip.hint] || 0, 3);
-    text = tip.text;
-  } else {
-    const texts = {
-      discord: '"群里有人说要拉盘，可信度：' + (Math.random()>0.5?'低':'极低') + '"',
-      market:  '"交易所公告：系统维护中，请保持理性"',
-      kol:     '"KOL：现在是买入的最好时机！"（他每天都这么说）',
-    };
-    text = texts[src] || '';
-  }
-  document.getElementById('intelText').textContent = text;
 }
 
 function flash(msg) {
