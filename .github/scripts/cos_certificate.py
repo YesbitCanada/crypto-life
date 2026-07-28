@@ -22,6 +22,11 @@ TARGETS = [
         "region": "ap-hongkong",
         "domains": ["degen.app-sands.com"],
     },
+    {
+        "bucket": "majiang-1256918364",
+        "region": "ap-hongkong",
+        "domains": ["majiang.app-sands.com"],
+    },
 ]
 WILDCARD_NAME = "*.app-sands.com"
 
