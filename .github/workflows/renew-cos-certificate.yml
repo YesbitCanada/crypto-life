@@ -1,0 +1,65 @@
+name: Renew COS wildcard certificate
+
+on:
+  schedule:
+    - cron: "37 3 * * 3"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Issue and deploy a certificate even when the current one is valid
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: renew-cos-wildcard-certificate
+  cancel-in-progress: false
+
+jobs:
+  renew:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install certificate tooling
+        run: pip install certbot certbot-dns-route53 cos-python-sdk-v5 cryptography
+
+      - name: Check current certificate
+        id: certificate
+        run: python .github/scripts/cos_certificate.py check
+
+      - name: Request wildcard certificate
+        if: steps.certificate.outputs.current != '1' || inputs.force
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          LETSENCRYPT_EMAIL: ${{ secrets.LETSENCRYPT_EMAIL }}
+        run: |
+          certbot certonly \
+            --dns-route53 \
+            --non-interactive \
+            --agree-tos \
+            --email "$LETSENCRYPT_EMAIL" \
+            --cert-name app-sands.com \
+            --domain app-sands.com \
+            --domain "*.app-sands.com" \
+            --config-dir "$RUNNER_TEMP/letsencrypt/config" \
+            --work-dir "$RUNNER_TEMP/letsencrypt/work" \
+            --logs-dir "$RUNNER_TEMP/letsencrypt/logs"
+
+      - name: Deploy certificate to COS
+        if: steps.certificate.outputs.current != '1' || inputs.force
+        env:
+          TCB_SECRET_ID: ${{ secrets.TCB_SECRET_ID }}
+          TCB_SECRET_KEY: ${{ secrets.TCB_SECRET_KEY }}
+        run: |
+          python .github/scripts/cos_certificate.py deploy \
+            --certificate "$RUNNER_TEMP/letsencrypt/config/live/app-sands.com/fullchain.pem" \
+            --private-key "$RUNNER_TEMP/letsencrypt/config/live/app-sands.com/privkey.pem"
