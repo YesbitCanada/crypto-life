@@ -16,6 +16,8 @@ Push to `main` triggers GitHub Actions (`.github/workflows/deploy.yml`), which u
 
 There is no build step — files are deployed as-is.
 
+The `*.app-sands.com` wildcard certificate is renewed weekly by `.github/workflows/renew-cos-certificate.yml` and deployed to every bucket in `TARGETS` in `.github/scripts/cos_certificate.py`: degen, majiang, and `home-1256918364` (`www.app-sands.com` navigation page, source in `../home/`, uploaded manually with coscmd).
+
 ## Architecture
 
 The entire game logic lives inside `index.html` as a single self-contained file:

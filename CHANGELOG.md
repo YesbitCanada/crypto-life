@@ -16,6 +16,9 @@
   - `TICKER_POOL` 与 `INSIDER_TIPS` 重新分配，补齐 `NFT炒作 / 项目方发声 / 算力争夺 / DeFi爆发 / AI爆发 / 监管禁令 / 基金会抛售` 等事件的正负面情报来源
   - 削弱 `项目跑路 / KOL喊单` 等头部事件的重复情报，减少长期概率过热，提升价格事件池整体均衡度
   - `event.md` 事件编号修正为连续 `1-24`，去除重复编号，和当前事件表保持一致
+- **www 导航页（Claude AI，2026-09-28）**
+  - 新增 `https://www.app-sands.com/` 导航页（腾讯 COS 桶 `home-1256918364`，源码在 `gamepro/home/`），入口指向 degen / majiang
+  - 通配符证书续期脚本 `cos_certificate.py` 增加 www 目标
 
 ## v1.3.6（2026-04-02）
 - **UI 优化**
