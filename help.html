@@ -231,7 +231,7 @@ li{line-height:1.8;font-size:14px;margin-bottom:3px;}
         </div>
         <div class="tip-card">
           <div class="tip-num">3</div>
-          <p><b>用 AAVE 保住本金</b>：把部分现金存入 AAVE，免受钓鱼攻击，还能获得每天 1% 利息。</p>
+          <p><b>用 DEFI 存款保住本金</b>：把部分现金存进去，免受钓鱼攻击，还能获得每天 1% 利息。</p>
         </div>
         <div class="tip-card">
           <div class="tip-num">4</div>
@@ -256,9 +256,9 @@ li{line-height:1.8;font-size:14px;margin-bottom:3px;}
     <div class="section" id="ui">
       <div class="section-head"><h2>界面说明</h2><span class="section-tag">UI</span></div>
 
-      <p><b>顶栏</b>：总资产、现金、持仓、存款、负债。右侧状态框固定显示心态、仓位、持仓量和天数。</p>
+      <p><b>顶栏</b>：总资产（下方显示较昨日涨跌）、现金、持仓（下方显示总浮盈）、存款、负债（下方显示明日利息）。右侧状态屏用 15 格进度条显示天数、用血条显示心态，并显示仓位；杠杆仓距爆仓不足 30% 时整块变红报警。标题旁的 🔊 是音效开关，顶栏下方的 ticker 每天滚动 <b>2 条</b> 快讯。</p>
 
-      <p><b>左栏</b>：现在只有 <b>1 条内幕情报</b>，每天刷新一次；今日情绪屏显示当天市场状态；底部功能按钮进入 AAVE / 还款 / 心理援助 / Etherscan。</p>
+      <p><b>左栏</b>：现在只有 <b>1 条内幕情报</b>，每天刷新一次；今日情绪屏显示当天市场状态；底部功能按钮进入 DEFI 存款 / 还款 / 心理援助 / Etherscan。</p>
 
       <div class="mood-row">
         <div class="mood-badge mood-hold">按兵不动</div>
@@ -268,15 +268,19 @@ li{line-height:1.8;font-size:14px;margin-bottom:3px;}
         <div class="mood-badge mood-moon">天降横财</div>
       </div>
 
-      <p><b>中栏</b>：市场行情列表（含近 10 天 sparkline）。点击资产后，当前选择区显示持仓、爆仓价、杠杆和风险；交易控制区用滑条选手数、选杠杆、点买入/卖出。现金不足时买入置灰，无持仓时卖出置灰。</p>
+      <p><b>中栏</b>：市场行情列表（含近 10 天 sparkline）。单日涨跌超过 50% 会用色块高亮；有持仓的资产多显示一行持仓手数、均价和浮盈 / 浮亏。点击资产后，当前选择区显示持仓、爆仓价、杠杆和风险；交易控制区用滑条选手数、选杠杆、点买入/卖出。现金不足时买入置灰，无持仓时卖出置灰。</p>
       <p><b>底部操作</b>：当天买卖完成后，点击下方按钮推进游戏：</p>
       <div style="margin-bottom:10px;">
         <button style="border:4px solid var(--line);padding:12px 24px;font-size:20px;font-weight:700;color:#fff7df;font-family:inherit;background:#bc8b23;box-shadow:inset -4px -4px 0 0 #7d5c18,inset 4px 4px 0 0 #e1b44e;cursor:default;">⏩ 下一天</button>
       </div>
 
-      <p><b>右栏</b>：最近 3 条事件卡片和选中资产走势大图（2x 杠杆时红色虚线标注爆仓价）。底部 ticker 每天只显示 <b>2 条</b> 快讯。</p>
+      <p><b>事件弹窗</b>：顶部显示当日结算（债务利息 / 存款利息 / 持仓变动），底部标签显示这次事件对你的实际影响。</p>
 
-      <p style="font-size:13px;color:var(--muted);">有持仓的币种图标左上角显示绿色 <b style="color:var(--green);">●</b> 徽标。手机端下滑后，买入 / 卖出会提前浮到底部。</p>
+      <p><b>右栏</b>：我的持仓明细（均价、现值、浮动盈亏）、最近 3 条事件卡片和选中资产走势大图（蓝色虚线为持仓成本，2x 杠杆时红色虚线标注爆仓价）。</p>
+
+      <p><b>结局</b>：结算页给出称号、最终 / 峰值净资产、交易与爆仓次数、净资产走势，并记录历史最佳；可一键复制战绩。</p>
+
+      <p style="font-size:13px;color:var(--muted);">有持仓的币种图标左上角显示绿色 <b style="color:var(--green);">●</b> 徽标。手机端点击币种行（或底部“交易”按钮）会从底部弹出交易面板，“下一天”固定在屏幕底部。</p>
     </div>
 
     <!-- 交易机制 -->
@@ -301,7 +305,7 @@ li{line-height:1.8;font-size:14px;margin-bottom:3px;}
       <table class="px-table">
         <tr><th>功能</th><th>说明</th></tr>
         <tr>
-          <td><b>🏦 AAVE 存款</b></td>
+          <td><b>🏦 DEFI 存款</b></td>
           <td>存入现金，<span class="hl-green">每天获得 1% 利息（复利）</span>，不受钓鱼攻击等事件影响。存入/取出各自独立滑条，"全部"快捷按钮填满至最大值。</td>
         </tr>
         <tr>
