@@ -69,15 +69,27 @@ body{padding:12px;}
   border:var(--px) solid var(--line);
   box-shadow:inset -4px -4px 0 0 #132842,inset 4px 4px 0 0 #40679b;
 }
+.titlebox{display:flex;flex-direction:column;justify-content:space-between;gap:6px;}
 .titlebox h1{margin:0;font-size:30px;letter-spacing:2px;line-height:1;}
 .titlebox small{display:block;margin-top:6px;color:#cbd8e9;font-size:11px;}
+.title-tools{display:flex;gap:6px;}
+.tool-btn{
+  display:inline-flex;align-items:center;padding:3px 10px;
+  font-size:11px;font-family:inherit;line-height:1.5;letter-spacing:1px;
+  color:var(--text);background:#d9c69c;border:3px solid var(--line);
+  box-shadow:inset -2px -2px 0 0 #b79c70,inset 2px 2px 0 0 #f6e8c4;
+  text-decoration:none;cursor:pointer;
+}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:4px;min-height:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stat-sub.green{color:#2f8c45;}
+.stat-sub.red{color:var(--red);}
 .statusbar{
   display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;
   border:var(--px) solid var(--line);
   box-shadow:inset -4px -4px 0 0 #c9b68d,inset 4px 4px 0 0 #fff2cb;
   overflow:hidden;
 }
-.stat{padding:10px 12px;border-right:var(--px) solid var(--line);}
+.stat{padding:10px 12px;border-right:var(--px) solid var(--line);min-width:0;}
 .stat:last-child{border-right:none;}
 .stat-lbl{font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;}
 .stat-val{font-size:25px;font-weight:700;line-height:1.1;}
@@ -86,14 +98,33 @@ body{padding:12px;}
 .red{color:var(--red);}
 .yellow{color:#d88e16;}
 .alertbox{
-  padding:12px 14px;
-  background:linear-gradient(180deg,#b94634,#913227);
+  padding:10px 12px;
+  background:linear-gradient(180deg,var(--screen2),var(--screen));
   color:#fff4d2;
   border:var(--px) solid var(--line);
+  box-shadow:inset -4px -4px 0 0 #05080c,inset 4px 4px 0 0 #1d2c38;
+}
+.alertbox.danger{
+  background:linear-gradient(180deg,#b94634,#913227);
   box-shadow:inset -4px -4px 0 0 #6d241d,inset 4px 4px 0 0 #d96658;
 }
-.alertbox .stat-lbl{color:#ffd3bf;margin-bottom:4px;font-size:12px;}
-.alertbox .alert-val{font-size:16px;font-weight:700;line-height:1.4;}
+.hud-risk{font-size:13px;font-weight:700;margin-bottom:6px;color:#fff4d2;}
+.hud-row{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:#8dc1ff;letter-spacing:1px;}
+.alertbox.danger .hud-row{color:#ffd3bf;}
+.hud-row b{font-size:16px;color:#fff4d2;margin-left:2px;}
+.day-track{display:grid;grid-template-columns:repeat(15,1fr);gap:2px;margin:4px 0 8px;}
+.day-cell{display:block;height:10px;background:#1d2c38;border:1px solid #05080c;}
+.day-cell.past{background:var(--yellow);}
+.day-cell.today{background:#fff4d2;animation:blink 1s steps(2) infinite;}
+.day-track.urgent .day-cell.past{background:var(--red);}
+.day-track.urgent .day-cell.today{background:#ffb3aa;}
+.hp-bar{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;margin-top:4px;}
+.hp-seg{display:block;height:10px;background:#1d2c38;border:1px solid #05080c;}
+.hp-bar.hp-ok .hp-seg.on{background:var(--green);}
+.hp-bar.hp-warn .hp-seg.on{background:var(--yellow);}
+.hp-bar.hp-low .hp-seg.on{background:var(--red);}
+.hp-bar.hp-low{animation:blink 1s steps(2) infinite;}
+@keyframes blink{50%{opacity:.45;}}
 
 /* ── MAIN GRID ── */
 .main{display:grid;grid-template-columns:250px 1fr 310px;gap:10px;}
@@ -194,6 +225,22 @@ body{padding:12px;}
 .coin-meta span{display:block;font-size:11px;opacity:.75;margin-top:3px;}
 .coin-price{font-size:16px;text-align:right;font-weight:700;}
 .coin-chg{font-size:15px;text-align:right;font-weight:700;}
+.coin-icon svg{width:72%;height:72%;display:block;}
+.coin-pos{
+  grid-column:1/-1;display:flex;flex-wrap:wrap;gap:2px 12px;
+  font-size:12px;padding-top:6px;margin-top:1px;
+  border-top:2px dashed rgba(43,36,29,.3);
+}
+.coin-row.sel .coin-pos{border-top-color:rgba(255,247,223,.35);}
+.coin-pos .up{color:#2f8c45;font-weight:700;}
+.coin-pos .down{color:var(--red);font-weight:700;}
+.coin-row.sel .coin-pos .up{color:#9dff8a;}
+.coin-row.sel .coin-pos .down{color:#ffb3aa;}
+.chg-chip{display:inline-block;padding:1px 5px;color:#fff7df;border:2px solid var(--line);font-size:13px;}
+.chg-chip.up{background:#2f8c45;}
+.chg-chip.down{background:#b94634;}
+.coin-row.tick{animation:rowIn .24s steps(4) both;}
+@keyframes rowIn{0%{opacity:0;transform:translateY(-6px);}100%{opacity:1;transform:none;}}
 .spark-box{
   height:36px;border:var(--px) solid var(--line);
   background:#111820;
@@ -278,6 +325,7 @@ body{padding:12px;}
 .modal-back.open{display:flex;}
 .modal-win{
   background:var(--panel);width:100%;max-width:400px;
+  max-height:calc(100vh - 32px);overflow-y:auto;
   border:var(--px) solid var(--line);
   box-shadow:0 0 0 4px #6d5c45,8px 8px 0 0 var(--shadow);
 }
@@ -504,7 +552,7 @@ body{padding:12px;}
 
 /* ── TICKER ── */
 .ticker-wrap{
-  margin-top:10px;
+  margin:0 0 10px;
   border:var(--px) solid var(--line);
   background:#10161c;height:24px;overflow:hidden;
   display:flex;align-items:center;
@@ -513,39 +561,167 @@ body{padding:12px;}
 .ticker-icon{padding:0 8px;color:#8dc1ff;font-size:13px;flex-shrink:0;border-right:2px solid #2a3840;}
 .ticker-scroll{flex:1;overflow:hidden;height:100%;display:flex;align-items:center;}
 .ticker-txt{white-space:nowrap;font-size:12px;color:#6cff3d;animation:tick 30s linear infinite;}
-@keyframes tick{0%{transform:translateX(700px);}100%{transform:translateX(-100%);}}
+@keyframes tick{0%{transform:translateX(min(700px,100vw));}100%{transform:translateX(-100%);}}
 .ticker-day{padding:0 10px;font-size:12px;color:var(--yellow);border-left:2px solid #2a3840;flex-shrink:0;}
 
-/* 存款为0时桌面端隐藏，手机端保留避免孤儿行 */
-.savings-empty{display:none;}
+
+/* ══ v1.4 — HOLDINGS / DRAWER / FEEDBACK ══ */
+.hold-row{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;font-size:13px;padding:5px 0;border-bottom:1px solid #1d2c38;cursor:pointer;}
+.hold-row b{color:#fff4d2;}
+.hold-row small{display:block;color:#8dc1ff;font-size:11px;margin-top:2px;}
+.hold-total{display:flex;justify-content:space-between;font-size:14px;font-weight:700;padding-top:7px;color:#fff4d2;}
+.hold-empty{color:#5b7d94;font-size:12px;line-height:1.6;}
+.pnl-up{color:#6cff3d;}
+.pnl-down{color:#ff8888;}
+
+.drawer-head,.drawer-chart,.sheet-back,#tradeOpenBtn,.show-m{display:none;}
+
+.flash-up{animation:flashUp .6s steps(5);}
+.flash-down{animation:flashDown .6s steps(5);}
+@keyframes flashUp{0%{background:rgba(74,184,58,.6);}100%{background:rgba(74,184,58,0);}}
+@keyframes flashDown{0%{background:rgba(227,91,79,.6);}100%{background:rgba(227,91,79,0);}}
+
+.frame{position:relative;left:0;}
+.frame.shake{animation:shake .4s steps(8);}
+@keyframes shake{0%,100%{left:0;}12%{left:-8px;}25%{left:8px;}37%{left:-6px;}50%{left:6px;}62%{left:-4px;}75%{left:4px;}87%{left:-2px;}}
+
+#dayFlip{
+  display:none;position:fixed;inset:0;z-index:90;
+  background:rgba(10,15,20,.93);color:#fff4d2;
+  flex-direction:column;align-items:center;justify-content:center;text-align:center;
+}
+#dayFlip.on{display:flex;animation:flipIn .56s steps(7) both;}
+.dayflip-big{font-size:58px;font-weight:700;letter-spacing:6px;color:var(--yellow);text-shadow:4px 4px 0 #000;}
+.dayflip-sub{margin-top:12px;font-size:15px;color:#ff9c92;line-height:1.7;}
+@keyframes flipIn{0%{opacity:0;}15%{opacity:1;}85%{opacity:1;}100%{opacity:0;}}
+
+.modal-back.open .modal-win{animation:pop .16s steps(4);}
+@keyframes pop{0%{transform:scale(.86);opacity:0;}100%{transform:none;opacity:1;}}
+.modal-tb.tone-good{background:linear-gradient(180deg,#2f8c45,#1f5e2f);}
+.modal-tb.tone-bad{background:linear-gradient(180deg,#b94634,#7a291f);}
+.day-sum{display:none;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;}
+.day-sum .px-screen{padding:6px 8px;}
+.day-sum .screen-title{font-size:10px;margin-bottom:3px;}
+.day-sum b{font-size:14px;}
+.impact-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.impact-tag{padding:4px 8px;font-size:13px;font-weight:700;border:3px solid var(--line);background:#fff3d2;box-shadow:2px 2px 0 rgba(0,0,0,.15);}
+.impact-tag.good{background:#cfeec4;color:#1f5e2f;}
+.impact-tag.bad{background:#f6cdc6;color:#7a291f;}
+
+.toast{
+  position:fixed;left:50%;top:18%;z-index:150;pointer-events:none;
+  transform:translateX(-50%);max-width:92vw;
+  padding:6px 12px;font-size:15px;font-weight:700;white-space:nowrap;
+  color:var(--text);background:#fff3d2;border:3px solid var(--line);
+  box-shadow:3px 3px 0 var(--shadow);
+  animation:toastUp 1.5s steps(15) forwards;
+}
+.toast.good{background:#cfeec4;color:#1f5e2f;}
+.toast.bad{background:#f6cdc6;color:#7a291f;}
+@keyframes toastUp{0%{opacity:0;margin-top:14px;}10%{opacity:1;margin-top:0;}80%{opacity:1;margin-top:0;}100%{opacity:0;margin-top:-30px;}}
+.coin-p{
+  position:fixed;z-index:160;width:10px;height:10px;pointer-events:none;
+  background:var(--yellow);border:2px solid #7d5c18;
+  animation:coinFly .85s cubic-bezier(.15,.7,.4,1) forwards;
+}
+@keyframes coinFly{0%{transform:translate(0,0);opacity:1;}70%{opacity:1;}100%{transform:translate(var(--dx),var(--dy));opacity:0;}}
+
+/* scorecard */
+.go-rank{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.go-title-badge{padding:4px 10px;font-size:18px;font-weight:700;border:var(--px) solid var(--line);background:var(--yellow);box-shadow:3px 3px 0 var(--shadow);}
+.go-new{color:var(--red);font-weight:700;font-size:13px;animation:blink 1s steps(2) infinite;}
+.go-reason{font-size:13px;line-height:1.7;margin:0 0 8px;}
+.go-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;}
+.go-stats .px-screen{padding:6px 8px;}
+.go-stats .screen-title{font-size:10px;margin-bottom:3px;}
+.go-stats .screen-sm{font-size:15px;}
+.go-curve{display:block;width:100%;height:56px;margin-bottom:6px;border:var(--px) solid var(--line);background:#10161c;box-shadow:inset -4px -4px 0 0 #05080c,inset 4px 4px 0 0 #22303c;}
+.go-best{font-size:12px;color:var(--muted);margin-bottom:8px;}
+
+/* CRT scanlines on dark screens */
+.px-screen,.alertbox:not(.danger){
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px),linear-gradient(180deg,var(--screen2),var(--screen));
+}
+.big-chart,.go-curve,.spark-box{
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px);
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;}
+}
+
+/* 存款为0时弱化显示（保持 5 格不留空） */
+.savings-empty .stat-val,.savings-empty .stat-sub{opacity:.45;}
 /* ── RESPONSIVE ── */
 @media(max-width:1100px){
-  .topbar{grid-template-columns:1fr 1fr;}
-  .titlebox{grid-column:1/3;}
+  .topbar{grid-template-columns:2fr 1fr;}
+  .titlebox{grid-column:1/3;flex-direction:row;align-items:center;}
   .main{grid-template-columns:220px 1fr;}
   .right-col{display:none;}
-  .statusbar{grid-template-columns:repeat(5,1fr);}
+  .statusbar{grid-template-columns:1.5fr repeat(4,1fr);}
+  .stat{padding:10px 8px;}
   .stat-val{font-size:18px;}
-  .stat-sm .stat-val{font-size:15px;}
+  .stat-sm{padding:10px 5px;}
+  .stat-sm .stat-val{font-size:13px;}
   .stat-lbl{font-size:11px;}
 }
 @media(max-width:700px){
-  body{padding:6px;}
+  body{padding:6px 6px calc(env(safe-area-inset-bottom,0px) + 86px);}
   .topbar{grid-template-columns:1fr;}
-  .titlebox{grid-column:auto;}
+  .titlebox{grid-column:auto;flex-direction:row;align-items:center;padding:8px 10px;}
+  .titlebox h1{font-size:21px;}
+  .titlebox small,.tool-lbl{display:none;}
+  .tool-btn{padding:4px 8px;font-size:13px;}
   .main{grid-template-columns:1fr;}
-  .left-col{display:block;order:2;}
+  .left-col{display:grid;order:0;grid-template-columns:1fr 104px;gap:6px;padding:8px!important;}
+  .left-col .panelhead,.left-col .left-divider{display:none;}
+  .left-col .info-card,.left-col .mood-screen{margin:0;padding:7px 8px;}
+  .left-col .mood-screen .screen-big{font-size:15px;}
+  .left-col .func-list{grid-column:1/-1;grid-template-columns:repeat(4,1fr);gap:4px;}
+  .left-col .func-btn{padding:8px 2px;font-size:12px;text-align:center;}
+  .hide-m{display:none;}
+  .show-m{display:inline;}
   .main > main{order:1;}
   .right-col{display:none;}
-  .trade-grid{grid-template-columns:1fr;}
-  .footer-actions{grid-template-columns:1fr 1fr;}
+  /* 交易面板 → 底部抽屉 */
+  .trade-grid{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;margin:0;
+    grid-template-columns:1fr;gap:8px;
+    max-height:90vh;overflow-y:auto;
+    padding:10px 10px calc(env(safe-area-inset-bottom,0px) + 10px);
+    background:var(--panel);border-top:var(--px) solid var(--line);
+    box-shadow:0 -4px 0 0 #6d5c45;
+    transform:translateY(105%);visibility:hidden;
+    transition:transform .16s steps(5),visibility 0s .16s;
+  }
+  body.trade-open .trade-grid{transform:none;visibility:visible;transition:transform .16s steps(5);}
+  body.trade-open .sheet-back{display:block;position:fixed;inset:0;z-index:59;background:rgba(0,0,0,.6);}
+  .drawer-head{display:flex;justify-content:space-between;align-items:center;font-size:17px;font-weight:700;}
+  .drawer-chart{display:block;height:84px;}
+  .trade-card h3,.sel-basic{display:none;}
+  .trade-grid .trade-card{padding:8px;}
+  /* 底部固定操作栏 */
+  .footer-actions{
+    position:fixed;left:6px;right:6px;z-index:50;margin:0;
+    bottom:calc(env(safe-area-inset-bottom,0px) + 6px);
+    grid-template-columns:1.25fr 1.35fr auto;gap:6px;padding:6px;
+    background:var(--panel);border:var(--px) solid var(--line);
+    box-shadow:0 0 0 2px #6d5c45,4px 4px 0 0 var(--shadow);
+  }
+  .footer-actions .action{font-size:16px;padding:12px 6px;white-space:nowrap;}
+  #tradeOpenBtn{display:block;background:#2b5fa3;box-shadow:inset -4px -4px 0 0 #193c6c,inset 4px 4px 0 0 #5484c4;overflow:hidden;text-overflow:ellipsis;}
+  .dayflip-big{font-size:44px;}
+  .day-sum b{font-size:13px;}
   /* Statusbar: 2行布局 */
   .statusbar{grid-template-columns:1fr 1fr 1fr 1fr;overflow:visible;}
-  .statusbar .stat:first-child{grid-column:1/-1;border-bottom:var(--px) solid var(--line);}
+  .statusbar .stat:first-child{grid-column:1/-1;border-bottom:var(--px) solid var(--line);display:flex;flex-wrap:wrap;align-items:baseline;gap:0 10px;}
+  .statusbar .stat:first-child .stat-lbl{width:100%;}
+  .stat-sub{font-size:10px;margin-top:2px;}
   .stat{padding:7px 10px;}
+  .stat-sm{padding:7px 6px;}
   .stat-lbl{font-size:11px;margin-bottom:2px;}
   .stat-val{font-size:24px;}
-  .stat-sm .stat-val{font-size:18px;}
+  .stat-sm .stat-val{font-size:15px;}
   /* 币种名 + 中文名同行显示，恢复原字号 */
   .coin-row{grid-template-columns:30px 1fr 80px 70px;padding:6px 8px;gap:4px;}
   .coin-icon-wrap{width:30px;height:30px;}
@@ -561,22 +737,6 @@ body{padding:12px;}
   .source-list button{flex-shrink:0;}
   /* 手机端事件流显示 */
   .mobile-event-feed{display:block !important;}
-  /* 买入/卖出按钮提早悬浮 */
-  .btn-row-wrap.floating{height:68px;}
-  .btn-row-wrap.floating .btn-row{
-    position:fixed;
-    bottom:calc(env(safe-area-inset-bottom, 0px) + 8px);
-    left:6px;
-    right:6px;
-    z-index:18;
-    margin-top:0;
-    padding:6px;
-    background:var(--panel);
-    border:var(--px) solid var(--line);
-    box-shadow:0 0 0 2px #6d5c45,4px 4px 0 0 var(--shadow);
-  }
-  /* 手机端存款格强制显示，避免负债孤行 */
-  .savings-empty{display:block;}
 }
 </style>
 </head>
@@ -588,6 +748,10 @@ body{padding:12px;}
     <div class="modal-tb"><h3>₿ 币圈浮生记</h3></div>
     <div class="intro-body">
 
+      <div class="intro-note" id="introBest" style="display:none;"></div>
+      <button class="m-btn" id="storyToggle" style="display:none;" onclick="toggleStory()">📖 回顾前情</button>
+
+      <div id="storyCards" style="display:flex;flex-direction:column;gap:14px;">
       <div class="story-card">
         <div class="story-img story-img-1" role="img" aria-label="老同学带你去缅北找工作"></div>
         <div class="story-text">
@@ -628,6 +792,8 @@ body{padding:12px;}
         </div>
       </div>
 
+      </div><!-- #storyCards -->
+
       <div class="intro-note">
         你现在的目标很简单：在 <b>15 天</b>内翻盘，撑住心态，把债还清。
       </div>
@@ -649,15 +815,21 @@ body{padding:12px;}
   <!-- TOPBAR -->
   <section class="topbar">
     <div class="titlebox">
-      <h1>币圈浮生记</h1>
-      <small>Pixel Edition · 15天翻盘传说</small>
-      <a href="help.html" style="display:inline-block;margin-top:5px;padding:3px 10px;font-size:11px;font-family:inherit;color:var(--text);background:#d9c69c;border:3px solid var(--line);box-shadow:inset -2px -2px 0 0 #b79c70,inset 2px 2px 0 0 #f6e8c4;text-decoration:none;letter-spacing:1px;">❓ 帮助手册</a>
+      <div>
+        <h1>币圈浮生记</h1>
+        <small>Pixel Edition · 15天翻盘传说</small>
+      </div>
+      <div class="title-tools">
+        <a class="tool-btn" href="help.html">❓<span class="tool-lbl">&nbsp;帮助手册</span></a>
+        <button class="tool-btn" id="muteBtn" onclick="toggleMute()" aria-label="音效开关">🔊</button>
+      </div>
     </div>
 
     <div class="statusbar">
       <div class="stat">
         <div class="stat-lbl">总资产 USDT</div>
         <div class="stat-val" id="tbNetAsset" style="color:var(--text);">$0</div>
+        <div class="stat-sub" id="tbNetSub">目标：还清债务</div>
       </div>
       <div class="stat stat-sm">
         <div class="stat-lbl">现金</div>
@@ -666,42 +838,36 @@ body{padding:12px;}
       <div class="stat stat-sm">
         <div class="stat-lbl">持仓</div>
         <div class="stat-val" id="tbPosVal" style="color:var(--text);">$0</div>
+        <div class="stat-sub" id="tbPosSub"></div>
       </div>
       <div class="stat stat-sm" id="tbSavingsCell">
         <div class="stat-lbl">存款</div>
         <div class="stat-val" id="tbSavings" style="color:var(--text);">$0</div>
+        <div class="stat-sub">日息 1%</div>
       </div>
       <div class="stat stat-sm">
         <div class="stat-lbl">负债</div>
         <div class="stat-val red" id="tbDebt">$3,000</div>
+        <div class="stat-sub red" id="tbDebtSub"></div>
       </div>
     </div>
 
-    <div class="alertbox">
-      <div id="alertRisk" style="display:none;">
-        <div class="stat-lbl" style="color:#ffd3bf;">⚠ 爆仓风险！</div>
-        <div class="alert-val" id="alertTxt"></div>
-      </div>
-      <div id="alertStatus" style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;">
-        <div>
-          <div class="stat-lbl" style="color:#ffd3bf;">心态</div>
-          <div class="alert-val" id="tbHealth">100</div>
-        </div>
-        <div>
-          <div class="stat-lbl" style="color:#ffd3bf;">仓位</div>
-          <div class="alert-val" id="tbPosCap">0/100</div>
-        </div>
-        <div>
-          <div class="stat-lbl" style="color:#ffd3bf;">持仓量</div>
-          <div class="alert-val" id="tbQty">0手</div>
-        </div>
-        <div>
-          <div class="stat-lbl" style="color:#ffd3bf;">天数</div>
-          <div class="alert-val" id="tbDays">0/15</div>
-        </div>
+    <div class="alertbox" id="alertBox">
+      <div class="hud-risk" id="alertRisk" style="display:none;">⚠ 爆仓风险！<span id="alertTxt"></span></div>
+      <div id="alertStatus">
+        <div class="hud-row"><span>天数<b id="tbDays">0/15</b></span><span id="tbDaysLeft">剩 15 天</span></div>
+        <div class="day-track" id="dayTrack"></div>
+        <div class="hud-row"><span>心态<b id="tbHealth">100</b></span><span>仓位<b id="tbPosCap">0/100</b></span></div>
+        <div class="hp-bar" id="hpBar"></div>
       </div>
     </div>
   </section>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-icon">📰</div>
+    <div class="ticker-scroll"><span class="ticker-txt" id="tickerTxt">加载中...</span></div>
+  </div>
 
   <!-- MAIN -->
   <section class="main">
@@ -722,10 +888,10 @@ body{padding:12px;}
 
       <hr class="left-divider"/>
       <div class="func-list">
-        <button class="func-btn" onclick="openModal('bank')">🏦 DEFI 存款</button>
-        <button class="func-btn" onclick="openModal('postal')">💸 还款小宝</button>
-        <button class="func-btn" onclick="openModal('hospital')">🧠 心理援助</button>
-        <button class="func-btn" onclick="openModal('cafe')">🔍 Etherscan</button>
+        <button class="func-btn" onclick="openModal('bank')">🏦 <span class="hide-m">DEFI </span>存款</button>
+        <button class="func-btn" onclick="openModal('postal')">💸 还款<span class="hide-m">小宝</span></button>
+        <button class="func-btn" onclick="openModal('hospital')">🧠 心理<span class="hide-m">援助</span></button>
+        <button class="func-btn" onclick="openModal('cafe')">🔍 <span class="hide-m">Etherscan</span><span class="show-m">记录</span></button>
       </div>
     </aside>
 
@@ -735,11 +901,14 @@ body{padding:12px;}
 
       <div class="market-list" id="marketList"></div>
 
-      <div class="trade-grid">
+      <div class="sheet-back" onclick="closeTrade()"></div>
+      <div class="trade-grid" id="tradeSheet">
+        <div class="drawer-head"><span id="drawerTitle">交易</span><button class="modal-x" onclick="closeTrade()" aria-label="关闭">✕</button></div>
+        <svg id="drawerChart" class="big-chart drawer-chart" viewBox="0 0 300 130" preserveAspectRatio="none"></svg>
         <!-- Left trade card: current selection -->
         <div class="trade-card">
           <h3>当前选择</h3>
-          <div class="kv">
+          <div class="kv sel-basic">
             <div class="px-screen">
               <div class="screen-title">币种</div>
               <div class="screen-sm" id="selName">—</div>
@@ -815,6 +984,7 @@ body{padding:12px;}
       </div>
 
       <div class="footer-actions">
+        <button class="action" id="tradeOpenBtn" onclick="openTrade()">交易</button>
         <button class="action next-btn" onclick="handleNextDay()">⏩ 下一天</button>
         <button class="action flat-btn" onclick="handleCloseAll()">全部平仓</button>
       </div>
@@ -834,8 +1004,8 @@ body{padding:12px;}
       <div class="panelhead"><h2>账户情况</h2><div class="badge">ACCOUNT</div></div>
 
       <div class="px-screen" style="margin-bottom:8px;">
-        <div class="screen-title">持仓数量</div>
-        <div class="screen-big" id="acctQty">0手</div>
+        <div class="screen-title">我的持仓</div>
+        <div id="holdList"><div class="hold-empty">空仓</div></div>
       </div>
 
       <div class="panelhead" style="margin-top:6px;"><h2>事件流</h2><div class="badge">EVENT</div></div>
@@ -848,21 +1018,18 @@ body{padding:12px;}
 
   </section>
 
-  <!-- TICKER -->
-  <div class="ticker-wrap">
-    <div class="ticker-icon">📰</div>
-    <div class="ticker-scroll"><span class="ticker-txt" id="tickerTxt">加载中...</span></div>
-  </div>
-
 </div><!-- .frame -->
+
+<div id="dayFlip"><div class="dayflip-big" id="dayFlipBig">DAY 1</div><div class="dayflip-sub" id="dayFlipSub"></div></div>
 
 <!-- ══ MODALS ══ -->
 <div class="modal-back" id="modalBack">
 
   <!-- Event -->
   <div class="modal-win event-modal" id="modalEvent" style="display:none;">
-    <div class="modal-tb"><h3 id="evTitle">⚡ 链上事件</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-tb" id="evTb"><h3 id="evTitle">⚡ 链上事件</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
+      <div class="day-sum" id="evDaySum"></div>
       <div class="event-art-wrap" id="evArtWrap">
         <img class="event-art" id="evArt" alt="事件插图"/>
       </div>
@@ -872,6 +1039,7 @@ body{padding:12px;}
           <p class="modal-text" id="evText"></p>
         </div>
       </div>
+      <div class="impact-tags" id="evTags"></div>
     </div>
     <div class="modal-foot"><button class="m-btn primary" onclick="closeModal()">知道了</button></div>
   </div>
@@ -890,7 +1058,7 @@ body{padding:12px;}
 
   <!-- Bank -->
   <div class="modal-win" id="modalBank" style="display:none;">
-    <div class="modal-tb"><h3>🏦 AAVE 借贷协议</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-tb"><h3>🏦 DEFI 存款</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;font-size:13px;">
         <div>钱包：<b id="bkCash">$0</b></div>
@@ -988,15 +1156,13 @@ body{padding:12px;}
         </div>
       </div>
       <div class="gameover-meta">
-        <div class="modal-icon-row">
-          <span class="modal-big-icon" id="goIcon">🎉</span>
-          <p class="modal-text" id="goText"></p>
-        </div>
+        <div id="goCard"></div>
         <div class="go-rebirth" id="goRebirth"><b>重生下一局：</b>你已经摸到节奏了，试着赚得更稳。</div>
       </div>
     </div>
     <div class="modal-foot">
       <button class="m-btn primary" onclick="restartGame()">再来一把</button>
+      <button class="m-btn" id="goCopyBtn" onclick="copyResult()">📋 复制战绩</button>
     </div>
   </div>
 
@@ -1101,6 +1267,66 @@ let priceHistory = {}, recentEvents = [];
 let lastSelectedGood = null; // tracks asset switches to reset slider
 let pendingWarn = null;
 let modalChainPending = false;
+let marketFresh = false;      // true for the first render after a day advance (staggered row animation)
+let dayBusy = false;          // day-flip transition in progress
+let pendingDaySum = null;     // { debtInt, savInt, posDelta } shown once in the next event modal
+let lastImpact = null;        // { ev, tags, tone, coins } computed by applyEvent
+let lastResultText = '';
+
+const reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+function isMobile() { return window.matchMedia('(max-width:700px)').matches; }
+function $(id) { return document.getElementById(id); }
+
+// 8x8 pixel glyphs for the coin icons
+const PIX = {
+  BTC:  ['..#.#...','.#####..','.#...##.','.#####..','.#...##.','.#...##.','.#####..','..#.#...'],
+  ETH:  ['...##...','..####..','.######.','########','........','.######.','..####..','...##...'],
+  DOGE: ['#......#','##....##','########','#.####.#','########','###..###','.######.','..####..'],
+  GPU:  ['.#.##.#.','########','.#....#.','##.##.##','##.##.##','.#....#.','########','.#.##.#.'],
+  MINER:['.#####..','#....##.','.....###','....##.#','...##...','..##....','.##.....','##......'],
+  NFT:  ['########','#......#','#.##...#','#.##...#','#....#.#','#.#.####','########','........'],
+  LP:   ['...#....','...##...','..###...','..####..','.######.','.######.','.######.','..####..'],
+  PLUS: ['...##...','...##...','...##...','########','########','...##...','...##...','...##...'],
+};
+const _pixCache = {};
+function pixIcon(key) {
+  if (_pixCache[key]) return _pixCache[key];
+  const rows = PIX[key];
+  if (!rows) return key[0];
+  let r = '';
+  rows.forEach((row, y) => { for (let x = 0; x < row.length; x++) if (row[x] === '#') r += `<rect x="${x}" y="${y}" width="1" height="1"/>`; });
+  return (_pixCache[key] = `<svg viewBox="0 0 8 8" fill="#fff4d2" shape-rendering="crispEdges" aria-hidden="true">${r}</svg>`);
+}
+
+// Position equity = what a sell would pay out right now (matches doSell)
+function posEquity(k, price) {
+  const v = G.goods[k]; if (!v || v.qty <= 0) return 0;
+  const lev = v.lev || 1, p = price === undefined ? prices[k] : price, entry = v.entry || p;
+  return Math.max(0, (p - entry * (1 - 1/lev)) * v.qty);
+}
+function totalEquity() { let t = 0; for (const k in G.goods) t += posEquity(k); return t; }
+function calcNet() { return parseFloat((G.cash + totalEquity() + G.savings - G.debt).toFixed(2)); }
+function posPnl(k) {
+  const v = G.goods[k], eq = posEquity(k), cost = (v && v.totalCost) || 0;
+  return { eq, cost, pnl: eq - cost, pct: cost > 0.005 ? (eq - cost) / cost * 100 : null };
+}
+function signK(n) { return (n >= 0 ? '+' : '−') + fmtK(Math.abs(n)); }
+
+function ensureStats() {
+  if (!G.stats) G.stats = {};
+  const st = G.stats;
+  if (!Array.isArray(st.netHistory)) st.netHistory = [];
+  st.trades = st.trades || 0;
+  st.liqs = st.liqs || 0;
+  const net = calcNet();
+  if (!st.netHistory.length) st.netHistory.push(net);
+  if (typeof st.peakNet !== 'number') st.peakNet = Math.max(...st.netHistory);
+}
+function recordNet(net) {
+  ensureStats();
+  G.stats.netHistory.push(net);
+  if (net > G.stats.peakNet) G.stats.peakNet = net;
+}
 
 function createOnboardingState() {
   return { active:true, step:'buy_doge', boostedDay:false, profitHint:0 };
@@ -1159,29 +1385,14 @@ function maybeShowOnboardingPrompt() {
   if (!G.onboarding || !G.onboarding.active || currentModal) return;
   markOnboardingSeen();
   if (G.onboarding.step === 'buy_doge' && G.day === 0) {
-    showWarn('新手提示：今天 DOGE 正在地板价，先买一点 DOGE 试试手气。', '🐕');
+    showWarn('新手提示：今天 DOGE 正在地板价。点一下 DOGE 这一行，先买一点试试手气。', '🐕');
   } else if (G.onboarding.step === 'advance_day') {
     showWarn('很好。现在点击“下一天”，看看这笔 DOGE 会发生什么。', '⏩');
   } else if (G.onboarding.step === 'sell_doge') {
     showWarn(`DOGE暴涨，第一桶金到手了，按你现在这笔 DOGE 大约已经赚了 ${fmtC(G.onboarding.profitHint || 0)}。先卖出落袋。`, '📈');
   } else if (G.onboarding.step === 'repay_debt') {
-    showWarn('很好，现在去“还给小宝”，先还一部分，压住每天 10% 的利息。', '💸');
+    showWarn('很好，现在点“💸 还款”，先还小宝一部分，压住每天 10% 的利息。', '💸');
   }
-}
-
-function syncTradeButtonsSticky() {
-  const wrap = document.getElementById('tradeBtnWrap');
-  if (!wrap) return;
-  const isMobile = window.matchMedia('(max-width:700px)').matches;
-  if (!isMobile) {
-    wrap.classList.remove('floating');
-    return;
-  }
-  const rect = wrap.getBoundingClientRect();
-  const viewportH = window.innerHeight || document.documentElement.clientHeight || 0;
-  const triggerOffset = 120;
-  const originalRowVisible = rect.top <= viewportH - 96;
-  wrap.classList.toggle('floating', window.scrollY > triggerOffset && !originalRowVisible);
 }
 
 function rp(cfg) {
@@ -1232,6 +1443,8 @@ function newGame() {
   document.getElementById('levSelect').value = '1';
   document.getElementById('qtyInput').value = '0';
   document.getElementById('qtyDisplay').textContent = '0';
+  ensureStats();
+  pendingDaySum = null; lastImpact = null;
   setMood(null);
   updateInsiderTip();
   updateTicker();
@@ -1264,6 +1477,7 @@ function loadGame() {
     selectedGood = d.selectedGood || null;
     G.onboarding = d.G.onboarding || null;
     G.warnedHealthBuckets = d.G.warnedHealthBuckets || {};
+    ensureStats();
     document.getElementById('levSelect').value = String(currentLev);
     return true;
   } catch(e) { return false; }
@@ -1275,12 +1489,30 @@ function clearSave() { localStorage.removeItem('cryptoGame_v2'); }
 //  GAME LOGIC
 // ═══════════════════════════════════════════
 
-function handleNextDay() { playCoin(); doMove(); }
+function handleNextDay() {
+  if (dayBusy || currentModal || !(G.daysLeft > 0)) return;
+  closeTrade();
+  playTick();
+  if (reduceMotion) { doMove(); return; }
+  const lastDay = G.daysLeft === 1;
+  $('dayFlipBig').textContent = lastDay ? '结算日' : `DAY ${G.day + 1}`;
+  const sub = [];
+  if (G.debt > 0) sub.push(`小宝的利息 +${fmtK(G.debt * 0.1)}`);
+  if (!lastDay && G.daysLeft - 1 <= 3) sub.push(`只剩 ${G.daysLeft - 1} 天`);
+  $('dayFlipSub').innerHTML = sub.join('<br>');
+  const flip = $('dayFlip');
+  dayBusy = true;
+  flip.classList.add('on');
+  setTimeout(() => { flip.classList.remove('on'); dayBusy = false; doMove(); }, 560);
+}
 
 function doMove() {
+  ensureStats();
+  const debt0 = G.debt, sav0 = G.savings, eq0 = totalEquity();
   G.daysLeft--; G.day++;
   G.debt = parseFloat((G.debt * 1.1).toFixed(2));
   if (G.savings > 0) G.savings = parseFloat((G.savings * 1.01).toFixed(2));
+  const debtInt = G.debt - debt0, savInt = G.savings - sav0;
   prevPrices = { ...prices };
   for (const k in PRICE_CFG) {
     const cfg = (k === 'PLUS' && G.plusRugged) ? { min:0.01, max:0.1, dec:2 } : PRICE_CFG[k];
@@ -1298,6 +1530,8 @@ function doMove() {
   }
 
   const liqList = checkLiquidations();
+  G.stats.liqs += liqList.length;
+  marketFresh = true;
 
   if (G.daysLeft === 0) {
     // Force sell all positions
@@ -1307,6 +1541,7 @@ function doMove() {
       G.cash += Math.max(0, parseFloat(((prices[k] - entry * (1 - 1/lev)) * v.qty).toFixed(2)));
     }
     G.goods = {}; G.totalGoods = 0;
+    recordNet(calcNet());
     clearSave();
     renderAll();
     if (liqList.length > 0) showLiqModal(liqList, () => showGameOver());
@@ -1329,6 +1564,8 @@ function doMove() {
     }
   }
 
+  pendingDaySum = { debtInt, savInt, posDelta: totalEquity() - eq0 };
+  recordNet(calcNet());
   setMood(evt);
   updateInsiderTip();
   saveGame();
@@ -1352,6 +1589,7 @@ function doMove() {
     const entry = doge?.entry || PRICE_CFG.DOGE.min;
     G.onboarding.profitHint = qty > 0 ? Math.max(0, parseFloat(((prices.DOGE - entry * (1 - 1 / lev)) * qty).toFixed(2))) : 0;
     G.onboarding.step = 'sell_doge';
+    pendingDaySum = null;
     saveGame();
     setTimeout(() => maybeShowOnboardingPrompt(), 120);
   }
@@ -1373,7 +1611,9 @@ function checkLiquidations() {
 }
 
 function applyEvent(ev) {
-  if (ev.debt) G.debt += ev.debt;
+  const imp = { ev, tags: [], tone: 'bad', coins: false };
+  const cash0 = G.cash;
+  if (ev.debt) { G.debt += ev.debt; imp.tags.push({ t: `负债 +${fmtK(ev.debt)}`, tone: 'bad' }); }
   if (ev.type === 'price') {
     const dec = PRICE_CFG[ev.goods] ? (PRICE_CFG[ev.goods].dec || 0) : 2;
     const basePrice = prevPrices[ev.goods] ?? prices[ev.goods];
@@ -1391,14 +1631,31 @@ function applyEvent(ev) {
     }
     priceHistory[ev.goods].push(prices[ev.goods]);
     if (priceHistory[ev.goods].length > 10) priceHistory[ev.goods].shift();
+    const up = prices[ev.goods] >= basePrice;
+    imp.tone = up ? 'good' : 'bad';
+    imp.tags.push({ t: `${ev.goods} ${fmtN(basePrice)} → ${fmtN(prices[ev.goods])}`, tone: imp.tone });
+    const held = G.goods[ev.goods];
+    if (held && held.qty > 0) {
+      const d = posEquity(ev.goods) - posEquity(ev.goods, basePrice);
+      imp.tags.push({ t: `你的 ${held.qty}手 ${signK(d)}`, tone: d >= 0 ? 'good' : 'bad' });
+      imp.coins = d > 0;
+    } else {
+      imp.tags.push({ t: up ? '你没上车 😭' : '你躲过一劫 😎', tone: '' });
+    }
   } else if (ev.type === 'goods' && ev.qty > 0) {
     if (!G.goods[ev.goods]) G.goods[ev.goods] = { qty:0, totalCost:0, lev:1, entry:prices[ev.goods] };
     G.goods[ev.goods].qty += ev.qty;
     G.totalGoods += ev.qty;
+    imp.tone = 'good'; imp.coins = true;
+    imp.tags.push({ t: `+${ev.qty}手 ${ev.goods}`, tone: 'good' });
+    imp.tags.push({ t: `价值 ≈ ${fmtK(ev.qty * prices[ev.goods])}`, tone: 'good' });
   } else if (ev.type === 'cash') {
     G.cash = parseFloat((G.cash * ev.rate).toFixed(2));
     if (ev.hp) G.health = Math.max(0, G.health + ev.hp);
+    imp.tags.push({ t: `现金 −${fmtK(cash0 - G.cash)}`, tone: 'bad' });
+    if (ev.hp) imp.tags.push({ t: `心态 ${ev.hp > 0 ? '+' : '−'}${Math.abs(ev.hp)}`, tone: ev.hp > 0 ? 'good' : 'bad' });
   }
+  lastImpact = imp;
   eventLog.unshift(`第${G.day}天 ${ev.desc}`);
   if (eventLog.length > 30) eventLog.pop();
   recentEvents.unshift({ icon: ev.icon || '⚡', title: ev.title || '事件', desc: ev.desc });
@@ -1474,51 +1731,119 @@ function sparkPath(hist, w, h, pad) {
   }).join(' ');
 }
 
-function renderAll() {
-  // Compute position value (needed by both topbar and right panel)
-  let posVal = 0;
-  for (const [k, v] of Object.entries(G.goods)) if (v.qty > 0) posVal += prices[k] * v.qty;
+// Count a stat value up/down to its new value and flash its cell
+const TWEEN_IDS = ['tbNetAsset','tbCash','tbPosVal','tbSavings','tbDebt'];
+function resetTweens() { TWEEN_IDS.forEach(id => { const el = $(id); clearInterval(el._ti); el._v = undefined; }); }
+function tweenNum(el, to, upIsBad) {
+  const from = el._v;
+  el._v = to;
+  clearInterval(el._ti);
+  if (from === undefined || Math.abs(from - to) < 0.005 || reduceMotion) { el.textContent = fmtK(to); return; }
+  const cell = el.closest('.stat');
+  if (cell) {
+    cell.classList.remove('flash-up', 'flash-down');
+    void cell.offsetWidth;
+    cell.classList.add((to > from) !== !!upIsBad ? 'flash-up' : 'flash-down');
+  }
+  let i = 0; const N = 8;
+  el._ti = setInterval(() => {
+    i++;
+    const t = i / N, e = 1 - (1 - t) * (1 - t);
+    el.textContent = fmtK(i >= N ? to : from + (to - from) * e);
+    if (i >= N) clearInterval(el._ti);
+  }, 45);
+}
 
-  // Topbar: 总资产 + 5 values
-  const net = parseFloat((G.cash + posVal + G.savings - G.debt).toFixed(2));
-  const netEl = document.getElementById('tbNetAsset');
-  netEl.textContent = fmtK(net);
+function renderHud() {
+  const track = $('dayTrack');
+  if (track.children.length !== TOTAL_DAYS) {
+    track.style.gridTemplateColumns = `repeat(${TOTAL_DAYS},1fr)`;
+    track.innerHTML = '<i class="day-cell"></i>'.repeat(TOTAL_DAYS);
+  }
+  [...track.children].forEach((c, i) => { c.className = 'day-cell' + (i < G.day ? ' past' : i === G.day ? ' today' : ''); });
+  track.classList.toggle('urgent', G.daysLeft <= 3);
+  $('tbDays').textContent = `${G.day}/${TOTAL_DAYS}`;
+  $('tbDaysLeft').textContent = G.daysLeft > 0 ? `剩 ${G.daysLeft} 天` : '到期';
+
+  const bar = $('hpBar');
+  if (bar.children.length !== 10) bar.innerHTML = '<i class="hp-seg"></i>'.repeat(10);
+  const on = Math.ceil(Math.max(0, G.health) / 10);
+  [...bar.children].forEach((c, i) => { c.className = 'hp-seg' + (i < on ? ' on' : ''); });
+  bar.className = 'hp-bar ' + (G.health >= 50 ? 'hp-ok' : G.health >= 30 ? 'hp-warn' : 'hp-low');
+  $('tbHealth').textContent = G.health;
+  $('tbPosCap').textContent = `${G.totalGoods}/${G.capacity}`;
+}
+
+function renderHoldings() {
+  const keys = Object.keys(G.goods).filter(k => G.goods[k] && G.goods[k].qty > 0);
+  const box = $('holdList');
+  if (!keys.length) { box.innerHTML = '<div class="hold-empty">空仓 · 点左侧币种开始交易</div>'; return; }
+  let eqSum = 0, pnlSum = 0, html = '';
+  keys.forEach(k => {
+    const v = G.goods[k], r = posPnl(k);
+    eqSum += r.eq; pnlSum += r.pnl;
+    html += `<div class="hold-row" onclick="selectCoin('${k}')">
+      <div><b>${k}</b> ${v.qty}手${(v.lev||1) > 1 ? ' · ' + v.lev + 'x' : ''}<small>均价 ${fmtN(v.entry)} · 现值 ${fmtK(r.eq)}</small></div>
+      <div class="${r.pnl >= 0 ? 'pnl-up' : 'pnl-down'}">${signK(r.pnl)}</div>
+    </div>`;
+  });
+  html += `<div class="hold-total"><span>浮动盈亏</span><span class="${pnlSum >= 0 ? 'pnl-up' : 'pnl-down'}">${signK(pnlSum)}</span></div>`;
+  box.innerHTML = html;
+}
+
+function renderAll() {
+  ensureStats();
+  // Position value = equity (what selling now would pay out), so leverage is not double counted
+  const posVal = totalEquity();
+  let pnlSum = 0, hasPos = false;
+  for (const k in G.goods) if (G.goods[k].qty > 0) { hasPos = true; pnlSum += posPnl(k).pnl; }
+
+  // Topbar
+  const net = calcNet();
+  const netEl = $('tbNetAsset');
+  tweenNum(netEl, net);
   netEl.style.color = net >= 0 ? 'var(--green)' : 'var(--red)';
-  document.getElementById('tbCash').textContent = fmtK(G.cash);
-  document.getElementById('tbPosVal').textContent = fmtK(posVal);
-  document.getElementById('tbSavings').textContent = fmtK(G.savings);
-  document.getElementById('tbSavingsCell').classList.toggle('savings-empty', G.savings <= 0);
-  document.getElementById('tbDebt').textContent = fmtK(G.debt);
-  // Alertbox: show risk warning or status (心态/仓位/天数)
+  tweenNum($('tbCash'), G.cash);
+  tweenNum($('tbPosVal'), posVal);
+  tweenNum($('tbSavings'), G.savings);
+  $('tbSavingsCell').classList.toggle('savings-empty', G.savings <= 0);
+  tweenNum($('tbDebt'), G.debt, true);
+
+  const hist = G.stats.netHistory, netSub = $('tbNetSub');
+  if (hist.length >= 2) {
+    const d = net - hist[hist.length - 2];
+    netSub.textContent = `较昨日 ${d >= 0 ? '▲' : '▼'} ${fmtK(Math.abs(d))}`;
+    netSub.className = 'stat-sub ' + (d >= 0 ? 'green' : 'red');
+  } else {
+    netSub.textContent = '目标：还清债务';
+    netSub.className = 'stat-sub';
+  }
+  const posSub = $('tbPosSub');
+  posSub.textContent = hasPos ? `浮盈 ${signK(pnlSum)}` : '';
+  posSub.className = 'stat-sub ' + (pnlSum >= 0 ? 'green' : 'red');
+  const debtSub = $('tbDebtSub');
+  debtSub.innerHTML = G.debt > 0 ? `<span class="hide-m">明日</span>利息 +${fmtK(G.debt * 0.1)}` : '已还清 ✓';
+  debtSub.className = 'stat-sub ' + (G.debt > 0 ? 'red' : 'green');
+
+  // HUD: liquidation risk banner on top of the day / morale bars
   let minDist = null;
   for (const [k, v] of Object.entries(G.goods)) {
     const lev = v.lev || 1; if (lev <= 1) continue;
     const d = Math.max(0, (prices[k] - v.entry * (1 - 1/lev)) / Math.max(0.001, prices[k]) * 100);
     if (minDist === null || d < minDist) minDist = d;
   }
-  const alertRisk = document.getElementById('alertRisk');
-  const alertStatus = document.getElementById('alertStatus');
-  if (minDist !== null && minDist < 30) {
-    alertRisk.style.display = 'block';
-    alertStatus.style.display = 'none';
-    document.getElementById('alertTxt').textContent = `距爆仓仅剩 ${Math.round(minDist)}% 空间`;
-  } else {
-    alertRisk.style.display = 'none';
-    alertStatus.style.display = 'grid';
-  }
-  document.getElementById('tbHealth').textContent = G.health;
-  document.getElementById('tbPosCap').textContent = `${G.totalGoods}/${G.capacity}`;
-  document.getElementById('tbQty').textContent = G.totalGoods + '手';
-  document.getElementById('tbDays').textContent = `${G.day}/${TOTAL_DAYS}`;
-
-  // Right account
-  document.getElementById('acctQty').textContent = G.totalGoods + '手';
+  const risky = minDist !== null && minDist < 30;
+  $('alertRisk').style.display = risky ? 'block' : 'none';
+  $('alertBox').classList.toggle('danger', risky);
+  if (risky) $('alertTxt').textContent = `距爆仓仅剩 ${Math.round(minDist)}% 空间`;
+  renderHud();
+  renderHoldings();
 
   renderMarket();
   updateTradeInfo();
   renderEventFeed();
   renderBigChart();
-  syncTradeButtonsSticky();
+  marketFresh = false;
 
   // Prompt for psychological help once per 10-point health bucket (40s, 30s, etc.)
   const healthBucket = healthWarningBucket(G.health);
@@ -1531,39 +1856,62 @@ function renderAll() {
   }
 }
 
+function selectCoin(key) {
+  selectedGood = key;
+  renderAll();
+  if (isMobile()) openTrade();
+}
+
 function renderMarket() {
   const list = document.getElementById('marketList');
   list.innerHTML = '';
+  let idx = 0;
   for (const [key, name] of Object.entries(GOODS)) {
     const p = prices[key], prev = prevPrices[key];
-    let chgStr = '—', chgCls = '';
+    let chgHtml = '—', chgCls = '';
     if (prev !== undefined && prev > 0) {
       const pct = (p - prev) / prev * 100;
       chgCls = pct >= 0 ? 'green' : 'red';
-      chgStr = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
+      chgHtml = Math.abs(pct) >= 50
+        ? `<span class="chg-chip ${pct >= 0 ? 'up' : 'down'}">${pct >= 0 ? '▲' : '▼'}${Math.abs(pct).toFixed(0)}%</span>`
+        : (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
     }
     const hist = priceHistory[key] || [p];
     const isSel = selectedGood === key;
-    const hasPos = G.goods[key] && G.goods[key].qty > 0;
+    const v = G.goods[key];
+    const hasPos = v && v.qty > 0;
     const col = COIN_COLORS[key];
     const sparkD = sparkPath(hist, 72, 28, 3);
+    let posHtml = '';
+    if (hasPos) {
+      const r = posPnl(key);
+      const pctStr = r.pct === null ? '' : ` (${r.pct >= 0 ? '+' : '−'}${Math.abs(r.pct).toFixed(0)}%)`;
+      posHtml = `<div class="coin-pos">
+        <span>持 ${v.qty}手${(v.lev||1) > 1 ? ' · ' + v.lev + 'x' : ''}</span>
+        <span>均价 ${fmtN(v.entry)}</span>
+        <span class="${r.pnl >= 0 ? 'up' : 'down'}">${r.pnl >= 0 ? '浮盈' : '浮亏'} ${signK(r.pnl)}${pctStr}</span>
+      </div>`;
+    }
     const row = document.createElement('div');
-    row.className = 'coin-row' + (isSel ? ' sel' : '') + (hasPos && !isSel ? ' has-pos' : '');
+    row.className = 'coin-row' + (isSel ? ' sel' : '') + (hasPos && !isSel ? ' has-pos' : '') + (marketFresh && !reduceMotion ? ' tick' : '');
+    if (marketFresh) row.style.animationDelay = (idx * 35) + 'ms';
     row.innerHTML = `
       <div class="coin-icon-wrap">
-        <div class="coin-icon" style="background:${col}">${key[0]}</div>
+        <div class="coin-icon" style="background:${col}">${pixIcon(key)}</div>
         ${hasPos ? '<div class="coin-pos-badge">●</div>' : ''}
       </div>
       <div class="coin-meta"><b>${key}</b><span>${name.replace(key,'').trim()}</span></div>
       <div class="coin-price">${fmtN(p)}</div>
-      <div class="coin-chg ${isSel ? '' : chgCls}">${chgStr}</div>
+      <div class="coin-chg ${isSel ? '' : chgCls}">${chgHtml}</div>
       <div class="spark-box">
         <svg width="100%" height="100%" viewBox="0 0 72 28" preserveAspectRatio="none">
           ${sparkD ? `<path d="${sparkD}" fill="none" stroke="${chgCls === 'red' ? '#e35b4f' : '#6cff3d'}" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/>` : ''}
         </svg>
-      </div>`;
-    row.onclick = () => { selectedGood = key; renderAll(); };
+      </div>
+      ${posHtml}`;
+    row.onclick = () => selectCoin(key);
     list.appendChild(row);
+    idx++;
   }
 }
 
@@ -1597,6 +1945,8 @@ function updateTradeInfo() {
 
   document.getElementById('selName').textContent = selectedGood;
   document.getElementById('selPrice').textContent = fmtN(p);
+  $('drawerTitle').textContent = `${selectedGood} · ${fmtN(p)}`;
+  $('tradeOpenBtn').textContent = `交易 ${selectedGood}`;
 
   // Lock leverage to existing position
   const liqRow = document.getElementById('selLiqRow');
@@ -1669,46 +2019,43 @@ function renderEventFeed() {
 }
 
 function renderBigChart() {
-  const svg = document.getElementById('bigChart');
+  drawChart($('bigChart'));
+  drawChart($('drawerChart'));
+}
+
+function drawChart(svg) {
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (tag, attrs) => { const n = document.createElementNS(NS, tag); for (const a in attrs) n.setAttribute(a, attrs[a]); svg.appendChild(n); return n; };
   const key = selectedGood || 'BTC';
   const hist = priceHistory[key];
   svg.innerHTML = '';
   if (!hist || hist.length < 2) {
-    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
-    t.setAttribute('x','150');t.setAttribute('y','70');t.setAttribute('text-anchor','middle');
-    t.setAttribute('fill','#2a3840');t.setAttribute('font-size','14');t.textContent='选择资产';
-    svg.appendChild(t); return;
+    mk('text', { x:150, y:70, 'text-anchor':'middle', fill:'#3d5568', 'font-size':14 }).textContent = '明天开始出现走势';
+    return;
   }
   const W=300,H=130,p=10;
-  const min=Math.min(...hist),max=Math.max(...hist),range=max-min||1;
-  // Grid lines
-  [35,70,105].forEach(y=>{
-    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
-    l.setAttribute('x1','0');l.setAttribute('y1',y);l.setAttribute('x2',W);l.setAttribute('y2',y);
-    l.setAttribute('stroke','#22303c');l.setAttribute('stroke-width','2');
-    svg.appendChild(l);
-  });
-  // Liq line
-  if (selectedGood && G.goods[selectedGood] && (G.goods[selectedGood].lev||1) > 1) {
-    const liqP = G.goods[selectedGood].entry * (1 - 1/G.goods[selectedGood].lev);
-    const ly = H - p - ((liqP - min) / range) * (H - p*2);
-    const ll=document.createElementNS('http://www.w3.org/2000/svg','line');
-    ll.setAttribute('x1','0');ll.setAttribute('y1',ly.toFixed(1));ll.setAttribute('x2',W);ll.setAttribute('y2',ly.toFixed(1));
-    ll.setAttribute('stroke','#e35b4f');ll.setAttribute('stroke-width','2');ll.setAttribute('stroke-dasharray','6,4');
-    svg.appendChild(ll);
+  const pos = selectedGood && G.goods[selectedGood];
+  const marks = [];
+  if (pos && pos.qty > 0) {
+    marks.push({ v: pos.entry, col: '#8dc1ff', dash: '2,4' });
+    if ((pos.lev||1) > 1) marks.push({ v: pos.entry * (1 - 1/pos.lev), col: '#e35b4f', dash: '6,4' });
   }
-  // Pixel line chart
-  const pts = hist.map((v,i)=>{
-    const x = p + i*((W-p*2)/(hist.length-1));
-    const y = H - p - ((v-min)/range)*(H-p*2);
-    return [x.toFixed(1),y.toFixed(1)];
-  });
+  const min=Math.min(...hist),max=Math.max(...hist),range=max-min||1;
+  const yOf = v => H - p - ((v-min)/range)*(H-p*2);
+  [35,70,105].forEach(y => mk('line', { x1:0, y1:y, x2:W, y2:y, stroke:'#22303c', 'stroke-width':2 }));
+  const pts = hist.map((v,i)=>[(p + i*((W-p*2)/(hist.length-1))).toFixed(1), yOf(v).toFixed(1)]);
   const d = pts.map((pt,i)=>`${i===0?'M':'L'} ${pt[0]} ${pt[1]}`).join(' ');
   const col = COIN_COLORS[key] || '#6cff3d';
-  const path=document.createElementNS('http://www.w3.org/2000/svg','path');
-  path.setAttribute('d',d);path.setAttribute('fill','none');path.setAttribute('stroke',col);
-  path.setAttribute('stroke-width','4');path.setAttribute('stroke-linecap','square');path.setAttribute('stroke-linejoin','miter');
-  svg.appendChild(path);
+  mk('path', { d: `${d} L ${pts[pts.length-1][0]} ${H} L ${pts[0][0]} ${H} Z`, fill: col, 'fill-opacity': .16, stroke: 'none' });
+  // 成本线（蓝）/ 爆仓线（红）：只在落入当前价格区间时绘制
+  marks.forEach(m => {
+    if (m.v < min || m.v > max) return;
+    const y = yOf(m.v).toFixed(1);
+    mk('line', { x1:0, y1:y, x2:W, y2:y, stroke:m.col, 'stroke-width':2, 'stroke-dasharray':m.dash });
+  });
+  mk('path', { d, fill:'none', stroke:col, 'stroke-width':4, 'stroke-linecap':'square', 'stroke-linejoin':'miter' });
+  const last = pts[pts.length-1];
+  mk('rect', { x:last[0]-4, y:last[1]-4, width:8, height:8, fill:'#fff4d2' });
 }
 
 function setMood(evt) {
@@ -1748,13 +2095,23 @@ function updateTicker() {
 //  HANDLERS
 // ═══════════════════════════════════════════
 
+function openTrade() {
+  if (!selectedGood) return;
+  document.body.classList.add('trade-open');
+}
+function closeTrade() { document.body.classList.remove('trade-open'); }
+
 function handleBuy() {
   if (!selectedGood) { flash('请先选择一种资产！'); return; }
   if (G.totalGoods >= G.capacity) { showWarn(`仓位已满（${G.totalGoods}/${G.capacity}手），无法继续买入！`, '📦'); return; }
   const qty = parseInt(document.getElementById('qtyInput').value) || 1;
+  const cash0 = G.cash;
   const n = doBuy(selectedGood, qty);
   if (n === 0) flash('USDT不足！'); else {
     playCoin();
+    G.stats.trades++;
+    toast(`买入 ${n}手 ${selectedGood} · −${fmtK(cash0 - G.cash)}`);
+    closeTrade();
     if (isOnboardingStep('buy_doge') && selectedGood === 'DOGE') G.onboarding.step = 'advance_day';
     saveGame();
   }
@@ -1762,12 +2119,30 @@ function handleBuy() {
   if (isOnboardingStep('advance_day')) setTimeout(() => maybeShowOnboardingPrompt(), 120);
 }
 
+// Sell `qty` of `key`; returns { n, gain, pnl } where pnl is realised profit vs. margin paid
+function sellWithPnl(key, qty) {
+  const v = G.goods[key];
+  if (!v || v.qty <= 0) return { n: 0, gain: 0, pnl: 0 };
+  const cash0 = G.cash, qty0 = v.qty, cost0 = v.totalCost || 0;
+  const n = doSell(key, qty);
+  const gain = G.cash - cash0;
+  return { n, gain, pnl: gain - cost0 * (n / qty0) };
+}
+
+function sellFeedback(label, gain, pnl) {
+  toast(`${label} · +${fmtK(gain)}（${pnl >= 0 ? '盈' : '亏'} ${signK(pnl)}）`, pnl >= 0 ? 'good' : 'bad');
+  if (pnl > 0) burstCoins();
+}
+
 function handleSell() {
   if (!selectedGood) { flash('请先选择一种资产！'); return; }
   const qty = parseInt(document.getElementById('qtyInput').value) || 1;
-  const n = doSell(selectedGood, qty);
-  if (n === 0) flash('空仓，无法平仓！'); else {
+  const r = sellWithPnl(selectedGood, qty);
+  if (r.n === 0) flash('空仓，无法平仓！'); else {
     playCoin();
+    G.stats.trades++;
+    sellFeedback(`卖出 ${r.n}手 ${selectedGood}`, r.gain, r.pnl);
+    closeTrade();
     if (isOnboardingStep('sell_doge') && selectedGood === 'DOGE') G.onboarding.step = 'repay_debt';
     saveGame();
   }
@@ -1778,7 +2153,11 @@ function handleSell() {
 function handleCloseAll() {
   const keys = Object.keys(G.goods).filter(k => G.goods[k]?.qty > 0);
   if (!keys.length) { flash('没有持仓！'); return; }
-  keys.forEach(k => { if (G.goods[k]?.qty > 0) doSell(k, G.goods[k].qty); });
+  let gain = 0, pnl = 0;
+  keys.forEach(k => { const r = sellWithPnl(k, G.goods[k].qty); gain += r.gain; pnl += r.pnl; });
+  G.stats.trades += keys.length;
+  sellFeedback('全部平仓', gain, pnl);
+  closeTrade();
   playCoin(); saveGame(); renderAll();
 }
 
@@ -1808,21 +2187,44 @@ function setLev(n) {
   if (selectedGood) { lastSelectedGood = null; updateTradeInfo(); }
 }
 
-function flash(msg) {
-  const alertRisk = document.getElementById('alertRisk');
-  const alertStatus = document.getElementById('alertStatus');
-  const alertTxt = document.getElementById('alertTxt');
-  const wasRisk = alertRisk.style.display !== 'none';
-  const prevTxt = alertTxt.textContent;
-  alertTxt.textContent = msg;
-  alertRisk.style.display = 'block';
-  alertStatus.style.display = 'none';
-  clearTimeout(alertTxt._t);
-  alertTxt._t = setTimeout(() => {
-    if (wasRisk) { alertRisk.style.display = 'block'; alertStatus.style.display = 'none'; }
-    else { alertRisk.style.display = 'none'; alertStatus.style.display = 'grid'; }
-    alertTxt.textContent = prevTxt;
-  }, 2000);
+function flash(msg) { toast(msg, 'bad'); }
+
+function toast(msg, tone) {
+  const live = document.querySelectorAll('.toast').length;
+  const t = document.createElement('div');
+  t.className = 'toast' + (tone ? ' ' + tone : '');
+  t.textContent = msg;
+  t.style.top = `calc(18% + ${live * 40}px)`;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 1500);
+}
+
+// Pixel coin burst from the centre of the viewport (or a given point)
+function burstCoins(x, y, n) {
+  if (reduceMotion) return;
+  x = x === undefined ? window.innerWidth / 2 : x;
+  y = y === undefined ? window.innerHeight * 0.3 : y;
+  for (let i = 0; i < (n || 16); i++) {
+    const c = document.createElement('i');
+    c.className = 'coin-p';
+    c.style.left = x + 'px'; c.style.top = y + 'px';
+    c.style.setProperty('--dx', Math.round((Math.random() - .5) * 280) + 'px');
+    c.style.setProperty('--dy', Math.round(-40 - Math.random() * 150 + (Math.random() < .35 ? 190 : 0)) + 'px');
+    c.style.animationDelay = Math.round(Math.random() * 120) + 'ms';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 1100);
+  }
+}
+
+function shakeFrame() {
+  try {
+    const active = !navigator.userActivation || navigator.userActivation.hasBeenActive;
+    if (navigator.vibrate && active) navigator.vibrate(120);
+  } catch(e) {}
+  if (reduceMotion) return;
+  const f = document.querySelector('.frame');
+  f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake');
+  setTimeout(() => f.classList.remove('shake'), 450);
 }
 
 // Bank
@@ -1831,6 +2233,7 @@ function handleDeposit() {
   if (amt <= 0 || amt > G.cash) { showWarn('存入金额无效或钱包不足！', '💸'); return; }
   G.cash = parseFloat((G.cash - amt).toFixed(2));
   G.savings = parseFloat((G.savings + amt).toFixed(2));
+  playCoin(); toast(`存入 ${fmtK(amt)} · 明日利息 +${fmtK(G.savings * 0.01)}`, 'good');
   updateBankModal(); renderAll(); saveGame();
 }
 function handleWithdraw() {
@@ -1838,6 +2241,7 @@ function handleWithdraw() {
   if (amt <= 0 || amt > G.savings) { showWarn('取出金额无效或存款不足！', '🏦'); return; }
   G.savings = parseFloat((G.savings - amt).toFixed(2));
   G.cash = parseFloat((G.cash + amt).toFixed(2));
+  playCoin(); toast(`取出 ${fmtK(amt)}`);
   updateBankModal(); renderAll(); saveGame();
 }
 function updateBankModal() {
@@ -1878,7 +2282,9 @@ function handleHeal() {
   if (G.health >= 100) { showWarn('心态还行，不用咨询！', '😌'); return; }
   if (G.cash < 5000) { showWarn('USDT不足！需要$5,000。', '💸'); return; }
   G.cash = parseFloat((G.cash - 5000).toFixed(2));
-  G.health = Math.min(100, G.health + 50); closeModal(); renderAll(); saveGame();
+  G.health = Math.min(100, G.health + 50); closeModal();
+  playCheer(); toast(`心态回升至 ${G.health} · −$5.00K`, 'good');
+  renderAll(); saveGame();
 }
 
 // Repay
@@ -1887,6 +2293,9 @@ function handleRepay() {
   const n = doRepay(amt);
   if (n <= 0) { showWarn('无法还款！（USDT不足）', '💸'); return; }
   document.getElementById('repayAmt').value = '';
+  playRepay();
+  toast(G.debt > 0 ? `还款 ${fmtK(n)} · 每天少付利息 ${fmtK(n * 0.1)}` : `还款 ${fmtK(n)} · 债务清零`, 'good');
+  if (G.debt <= 0) burstCoins();
   const onboardingRepay = isOnboardingStep('repay_debt');
   if (onboardingRepay) finishOnboarding();
   closeModal();
@@ -1938,8 +2347,14 @@ function closeModal() {
   document.getElementById('modalBack').classList.remove('open');
   const closingModal = currentModal;
   const cb = window._liqCb;
-  if (cb && closingModal === 'liq') { window._liqCb = null; setTimeout(cb, 120); }
   currentModal = null;
+  if (cb && closingModal === 'liq') {
+    // The liquidation notice chains into the event modal / game over; hold any queued
+    // morale warning until that chain is done so it is not overwritten.
+    window._liqCb = null;
+    setTimeout(() => { cb(); if (!currentModal) flushPendingWarn(); }, 120);
+    return;
+  }
   if (closingModal === 'event') {
     flushPendingWarn();
     return;
@@ -1953,6 +2368,25 @@ function showEventModal(ev) {
   document.getElementById('evTitle').textContent = (ev.icon || '⚡') + ' ' + (ev.title || '链上事件');
   document.getElementById('evIcon').textContent = ev.icon || '⚡';
   document.getElementById('evText').textContent = ev.desc;
+
+  // Impact tags: real numbers when this event was just applied, generic otherwise (debug preview)
+  const imp = (lastImpact && lastImpact.ev === ev) ? lastImpact : previewImpact(ev);
+  $('evTb').className = 'modal-tb tone-' + imp.tone;
+  $('evTags').innerHTML = imp.tags.map(t => `<span class="impact-tag ${t.tone || ''}">${t.t}</span>`).join('');
+  const sum = $('evDaySum');
+  if (pendingDaySum) {
+    const d = pendingDaySum; pendingDaySum = null;
+    const cell = (lbl, val, cls) => `<div class="px-screen"><div class="screen-title">${lbl}</div><b class="${cls}">${val}</b></div>`;
+    sum.innerHTML =
+      cell('债务利息', d.debtInt > 0.005 ? '+' + fmtK(d.debtInt) : '$0', d.debtInt > 0.005 ? 'pnl-down' : '') +
+      cell('存款利息', d.savInt > 0.005 ? '+' + fmtK(d.savInt) : '$0', d.savInt > 0.005 ? 'pnl-up' : '') +
+      cell('持仓变动', Math.abs(d.posDelta) > 0.005 ? signK(d.posDelta) : '$0', d.posDelta >= 0 ? 'pnl-up' : 'pnl-down');
+    sum.style.display = 'grid';
+  } else {
+    sum.style.display = 'none';
+  }
+  if (imp.tone === 'bad' && (ev.type !== 'price' || ev.rate < 0.5)) shakeFrame();
+  if (imp.coins) setTimeout(() => burstCoins(), 120);
   art.onerror = function() {
     artWrap.style.display = 'none';
     art.removeAttribute('src');
@@ -1966,6 +2400,22 @@ function showEventModal(ev) {
   }
   soundForEvent(ev);
   openModal('event');
+}
+
+function previewImpact(ev) {
+  const imp = { ev, tags: [], tone: 'bad', coins: false };
+  if (ev.debt) imp.tags.push({ t: `负债 +${fmtK(ev.debt)}`, tone: 'bad' });
+  if (ev.type === 'price') {
+    imp.tone = ev.rate >= 1 ? 'good' : 'bad';
+    imp.tags.push({ t: ev.rugPull ? `${ev.goods} 归零` : `${ev.goods} ×${ev.rate}`, tone: imp.tone });
+  } else if (ev.type === 'goods') {
+    imp.tone = 'good';
+    imp.tags.push({ t: `+${ev.qty}手 ${ev.goods}`, tone: 'good' });
+  } else if (ev.type === 'cash') {
+    imp.tags.push({ t: `现金 −${Math.round((1 - ev.rate) * 100)}%`, tone: 'bad' });
+    if (ev.hp) imp.tags.push({ t: `心态 −${Math.abs(ev.hp)}`, tone: 'bad' });
+  }
+  return imp;
 }
 
 // Console helpers for manually previewing a specific event modal.
@@ -2008,10 +2458,10 @@ function showWarn(msg, icon) {
 
 function showLiqModal(liqList, cb) {
   const msgs = liqList.map(l =>
-    `💀 ${GOODS[l.key]} ${l.lev}x杠杆 ${l.qty}手爆仓！\n入场$${l.entry.toFixed(2)} → 爆仓$${l.liqPrice.toFixed(2)}\n保证金全部损失，心态-15`
+    `💀 ${GOODS[l.key]} ${l.lev}x杠杆 ${l.qty}手爆仓！\n入场$${l.entry.toFixed(2)} → 爆仓$${l.liqPrice.toFixed(2)}\n保证金全部损失，心态-30`
   ).join('\n\n');
   document.getElementById('liqText').innerHTML = msgs.replace(/\n/g,'<br>');
-  playOuch(); openModal('liq'); window._liqCb = cb;
+  playOuch(); shakeFrame(); openModal('liq'); window._liqCb = cb;
 }
 
 const ENDING_META = {
@@ -2050,34 +2500,135 @@ const ENDING_META = {
   }
 };
 
+const BEST_KEY = 'cryptoGame_best_v1';
+function loadBest() {
+  try { const b = JSON.parse(localStorage.getItem(BEST_KEY)); return b && typeof b.net === 'number' ? b : null; }
+  catch(e) { return null; }
+}
+
+function rankTitle(endingKey, net) {
+  if (endingKey === 'mental_break') return '破防韭菜';
+  if (net < 0) return '负债累累';
+  if (net < 5000) return '勉强上岸';
+  if (net < 50000) return '币圈老手';
+  if (net < 500000) return '币圈新贵';
+  if (net < 5000000) return '链上巨鲸';
+  return '财富自由';
+}
+
 function showGameOver() {
   pendingWarn = null;
-  const net = parseFloat((G.cash + G.savings - G.debt).toFixed(2));
+  closeTrade();
+  ensureStats();
+  const net = calcNet();
   const endingKey = G.health <= 0 ? 'mental_break' : (net < 0 ? 'debt_fail' : 'debt_clear');
   const ending = ENDING_META[endingKey];
-  const netColor = net >= 0 ? 'var(--green)' : 'var(--red)';
+  const st = G.stats;
+  if (st.netHistory[st.netHistory.length - 1] !== net) recordNet(net);
+  const rank = rankTitle(endingKey, net);
+  const best = loadBest();
+  const isRecord = !best || net > best.net;
+  if (isRecord) {
+    try { localStorage.setItem(BEST_KEY, JSON.stringify({ net, rank, day: G.day })); } catch(e) {}
+  }
+
   const goScene = document.getElementById('goScene');
   goScene.className = `gameover-scene ${ending.sceneClass}`;
   document.getElementById('goTitle').textContent = ending.title;
-  document.getElementById('goIcon').textContent = ending.icon;
   document.getElementById('goSceneTag').textContent = ending.sceneTag;
   document.getElementById('goSceneReason').textContent = ending.sceneReason;
   document.getElementById('goSceneLeft').textContent = ending.leftFigure;
   document.getElementById('goSceneRight').textContent = ending.rightFigure;
-  document.getElementById('goText').innerHTML =
-    `${ending.reason}<br><br>` +
-    `现金：<b>${fmtC(G.cash)}</b><br>` +
-    `存款：<b>${fmtC(G.savings)}</b><br>` +
-    `欠款：<b style="color:var(--red)">${fmtC(G.debt)}</b><br>` +
-    `净资产：<b style="color:${netColor}">${fmtC(net)}</b>`;
+
+  // Net-worth curve with a zero ("上岸") line
+  const hist = st.netHistory, W = 300, H = 56, pad = 6;
+  const lo = Math.min(0, ...hist), hi = Math.max(0, ...hist), range = hi - lo || 1;
+  const zeroY = (H - pad - ((0 - lo) / range) * (H - pad * 2)).toFixed(1);
+  const curve = hist.length < 2 ? '' : hist.map((v, i) => {
+    const x = pad + i * ((W - pad * 2) / (hist.length - 1));
+    const y = H - pad - ((v - lo) / range) * (H - pad * 2);
+    return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
+  }).join(' ');
+  const cell = (lbl, val, color) => `<div class="px-screen"><div class="screen-title">${lbl}</div><div class="screen-sm"${color ? ` style="color:${color}"` : ''}>${val}</div></div>`;
+
+  document.getElementById('goCard').innerHTML =
+    `<div class="go-rank"><span class="go-title-badge">${ending.icon} ${rank}</span>${isRecord && best ? '<span class="go-new">🏅 新纪录！</span>' : ''}</div>` +
+    `<p class="go-reason">${ending.reason}</p>` +
+    `<div class="go-stats">` +
+      cell('最终净资产', fmtK(net), net >= 0 ? '#6cff3d' : '#ff8888') +
+      cell('峰值净资产', fmtK(st.peakNet), '#f0c64b') +
+      cell('现金 + 存款', fmtK(G.cash + G.savings)) +
+      (net >= 0 ? cell('结清欠款', fmtK(G.debt)) : cell('剩余欠款', fmtK(G.debt), '#ff8888')) +
+      cell('交易次数', st.trades + ' 次') +
+      cell('爆仓次数', st.liqs + ' 次', st.liqs > 0 ? '#ff8888' : '') +
+    `</div>` +
+    `<svg class="go-curve" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">` +
+      `<line x1="0" y1="${zeroY}" x2="${W}" y2="${zeroY}" stroke="#8dc1ff" stroke-width="1.5" stroke-dasharray="4,4"/>` +
+      (curve ? `<path d="${curve}" fill="none" stroke="${net >= 0 ? '#6cff3d' : '#e35b4f'}" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/>` : '') +
+    `</svg>` +
+    `<div class="go-best">净资产走势（虚线 = 上岸线）` +
+      (best ? ` · 历史最佳 ${fmtK(Math.max(best.net, net))}` : '') + `</div>`;
   document.getElementById('goRebirth').innerHTML = `<b>重生下一局：</b>${ending.rebirthLine}`;
+
+  const url = /^https?:/.test(location.protocol) ? '\n' + location.origin + location.pathname : '';
+  lastResultText =
+    `【币圈浮生记】${ending.title.replace(/^\S+\s/, '')}｜称号「${rank}」\n` +
+    `净资产 ${fmtC(net)}（峰值 ${fmtC(st.peakNet)}）\n` +
+    `撑了 ${G.day} 天 · 交易 ${st.trades} 次 · 爆仓 ${st.liqs} 次` + url;
+  document.getElementById('goCopyBtn').textContent = '📋 复制战绩';
+
   clearSave();
+  if (endingKey === 'debt_clear') { playCheer(); setTimeout(() => burstCoins(undefined, undefined, 28), 200); }
+  else shakeFrame();
   openModal('gameover');
+}
+
+function copyResult() {
+  const btn = document.getElementById('goCopyBtn');
+  const done = ok => { btn.textContent = ok ? '✓ 已复制' : '复制失败'; };
+  const fallback = () => {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = lastResultText; ta.style.cssText = 'position:fixed;opacity:0;';
+      document.body.appendChild(ta); ta.select();
+      const ok = document.execCommand('copy'); ta.remove(); done(ok);
+    } catch(e) { done(false); }
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(lastResultText).then(() => done(true), fallback);
+  } else fallback();
 }
 
 // ═══════════════════════════════════════════
 //  AUDIO
 // ═══════════════════════════════════════════
+
+let muted = false;
+try { muted = localStorage.getItem('cryptoGame_muted') === '1'; } catch(e) {}
+function syncMuteBtn() { const b = document.getElementById('muteBtn'); if (b) b.textContent = muted ? '🔇' : '🔊'; }
+function toggleMute() {
+  muted = !muted;
+  try { localStorage.setItem('cryptoGame_muted', muted ? '1' : '0'); } catch(e) {}
+  syncMuteBtn();
+  if (!muted) playCoin();
+}
+
+// Short square-wave blip sequence: [[freq, startOffset, duration], ...]
+function playBlips(seq, type, vol) {
+  if (muted) return;
+  try {
+    const c = ac(), t = c.currentTime;
+    seq.forEach(([f, d, len]) => {
+      const o = c.createOscillator(), g = c.createGain();
+      o.connect(g); g.connect(c.destination);
+      o.type = type || 'square'; o.frequency.value = f;
+      g.gain.setValueAtTime(vol || .08, t + d); g.gain.exponentialRampToValueAtTime(.001, t + d + len);
+      o.start(t + d); o.stop(t + d + len);
+    });
+  } catch(e) {}
+}
+function playTick()  { playBlips([[330, 0, .07], [220, .09, .07], [440, .2, .12]]); }
+function playRepay() { playBlips([[660, 0, .08], [880, .08, .08], [1320, .16, .22]], 'triangle', .16); }
 
 let _ac = null;
 function ac() {
@@ -2087,6 +2638,7 @@ function ac() {
 }
 
 function playCoin() {
+  if (muted) return;
   try {
     const c = ac(), t = c.currentTime;
     [880,1100,1320].forEach((f,i) => {
@@ -2101,6 +2653,7 @@ function playCoin() {
 }
 
 function playOuch() {
+  if (muted) return;
   try {
     const c = ac(), t = c.currentTime;
     [0,.1].forEach((d,i) => {
@@ -2116,6 +2669,7 @@ function playOuch() {
 }
 
 function playCheer() {
+  if (muted) return;
   try {
     const c = ac(), t = c.currentTime;
     [523,659,784,988,1047].forEach((f,i) => {
@@ -2141,7 +2695,9 @@ function soundForEvent(ev) {
 
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && currentModal && currentModal !== 'gameover') closeModal();
+  if (e.key !== 'Escape') return;
+  if (currentModal) { if (currentModal !== 'gameover') closeModal(); }
+  else closeTrade();
 });
 
 // Preload event images to eliminate flash when modal opens
@@ -2155,8 +2711,6 @@ function preloadEventImages() {
 
 // Unlock AudioContext on first user interaction
 document.addEventListener('click', () => { try { ac(); } catch(e) {} }, { once: true });
-window.addEventListener('scroll', syncTradeButtonsSticky, { passive:true });
-window.addEventListener('resize', syncTradeButtonsSticky);
 
 // Check for saved game on load
 window.addEventListener('load', () => {
@@ -2165,8 +2719,30 @@ window.addEventListener('load', () => {
     document.getElementById('savedNotice').style.display = 'block';
     document.getElementById('continueBtn').style.display = 'inline-block';
   }
-  syncTradeButtonsSticky();
+  initIntro();
 });
+
+function toggleStory() {
+  const cards = $('storyCards');
+  const show = cards.style.display === 'none';
+  cards.style.display = show ? 'flex' : 'none';
+  $('storyToggle').textContent = show ? '📕 收起前情' : '📖 回顾前情';
+}
+
+// Returning players: fold the 4-page story, surface best record
+function initIntro() {
+  syncMuteBtn();
+  if (hasSeenOnboarding()) {
+    $('storyCards').style.display = 'none';
+    $('storyToggle').style.display = 'block';
+  }
+  const best = loadBest();
+  if (best) {
+    const box = $('introBest');
+    box.style.display = 'block';
+    box.innerHTML = `🏅 历史最佳：<b style="color:${best.net >= 0 ? '#2f8c45' : 'var(--red)'}">${fmtC(best.net)}</b>${best.rank ? ' · 「' + best.rank + '」' : ''}`;
+  }
+}
 
 function startGame(useSave) {
   if (useSave && loadGame()) {
@@ -2176,6 +2752,7 @@ function startGame(useSave) {
   }
   document.getElementById('introOverlay').style.display = 'none';
   preloadEventImages();
+  resetTweens();
   renderAll();
   setTimeout(() => maybeShowOnboardingPrompt(), 120);
 }
@@ -2184,6 +2761,7 @@ function restartGame() {
   closeModal();
   clearSave();
   newGame();
+  resetTweens();
   renderAll();
   setTimeout(() => maybeShowOnboardingPrompt(), 120);
 }
